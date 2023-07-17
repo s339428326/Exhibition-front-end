@@ -3,6 +3,7 @@
         <TheWelcome />
         <TestToast />
         <TestPopover class="mt-4 mb-4" />
+        <p>Vic_test</p>
     </main>
 </template>
 
