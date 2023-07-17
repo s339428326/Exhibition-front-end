@@ -1,0 +1,24 @@
+
+@mixin media-w1200 {
+  @media (max-width: 1200px) {
+      @content;
+  }
+}
+
+@mixin media-w900 {
+  @media (max-width: 900px) {
+      @content;
+  }
+}
+
+@mixin media-w768 {
+  @media (max-width: 768px) {
+      @content;
+  }
+}
+
+@mixin media-w414 {
+  @media (max-width: 414px) {
+      @content;
+  }
+}
