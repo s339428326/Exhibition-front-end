@@ -7,7 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
     // base 的寫法：
     // base: '/Repository 的名稱/'
-    base: '/exhibition-app/',
+    base: '/Exhibition-app/',
     plugins: [vue()],
     resolve: {
         alias: {
