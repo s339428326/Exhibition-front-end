@@ -38,6 +38,13 @@
                                 >About</RouterLink
                             >
                         </li>
+                        <li class="nav-item">
+                            <RouterLink
+                                class="nav-link"
+                                to="/newPage"
+                                >newPage</RouterLink
+                            >
+                        </li>
                     </ul>
                     <form
                         class="d-flex"
