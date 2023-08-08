@@ -41,8 +41,8 @@
                         <li class="nav-item">
                             <RouterLink
                                 class="nav-link"
-                                to="/newPage"
-                                >newPage</RouterLink
+                                to="/ViewExhibition"
+                                >Test exhibitionPage</RouterLink
                             >
                         </li>
                     </ul>

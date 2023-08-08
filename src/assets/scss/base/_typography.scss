@@ -72,11 +72,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#app {
-    max-width: 1280px;
-    margin: 0 auto;
-    font-weight: normal;
-}
+// #app {
+//     max-width: 1280px;
+//     margin: 0 auto;
+//     font-weight: normal;
+// }
 
 a,
 .green {
@@ -103,3 +103,8 @@ a,
 //         padding: 0 2rem;
 //     }
 // }
+
+ul {
+    margin: 0;
+    padding: 0;
+}
