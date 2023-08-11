@@ -8,14 +8,14 @@
         </section>
 
         <section class="p-2 container mx-auto row mb-4">
-            <div class="col-7">
+            <div class="col-8">
                 <!-- 展覽Title-->
                 <div class="border-bottom pb-2 mb-4">
                     <div class="d-flex justify-content-between">
                         <h1>高雄駁二展覽｜人生紀念品</h1>
                         <div>
                             <button class="btn btn-outline-primary d-flex gap-2">
-                                <span class="border">ICON</span>
+                                <HeartIcon />
                                 <span>收藏</span>
                             </button>
                         </div>
@@ -34,7 +34,7 @@
                     「人生紀念品」展覽邀請各領域設計師重新詮釋自身或受訪者的人生故事，透過設計手法將故事濃縮淬煉成一件件紀念品，引領觀者從設計作品中品味各種人生故事的酸甜滋味，展覽也邀請知名設計師及文字工作者分享影響他們人生的重要紀念品，期待民眾從第三者角度閱讀他人故事的同時，也回想起一些人生值得紀念的片段，讓記憶中的故事因為展覽有新一層的體會及滋味。
                 </p>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <div>
                     <h2 class="text-center mb-2 border rounded-2 p-2">售票價格</h2>
                     <div class="border rounded-3 p-2 fs-5 shadow-sm mb-2">
@@ -75,14 +75,19 @@
                             </li>
                         </ul>
                     </div>
+                    <!-- 綁定dataset  -->
+                    <!-- name:item, price:100 -->
                     <button
-                        class="btn btn-primary w-100 mb-2"
+                        @click="addCartItemHandler"
+                        class="btn btn-primary w-100 mb-2 addCartBtn"
                         type="button"
+                        data-name="item3"
+                        data-price="100"
                     >
                         加入購物車
                     </button>
                     <button
-                        class="btn btn-primary w-100"
+                        class="btn btn-primary w-100 mb-2"
                         type="button"
                     >
                         前往結賬
@@ -92,7 +97,27 @@
         </section>
     </main>
 </template>
-<script setup></script>
+<script>
+    import { useCartDataStore } from '../stores/cartData'
+
+    export default {
+        setup() {
+            const cartDataStore = useCartDataStore()
+            const { addCartItem, updateCartItem } = cartDataStore
+
+            const addCartItemHandler = (e) => {
+                console.log('Handler', e.target)
+                addCartItem(e.target.dataset)
+            }
+
+            // addCartItem,
+            //     updateCartItem
+            return {
+                addCartItemHandler
+            }
+        }
+    }
+</script>
 <style lang="scss">
     //image init
     .view-exhibition {

@@ -1,76 +1,45 @@
 <template>
-    <div class="header">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a
-                    class="navbar-brand"
-                    href="#"
-                    >Navbar</a
-                >
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div
-                    class="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                >
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <RouterLink
-                                class="nav-link active"
-                                aria-current="page"
-                                to="/"
-                                >Home</RouterLink
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <RouterLink
-                                class="nav-link"
-                                to="/about"
-                                >About</RouterLink
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <RouterLink
-                                class="nav-link"
-                                to="/ViewExhibition"
-                                >Test exhibitionPage</RouterLink
-                            >
-                        </li>
-                    </ul>
-                    <form
-                        class="d-flex"
-                        role="search"
+    <header class="bg-light text-black">
+        <nav class="container py-4 d-flex justify-content-between align-items-center">
+            <a
+                class="fs-4 fw-bold"
+                href="/"
+                >Logo</a
+            >
+            <ul class="d-flex gap-2 fs-6 fw-bold align-items-center">
+                <li class="nav-item">
+                    <RouterLink
+                        class="nav-link active"
+                        aria-current="page"
+                        to="/"
+                        >Home</RouterLink
                     >
-                        <input
-                            class="form-control me-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button
-                            class="btn btn-outline-success"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-                    </form>
-                </div>
-            </div>
+                </li>
+                <li class="nav-item">
+                    <RouterLink
+                        class="nav-link"
+                        to="/about"
+                        >About</RouterLink
+                    >
+                </li>
+                <li class="nav-item">
+                    <RouterLink
+                        class="nav-link"
+                        to="/ViewExhibition"
+                        >測試 exhibitionPage</RouterLink
+                    >
+                </li>
+                <li>
+                    <CartButton />
+                </li>
+            </ul>
         </nav>
-    </div>
+    </header>
 </template>
 
 <script setup>
     import { RouterLink } from 'vue-router'
+    import CartButton from '../CartButton.vue'
 </script>
 
 <style lang="scss" scoped></style>
