@@ -7,10 +7,17 @@
     })
 </script>
 
-<template>
-    <div class="container">
+<template lang="pug">
+<div class="container">
+//- 地圖
+#app.container
+  .taiwan-map(ref="map")
+  #map
+    svg#svg(xmlns="http://www.w3.org/2000/svg", preserveAspectRatio="xMidYMid meet")
 
-        <h1>D3.map area</h1>
+  .shop-list
+    h1 {{ h1 }}
+    h2 {{ h2 }}
     </div>
 </template>
 

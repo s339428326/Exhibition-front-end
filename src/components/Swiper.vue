@@ -101,18 +101,15 @@
 
     // Import Swiper styles
     import 'swiper/css'
-
     import 'swiper/css/navigation'
-
     // import './style.css';
-
     // import required modules
     import { Navigation } from 'swiper/modules'
 
     export default {
         components: {
             Swiper,
-            SwiperSlide
+            SwiperSlide,
         },
         setup() {
             return {

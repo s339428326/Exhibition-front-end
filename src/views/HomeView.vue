@@ -5,6 +5,8 @@
         <TestPopover class="mt-4 mb-4" /> -->
         <div class="container">
             <p class="h1">D3.map area</p>
+            <d3map/>
+            
         </div>
         <div class="container">
             <div>
