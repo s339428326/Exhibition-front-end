@@ -21,7 +21,7 @@
             rel="noopener"
             >official documentation</a
         >
-        provides you with all information you need to get started
+        provides you with all information you need to get started.
     </WelcomeItem>
 
     <WelcomeItem>

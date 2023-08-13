@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-
 // 註冊bootstrap 與 bootstrap-Vue
 import 'bootstrap'
 import BootstrapVue3 from 'bootstrap-vue-next'
