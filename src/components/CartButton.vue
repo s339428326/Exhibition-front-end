@@ -98,6 +98,7 @@
                         <small class="text-black-50"> {{ item.date }}</small>
 
                         <div class="d-flex align-items-center gap-1">
+                            <span>{{ item.tickType.tickType }}</span>
                             <button
                                 class="btn border-0"
                                 @click="quantityHandler"
@@ -115,6 +116,7 @@
                             >
                                 +
                             </button>
+
                             <button
                                 class="ms-auto btn border-0"
                                 @click="cartDataInstance.deleteCartItem(index)"
