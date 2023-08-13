@@ -26,7 +26,7 @@
                     <RouterLink
                         class="nav-link"
                         to="/ViewExhibition"
-                        >測試 exhibitionPage</RouterLink
+                        >2-3 page</RouterLink
                     >
                 </li>
                 <li>
