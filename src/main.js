@@ -15,6 +15,7 @@ import { createPinia } from 'pinia'
 import Heart from 'vue-material-design-icons/Heart.vue'
 import Cart from 'vue-material-design-icons/Cart.vue'
 import DeleteCircle from 'vue-material-design-icons/DeleteCircle.vue'
+import HeartOutline from 'vue-material-design-icons/HeartOutline.vue'
 
 const app = createApp(App)
 
@@ -26,5 +27,6 @@ app.use(createPinia())
 app.component('HeartIcon', Heart)
 app.component('CartIcon', Cart)
 app.component('DeleteCircleIcon', DeleteCircle)
+app.component('HeartOutlineIcon', HeartOutline)
 
 app.mount('#app')
