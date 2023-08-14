@@ -7,30 +7,42 @@
             />
         </section>
 
-        <section class="p-2 container mx-auto row mb-4">
-            <div class="col-8">
+        <section class="p-2 container mx-auto row flex-column flex-md-row mb-4">
+            <div class="col col-md-8">
                 <!-- 展覽Title-->
-                <div class="border-bottom pb-2 mb-4">
-                    <div class="d-flex justify-content-between">
+                <div class="border-bottom pb-2 mb-4 d-flex flex-wrap justify-content-between">
+                    <div class="d-flex flex-column">
                         <h1>{{ name }}</h1>
-                        <div>
-                            <button class="btn btn-outline-primary d-flex gap-2">
-                                <HeartIcon />
-                                <span>收藏</span>
-                            </button>
-                        </div>
+                        <time
+                            class="fs-4 fw-bold"
+                            datetime="#"
+                            >{{ date }}
+                        </time>
                     </div>
-                    <time
-                        class="fs-4 fw-bold"
-                        datetime="#"
-                        >{{ date }}
-                    </time>
+                    <div>
+                        <button
+                            v-if="isHeartClick"
+                            class="btn btn-primary d-flex gap-2"
+                            @click="HeartHandler"
+                        >
+                            <HeartIcon />
+                            收藏
+                        </button>
+                        <button
+                            v-else
+                            class="btn btn-outline-primary d-flex gap-2"
+                            @click="HeartHandler"
+                        >
+                            <HeartOutlineIcon />
+                            收藏
+                        </button>
+                    </div>
                 </div>
-                <p>
+                <p class="mb-4">
                     {{ introduce }}
                 </p>
             </div>
-            <div class="col-4">
+            <div class="col col-md-4">
                 <div>
                     <h2 class="text-center mb-2 border rounded-2 p-2">售票價格</h2>
                     <div class="border rounded-3 p-2 fs-5 shadow-sm mb-2">
@@ -73,18 +85,18 @@
                     >
                         {{ cartBtnName }}
                     </button>
-                    <button
+                    <RouterLink
                         class="btn btn-primary w-100 mb-2"
-                        type="button"
+                        to="/payment"
+                        >前往結賬</RouterLink
                     >
-                        前往結賬
-                    </button>
                 </div>
             </div>
         </section>
     </main>
 </template>
 <script>
+    import { RouterLink } from 'vue-router'
     import { useCartDataStore } from '../stores/cartData'
     //1.取得axios 資料後渲染畫面
     export default {
@@ -92,6 +104,7 @@
             return {
                 //pinia  狀態管理
                 cartDataInstance: useCartDataStore(),
+                isHeartClick: false,
                 //view
                 name: '', //展覽名稱
                 coverImage: '', //展覽圖片
@@ -139,6 +152,9 @@
             this.tickType = { tickType: '單展票', price: 80 }
             //
         },
+        components: {
+            RouterLink
+        },
         methods: {
             addCartItemHandler(e) {
                 console.log('test', this.price, this.tickGroup, this.name)
@@ -158,6 +174,9 @@
                 this.tickType = this.tickGroup[tickGroupIndex]
                 // this.cartBtnDisable = true
                 // console.log(this.cartBtnDisable)
+            },
+            HeartHandler() {
+                this.isHeartClick = !this.isHeartClick
             }
         }
     }
