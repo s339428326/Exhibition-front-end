@@ -209,10 +209,14 @@
 
     .ticket-choose {
         input:checked ~ label {
-            background-color: white;
+            background-color: black;
+
             border-radius: 0.25rem;
             color: black;
             transition: all 0.25s ease-in;
+            p {
+                color: white;
+            }
         }
     }
 </style>
