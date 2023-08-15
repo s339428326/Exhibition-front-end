@@ -16,7 +16,14 @@
                     class="position-relative"
                 >
                     <span class="tag bg-warning fw-bold">台中</span>
-                    <span class="material-symbols-outlined heart"> favorite </span>
+
+                    <LikeButton
+                        :className="`btn border-0 heart`"
+                        :data="{ name: 'test', location: '台中' }"
+                        :isLike="isHeartClick"
+                        :handler="handlerLike"
+                    >
+                    </LikeButton>
                 </b-card>
             </div>
         </swiper-slide>
@@ -105,15 +112,34 @@
     // import './style.css';
     // import required modules
     import { Navigation } from 'swiper/modules'
+    import LikeButton from '../components/LikeButton.vue'
 
     export default {
         components: {
             Swiper,
             SwiperSlide,
+            LikeButton
         },
         setup() {
             return {
                 modules: [Navigation]
+            }
+        },
+        data() {
+            return {
+                isHeartClick: false
+            }
+        },
+        methods: {
+            handlerLike() {
+                //demo for HeartIcon to HeartOutlineIcon
+                this.isHeartClick = !this.isHeartClick
+                console.log(
+                    '[Like btn]',
+                    this.isHeartClick,
+                    this.data,
+                    'feature: 等待開發Like FireBase 資料 及 新增 pinia store使用'
+                )
             }
         }
     }
