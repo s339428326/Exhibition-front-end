@@ -8,8 +8,12 @@
 
 <template>
     <AppHeader />
-    <router-view />
+    <router-view class="content" />
     <AppFooter />
 </template>
 
-<style scoped></style>
+<style scoped>
+    .content {
+        min-height: calc(100vh - 96px - 56px);
+    }
+</style>

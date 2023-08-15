@@ -19,15 +19,40 @@ const routes = [
             // route level code-splitting
             // this generates a separate chunk (About.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
+            // {
+            //     path: '/about',
+            //     name: 'About',
+            //     component: () => import('../views/AboutView.vue')
+            // },
             {
-                path: '/about',
-                name: 'About',
-                component: () => import('../views/AboutView.vue')
+                path: 'searchExhibition',
+                name: 'SearchExhibition',
+                component: () => import('../views/SearchExhibition.vue')
             },
             {
-                path: '/ViewExhibition',
+                path: 'viewExhibition',
                 name: 'ViewExhibition',
                 component: () => import('../views/ViewExhibition.vue')
+            },
+            {
+                path: 'user/information',
+                name: 'Information',
+                component: () => import('../views/user/UserInfo.vue')
+            },
+            {
+                path: 'user/orderSearch',
+                name: 'OrderSearch',
+                component: () => import('../views/user/OrderSearch.vue')
+            },
+            {
+                path: 'user/editPassword',
+                name: 'EditPassword',
+                component: () => import('../views/user/EditPassword.vue')
+            },
+            {
+                path: 'user/favoriteList',
+                name: 'FavoriteList',
+                component: () => import('../views/user/FavoriteList.vue')
             }
         ]
     },
@@ -36,9 +61,29 @@ const routes = [
         path: '/payment',
         name: 'Payment',
         component: PaymentLayout,
-        redirect: '/payment',
         //add there payment page
-        children: []
+        children: [
+            {
+                path: 'confirm',
+                name: 'OrderConfirm',
+                component: () => import('../views/Cart/OrderConfirm.vue')
+            },
+            {
+                path: 'orderInfo',
+                name: 'OrderInfo',
+                component: () => import('../views/Cart/OrderInfo.vue')
+            },
+            {
+                path: 'paymentInfo',
+                name: 'PaymentInfo',
+                component: () => import('../views/Cart/PaymentInfo.vue')
+            },
+            {
+                path: 'orderSuccess',
+                name: 'OrderSuccess',
+                component: () => import('../views/Cart/OrderSuccess.vue')
+            }
+        ]
     }
 ]
 

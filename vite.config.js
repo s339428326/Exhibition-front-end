@@ -21,5 +21,12 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist'
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: '@import "@/assets/scss/abstracts/__abstracts-dir.scss";'
+            }
+        }
     }
 })
