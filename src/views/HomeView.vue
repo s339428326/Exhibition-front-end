@@ -5,7 +5,7 @@
         <TestPopover class="mt-4 mb-4" /> -->
         <div class="container">
             <p class="h1">D3.map area</p>
-            <d3map />
+            <d-3-map/>
         </div>
         <div class="container">
             <div>
@@ -115,6 +115,7 @@
     // import TestPopover from '../components/TestPopover.vue'
     import Swiper from '../components/Swiper.vue'
     import { useExhibitionStore } from '../stores/exhibitionList'
+    import D3Map from '../components/D3Map.vue'
 
     onMounted(() => {
         const exhibitionStore = useExhibitionStore()
