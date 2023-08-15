@@ -96,7 +96,7 @@
                     <span>Start-2023</span>
                 </div>
                 <p>Hot Exhibition information</p>
-                <Swiper/>
+                <Swiper />
             </div>
         </div>
     </main>
@@ -113,7 +113,7 @@
     // import TheWelcome from '../components/TheWelcome.vue'
     // import TestToast from '../components/TestToast.vue'
     // import TestPopover from '../components/TestPopover.vue'
-   import Swiper from '../components/Swiper.vue'
+    import Swiper from '../components/Swiper.vue'
     import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
 
