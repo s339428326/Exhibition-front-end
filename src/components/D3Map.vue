@@ -1,47 +1,56 @@
-<script setup>
-    defineProps({
-        msg: {
-            type: String,
-            required: true
-        }
-    })
-</script>
-
-<template lang="pug">
-<div class="container">
-//- 地圖
-#app.container
-  .taiwan-map(ref="map")
-  #map
-    svg#svg(xmlns="http://www.w3.org/2000/svg", preserveAspectRatio="xMidYMid meet")
-
-  .shop-list
-    h1 {{ h1 }}
-    h2 {{ h2 }}
-    </div>
+<template>
+    <h1>test</h1>
+    <!-- <div id="map-container"></div> -->
+    <svg id="map" class="border"></svg>
 </template>
-
-<style scoped>
-    h1 {
-        font-weight: 500;
-        font-size: 2.6rem;
-        position: relative;
-        top: -10px;
+<style lang="scss">
+    body {
+        background: #fff;
     }
 
-    h3 {
-        font-size: 1.2rem;
+    .county {
+        fill: #ebf0e4;
+        stroke: gray;
+        stroke-width: 0.1px;
     }
 
-    .greetings h1,
-    .greetings h3 {
-        text-align: center;
-    }
-
-    @media (min-width: 1024px) {
-        .greetings h1,
-        .greetings h3 {
-            text-align: left;
-        }
+    .county:hover {
+        fill: red;
     }
 </style>
+<script>
+    import 'https://leafletjs.com/examples/choropleth/us-states.js'
+    import '../assets/js/d3.js'
+    import * as d3 from "d3";
+import * as topojson from "topojson";
+export default {
+        mounted() {
+            this.draw()
+        },
+        methods: {
+            draw() {
+                let svg = d3
+                    .select('#map')
+                    .attr('width', 500)
+                    .attr('height', 600)
+
+                var projectmethod = d3.geoMercator().center([123.4, 24]).scale(8000)
+                var pathGenerator = d3.geoPath().projection(projectmethod)
+                d3.json('../COUNTY_MOI_1090820.json').then((data) => {
+                    const geometries = topojson.feature(data, data.objects['COUNTY_MOI_1090820'])
+
+                    svg.append('path')
+                    const paths = svg.selectAll('path').data(geometries.features)
+                    paths
+                        .enter()
+                        .append('path')
+                        .attr('d', pathGenerator)
+                        .attr('class', 'county')
+                        // 加上簡易版本 tooltip
+                        .append('title')
+                        .text((d) => d.properties['COUNTYNAME'])
+                })
+            }
+        }
+    }
+</script>
