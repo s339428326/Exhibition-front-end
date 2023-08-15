@@ -1,7 +1,10 @@
 <template>
     <h1>test</h1>
     <!-- <div id="map-container"></div> -->
-    <svg id="map" class="border"></svg>
+    <svg
+        id="map"
+        class="border"
+    ></svg>
 </template>
 <style lang="scss">
     body {
@@ -20,19 +23,15 @@
 </style>
 <script>
     import 'https://leafletjs.com/examples/choropleth/us-states.js'
-    import '../assets/js/d3.js'
-    import * as d3 from "d3";
-import * as topojson from "topojson";
-export default {
+    import * as d3 from 'd3'
+    import * as topojson from 'topojson'
+    export default {
         mounted() {
             this.draw()
         },
         methods: {
             draw() {
-                let svg = d3
-                    .select('#map')
-                    .attr('width', 500)
-                    .attr('height', 600)
+                let svg = d3.select('#map').attr('width', 500).attr('height', 600)
 
                 var projectmethod = d3.geoMercator().center([123.4, 24]).scale(8000)
                 var pathGenerator = d3.geoPath().projection(projectmethod)
