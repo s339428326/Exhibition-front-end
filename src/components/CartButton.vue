@@ -39,6 +39,9 @@
                             : 1
                 }
                 this.cartDataInstance.updateCartItem(newData, index)
+            },
+            closeModelHandler() {
+                window.document.querySelector('body').style = null
             }
         }
     }
@@ -138,6 +141,7 @@
             <router-link
                 class="btn btn-primary"
                 to="/payment/confirm"
+                @click="closeModelHandler"
             >
                 前往結帳
             </router-link>
