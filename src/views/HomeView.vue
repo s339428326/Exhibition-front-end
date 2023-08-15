@@ -5,12 +5,7 @@
         <TestPopover class="mt-4 mb-4" /> -->
         <div class="container">
             <p class="h1">D3.map area</p>
-<<<<<<< Updated upstream
-            <d3map/>
-            
-=======
-            <d-3-map />
->>>>>>> Stashed changes
+            <D3Map/>
         </div>
         <div class="container">
             <div>
