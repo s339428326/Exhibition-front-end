@@ -45,6 +45,7 @@
             //memo map list title
             return {
                 w: window.innerWidth,
+                h: window.innerHeight,
                 currentCounty: '台北市'
             }
         },
@@ -62,12 +63,13 @@
                 // d3.select('#map').remove()
                 this.draw()
                 this.w = window.innerWidth
+                this.w = window.innerHeight
             },
             //draw map
             async draw() {
                 //refer: https://www.letswrite.tw/d3-vue-taiwan-map/
                 let width = this.$refs.map.offsetWidth - 12
-                let height = window.innerHeight - 500
+                let height = window.innerHeight
 
                 // const w = window.screen.width
                 let rwdScale = 11000 //rwd scale number
@@ -77,18 +79,19 @@
                     rwdScale = 11000 //pc
                     centerX = 122
                     centerY = 24.3
+                    height = this.h * 0.6
                 } else if (this.w <= 992 && this.w > 414) {
                     width = this.$refs.map.offsetWidth - 24
                     rwdScale = 9000 //pc
                     centerX = 122.6
                     centerY = 24
-                    height = window.innerHeight - 650
+                    height = this.h * 0.5
                 } else {
                     width = this.$refs.map.offsetWidth - 24
                     rwdScale = 6000 //mobile
                     centerX = 123.8
                     centerY = 23.3
-                    height = window.innerHeight - 450
+                    height = this.h * 0.5
                 }
 
                 document.querySelector('#map').innerHTML = ''
