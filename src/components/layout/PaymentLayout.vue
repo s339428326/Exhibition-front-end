@@ -1,16 +1,20 @@
 <script>
     import AppFooter from './AppFooter.vue'
+    import CartHeader from './CartHeader.vue'
+
     export default {
-        components: { AppFooter }
+        components: { AppFooter, CartHeader }
     }
 </script>
 
 <template>
-    <header>
-        <p>展覽檢索</p>
-    </header>
-    <router-view />
+    <CartHeader />
+    <router-view class="content" />
     <AppFooter />
 </template>
 
-<style scoped></style>
+<style scoped>
+    .content {
+        min-height: calc(100vh - 96px - 56px);
+    }
+</style>

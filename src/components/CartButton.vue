@@ -39,6 +39,9 @@
                             : 1
                 }
                 this.cartDataInstance.updateCartItem(newData, index)
+            },
+            closeModelHandler() {
+                window.document.querySelector('body').style = null
             }
         }
     }
@@ -135,12 +138,13 @@
                 總價格：NT $
                 {{ total }}
             </p>
-            <button
+            <router-link
                 class="btn btn-primary"
-                type="button"
+                to="/payment/confirm"
+                @click="closeModelHandler"
             >
-                前往結賬
-            </button>
+                前往結帳
+            </router-link>
         </div>
     </div>
 </template>

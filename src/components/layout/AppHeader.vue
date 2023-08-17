@@ -1,15 +1,15 @@
 <template>
-    <header class="bg-light text-black">
+    <header class="text-black">
         <nav class="container py-4 d-flex justify-content-between align-items-center">
             <a
                 class="fs-4 fw-bold"
                 href="/"
                 >Logo</a
             >
-            <ul class="d-flex gap-2 fs-6 fw-bold align-items-center">
+            <ul class="d-flex gap-3 fs-6 fw-bold align-items-center">
                 <li class="nav-item">
                     <RouterLink
-                        class="nav-link active"
+                        class="nav-link"
                         aria-current="page"
                         to="/"
                         >Home</RouterLink
@@ -18,16 +18,12 @@
                 <li class="nav-item">
                     <RouterLink
                         class="nav-link"
-                        to="/about"
-                        >About</RouterLink
+                        to="/searchExhibition"
+                        >搜索頁</RouterLink
                     >
                 </li>
                 <li class="nav-item">
-                    <RouterLink
-                        class="nav-link"
-                        to="/ViewExhibition"
-                        >2-3 page</RouterLink
-                    >
+                    <UserButton />
                 </li>
                 <li>
                     <CartButton />
@@ -40,6 +36,18 @@
 <script setup>
     import { RouterLink } from 'vue-router'
     import CartButton from '../CartButton.vue'
+    import UserButton from '../UserButton.vue'
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+    @import '@/assets/scss/layouts/header';
+    @import '@/assets/scss/layouts/footer';
+
+    .nav-item:hover {
+        color: $primary;
+    }
+    .router-link-active.router-link-exact-active.nav-link {
+        color: $danger;
+        font-weight: 700;
+    }
+</style>
