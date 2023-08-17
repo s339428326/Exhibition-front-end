@@ -10,10 +10,10 @@
                 <template #button-content>
                     <AccountCircle class="me-1" />
                     <template v-if="isLogin">
-                        <span>登出</span>
+                        <span class="vertical-align-middle">登出</span>
                     </template>
                     <template v-else>
-                        <span>登入</span>
+                        <span class="vertical-align-middle">登入</span>
                     </template>
                 </template>
                 <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
@@ -33,7 +33,15 @@
 </script>
 
 <style lang="scss" scoped>
-    .pointer {
-        cursor: pointer;
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+
+    :deep(.btn) {
+        padding: 0;
+        color: #000;
+        &:hover {
+            color: $primary;
+        }
     }
 </style>

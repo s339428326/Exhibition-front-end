@@ -6,10 +6,10 @@
                 href="/"
                 >Logo</a
             >
-            <ul class="d-flex gap-2 fs-6 fw-bold align-items-center">
+            <ul class="d-flex gap-3 fs-6 fw-bold align-items-center">
                 <li class="nav-item">
                     <RouterLink
-                        class="nav-link active"
+                        class="nav-link"
                         aria-current="page"
                         to="/"
                         >Home</RouterLink
@@ -20,13 +20,6 @@
                         class="nav-link"
                         to="/searchExhibition"
                         >搜索頁</RouterLink
-                    >
-                </li>
-                <li class="nav-item">
-                    <RouterLink
-                        class="nav-link"
-                        to="/viewExhibition"
-                        >2-3 page</RouterLink
                     >
                 </li>
                 <li class="nav-item">
@@ -49,4 +42,12 @@
 <style lang="scss" scoped>
     @import '@/assets/scss/layouts/header';
     @import '@/assets/scss/layouts/footer';
+
+    .nav-item:hover {
+        color: $primary;
+    }
+    .router-link-active.router-link-exact-active.nav-link {
+        color: $danger;
+        font-weight: 700;
+    }
 </style>

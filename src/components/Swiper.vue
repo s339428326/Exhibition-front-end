@@ -15,7 +15,7 @@
                     sub-title="Subtitle"
                     class="position-relative"
                 >
-                    <span class="tag bg-warning fw-bold">台中</span>
+                    <span class="tag bg-warning fw-bold"></span>
                     <span class="material-symbols-outlined heart"> favorite </span>
                 </b-card>
             </div>
@@ -109,7 +109,7 @@
     export default {
         components: {
             Swiper,
-            SwiperSlide,
+            SwiperSlide
         },
         setup() {
             return {
