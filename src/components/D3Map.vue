@@ -36,9 +36,10 @@
     }
 </style>
 <script>
-    import 'https://leafletjs.com/examples/choropleth/us-states.js'
     import * as d3 from 'd3'
     import * as topojson from 'topojson'
+    import jsonFile from '../assets/json/COUNTY_MOI_1090820.json'
+
     export default {
         data() {
             //memo map list title
@@ -91,7 +92,7 @@
                 }
 
                 document.querySelector('#map').innerHTML = ''
-                console.log(this.w, width, rwdScale, centerX, centerY)
+                // console.log(this.w, width, rwdScale, centerX, centerY)
                 //bind d3 Dom
                 const svg = d3.select('#map').attr('width', width).attr('height', height)
 
@@ -100,32 +101,34 @@
                     .geoPath()
                     .projection(d3.geoMercator().center([centerX, centerY]).scale(rwdScale))
 
-                //read json
-                await d3.json('../COUNTY_MOI_1090820.json').then((data) => {
-                    const geometries = topojson.feature(data, data.objects['COUNTY_MOI_1090820'])
+                //無作用
+                const data = jsonFile
+                console.log(data)
 
-                    svg.append('path')
-                    const paths = svg.selectAll('path').data(geometries.features)
-                    paths
-                        .enter()
-                        .append('path')
-                        //新增監聽事件
-                        .on('click', (e, d) => {
-                            console.log('click', d.properties['COUNTYNAME'])
-                            this.currentCounty = d.properties['COUNTYNAME']
-                            const activeList = document.querySelectorAll('.active')
-                            activeList.forEach((item) => {
-                                item.classList.remove('active')
-                            })
-                            e.target.classList.add('active')
+                const geometries = topojson.feature(data, data.objects['COUNTY_MOI_1090820'])
+                svg.append('path')
+                const paths = svg.selectAll('path').data(geometries.features)
+
+                paths
+                    .enter()
+                    .append('path')
+                    //新增監聽事件
+                    .on('click', (e, d) => {
+                        console.log('click', d.properties['COUNTYNAME'])
+                        this.currentCounty = d.properties['COUNTYNAME']
+                        const activeList = document.querySelectorAll('.active')
+                        activeList.forEach((item) => {
+                            item.classList.remove('active')
                         })
-                        .attr('d', path)
-                        .attr('class', `county`)
-                        // 加上簡易版本 tooltip
-                        .append('title')
-                        .text((d) => d.properties['COUNTYNAME'])
-                    // 添加点击事件监听器
-                })
+                        e.target.classList.add('active')
+                    })
+                    .attr('d', path)
+                    .attr('class', `county`)
+                    // 加上簡易版本 tooltip
+                    .append('title')
+                    .text((d) => d.properties['COUNTYNAME'])
+
+                return svg
             }
         }
     }
