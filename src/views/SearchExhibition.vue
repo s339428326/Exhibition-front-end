@@ -95,11 +95,11 @@
             </div>
             <div class="col-9">
                 <p class="mb-3">搜索結果項目：213</p>
-                <ul class="fairList d-flex flex-wrap">
+                <ul class="fairList row row-cols-sm-1 row row-cols-md-2 row row-cols-lg-3">
                     <li
                         v-for="(fairItem, idx) in fairList"
                         :key="idx"
-                        class="mx-2 my-2"
+                        class="my-2 hover-scale"
                     >
                         <CardFair
                             :title="fairItem.title"
@@ -249,24 +249,31 @@
 </script>
 
 <style lang="scss" scoped>
-    .fairList {
-        margin-left: -8px;
-        margin-right: -8px;
-        li {
-            width: calc((100% / 3) - 32px);
-            transition: 0.3s ease-in-out;
+    // .fairList {
+    //     margin-left: -8px;
+    //     margin-right: -8px;
+    //     li {
+    //         width: calc((100% / 3) - 32px);
+    //         transition: 0.3s ease-in-out;
 
-            @include media-lg {
-                width: calc((100% / 2) - 16px);
-            }
+    //         @include media-lg {
+    //             width: calc((100% / 2) - 16px);
+    //         }
 
-            @include media-sm {
-                width: 100%;
-            }
+    //         @include media-sm {
+    //             width: 100%;
+    //         }
 
-            &:hover {
-                transform: scale(1.04);
-            }
+    //         &:hover {
+    //             transform: scale(1.04);
+    //         }
+    //     }
+    // }
+
+    .hover-scale {
+        transition: 0.3s ease-in-out;
+        &:hover {
+            transform: scale(1.04);
         }
     }
 
