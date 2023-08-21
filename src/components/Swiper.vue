@@ -6,16 +6,22 @@
         :modules="modules"
         class="mySwiper px-5"
     >
-        <swiper-slide>
+        <swiper-slide
+            v-for="(item, index) in products"
+            :key="index"
+        >
             <div>
                 <b-card
                     overlay
-                    img-src="https://placekitten.com/900/600"
-                    img-alt="Card Image"
-                    sub-title="Subtitle"
+                    :img-src="item.imgSrc"
+                    :img-alt="item.imgAlt"
                     class="position-relative"
                 >
+<<<<<<< HEAD
+                    <span class="tag bg-warning fw-bold">{{ item.productArea }}</span>
+=======
                     <span class="tag bg-warning fw-bold">台中</span>
+>>>>>>> f2097645a000725fc2b1f28223a1a5ccb555fc0f
 
                     <LikeButton
                         :className="`btn border-0 heart`"
@@ -24,6 +30,8 @@
                         :handler="handlerLike"
                     >
                     </LikeButton>
+<<<<<<< HEAD
+=======
                 </b-card>
             </div>
         </swiper-slide>
@@ -80,6 +88,7 @@
                 >
                     <span class="tag bg-warning fw-bold">台中</span>
                     <span class="material-symbols-outlined heart"> favorite </span>
+>>>>>>> f2097645a000725fc2b1f28223a1a5ccb555fc0f
                 </b-card>
             </div>
         </swiper-slide>
@@ -127,7 +136,33 @@
         },
         data() {
             return {
+<<<<<<< HEAD
+                isHeartClick: false,
+                products: [
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '台中'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '高雄'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '台中'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '高雄'
+                    }
+                ]
+=======
                 isHeartClick: false
+>>>>>>> f2097645a000725fc2b1f28223a1a5ccb555fc0f
             }
         },
         methods: {
