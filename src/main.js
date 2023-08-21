@@ -19,7 +19,6 @@ import HeartOutline from 'vue-material-design-icons/HeartOutline.vue'
 import AccountCircle from 'vue-material-design-icons/AccountCircle.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
 import Datepicker from 'vuejs3-datepicker'
-
 const app = createApp(App)
 
 app.use(router)
