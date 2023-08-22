@@ -20,7 +20,7 @@
                     <span class="tag bg-warning fw-bold">{{ item.productArea }}</span>
 
                     <LikeButton
-                        :className="`btn border-0 heart`"
+                        :className="`bg-transparent border-0 heart`"
                         :data="{ name: 'test', location: '台中' }"
                         :isLike="isHeartClick"
                         :handler="handlerLike"
@@ -44,8 +44,8 @@
     .heart {
         position: absolute;
         padding: 5px;
-        right: 0;
-        top: 0;
+        right: 5px; /* Adjust the right value as needed */
+    top: 5px; /* Adjust the top value as needed */
     }
 </style>
 <script>
