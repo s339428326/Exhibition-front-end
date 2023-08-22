@@ -83,7 +83,7 @@
                     {
                         imgSrc: 'https://placekitten.com/900/600',
                         imgAlt: 'Card Image',
-                        productArea: '高雄'
+                        productArea: '新北'
                     },
                     {
                         imgSrc: 'https://placekitten.com/900/600',
