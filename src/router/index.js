@@ -66,22 +66,7 @@ const routes = [
             {
                 path: 'confirm',
                 name: 'OrderConfirm',
-                component: () => import('../views/Cart/OrderConfirm.vue')
-            },
-            {
-                path: 'orderInfo',
-                name: 'OrderInfo',
-                component: () => import('../views/Cart/OrderInfo.vue')
-            },
-            {
-                path: 'paymentInfo',
-                name: 'PaymentInfo',
-                component: () => import('../views/Cart/PaymentInfo.vue')
-            },
-            {
-                path: 'orderSuccess',
-                name: 'OrderSuccess',
-                component: () => import('../views/Cart/OrderSuccess.vue')
+                component: () => import('../views/Payment/PaymentView.vue')
             }
         ]
     }

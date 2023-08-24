@@ -6,6 +6,7 @@ import 'bootstrap'
 import BootstrapVue3 from 'bootstrap-vue-next'
 
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+import './assets/scss/vendors/bootstrap/_bootstrap.scss'
 import './assets/scss/styles.scss'
 
 // 註冊pinia
@@ -18,6 +19,8 @@ import DeleteCircle from 'vue-material-design-icons/DeleteCircle.vue'
 import HeartOutline from 'vue-material-design-icons/HeartOutline.vue'
 import AccountCircle from 'vue-material-design-icons/AccountCircle.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
+
+//datepicker
 import Datepicker from 'vuejs3-datepicker'
 
 const app = createApp(App)
