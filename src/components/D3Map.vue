@@ -9,11 +9,26 @@
         </div>
         <div class="col-12 col-lg-6">
             <h5>目前選擇項目：{{ currentCounty }}</h5>
-            <ul>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-            </ul>
+            <div v-for="(item, index) in products" :key="index">
+
+                <b-card
+                    overlay
+                    style="max-width: 100%;"
+                    :img-src="item.imgSrc"
+                    :img-alt="item.imgAlt"
+                    text-variant="white"
+                    :class="`img-fit position-relative`"
+                >
+                    <b-card-text>
+                        {{ (index + 1).toString().padStart(2, '0') }}
+                        <p
+                        :class="`my-2 fs-4`"
+                        >{{ item.productName }}</p>
+                        <p :class="`position-absolute bottom-0 start-0 p-2`" 
+                        >{{ item.productDate }}</p>
+                    </b-card-text>
+                </b-card>
+            </div>
         </div>
     </section>
 </template>
@@ -34,6 +49,9 @@
     .active {
         fill: #8fcf36;
     }
+    .img-fit{
+        object-fit: contain;
+    }
 </style>
 <script>
     import * as d3 from 'd3'
@@ -46,10 +64,32 @@
             return {
                 w: window.innerWidth,
                 h: window.innerHeight,
-                currentCounty: '台北市'
+                currentCounty: '台北市',
+                products: [
+                    {
+                        imgSrc: 'https://picsum.photos/450/150/?image=42',
+                        imgAlt: 'Card Image',
+                        productArea: '台中',
+                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲',
+                        productDate:'2023/07/01'
+                    },
+                    {
+                        imgSrc: 'https://picsum.photos/450/150/?image=43',
+                        imgAlt: 'Card Image',
+                        productArea: '新北',
+                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲2',
+                        productDate:'2023/07/01'
+                    },
+                    {
+                        imgSrc: 'https://picsum.photos/450/150/?image=41',
+                        imgAlt: 'Card Image',
+                        productArea: '台中',
+                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲3',
+                        productDate:'2023/07/01'
+                    }
+                ]
             }
         },
-
         mounted() {
             this.draw()
             window.addEventListener('resize', this.handleResize)

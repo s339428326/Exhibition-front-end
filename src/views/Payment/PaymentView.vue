@@ -422,10 +422,6 @@
                             : 1
                 }
                 this.cartDataInstance.updateCartItem(newData, index)
-            },
-            // step
-            changeStepView(e) {
-                console.log('click')
             }
         },
         computed: {

@@ -22,7 +22,6 @@ import Magnify from 'vue-material-design-icons/Magnify.vue'
 
 //datepicker
 import Datepicker from 'vuejs3-datepicker'
-
 const app = createApp(App)
 
 app.use(router)

@@ -17,71 +17,15 @@
                     :img-alt="item.imgAlt"
                     class="position-relative"
                 >
-                    <span class="tag bg-warning fw-bold">台中</span>
+                    <span class="tag bg-warning fw-bold">{{ item.productArea }}</span>
 
                     <LikeButton
-                        :className="`btn border-0 heart`"
+                        :className="`bg-transparent border-0 heart`"
                         :data="{ name: 'test', location: '台中' }"
                         :isLike="isHeartClick"
                         :handler="handlerLike"
                     >
                     </LikeButton>
-                </b-card>
-            </div>
-        </swiper-slide>
-        <swiper-slide>
-            <div>
-                <b-card
-                    overlay
-                    img-src="https://placekitten.com/900/600"
-                    img-alt="Card Image"
-                    sub-title="Subtitle"
-                    class="position-relative"
-                >
-                    <span class="tag bg-warning fw-bold">台中</span>
-                    <span class="material-symbols-outlined heart"> favorite </span>
-                </b-card>
-            </div>
-        </swiper-slide>
-        <swiper-slide>
-            <div>
-                <b-card
-                    overlay
-                    img-src="https://placekitten.com/900/600"
-                    img-alt="Card Image"
-                    sub-title="Subtitle"
-                    class="position-relative"
-                >
-                    <span class="tag bg-warning fw-bold">台中</span>
-                    <span class="material-symbols-outlined heart"> favorite </span>
-                </b-card>
-            </div>
-        </swiper-slide>
-        <swiper-slide>
-            <div>
-                <b-card
-                    overlay
-                    img-src="https://placekitten.com/900/600"
-                    img-alt="Card Image"
-                    sub-title="Subtitle"
-                    class="position-relative"
-                >
-                    <span class="tag bg-warning fw-bold">台中</span>
-                    <span class="material-symbols-outlined heart"> favorite </span>
-                </b-card>
-            </div>
-        </swiper-slide>
-        <swiper-slide>
-            <div>
-                <b-card
-                    overlay
-                    img-src="https://placekitten.com/900/600"
-                    img-alt="Card Image"
-                    sub-title="Subtitle"
-                    class="position-relative"
-                >
-                    <span class="tag bg-warning fw-bold">台中</span>
-                    <span class="material-symbols-outlined heart"> favorite </span>
                 </b-card>
             </div>
         </swiper-slide>
@@ -100,8 +44,8 @@
     .heart {
         position: absolute;
         padding: 5px;
-        right: 0;
-        top: 0;
+        right: 5px; /* Adjust the right value as needed */
+        top: 5px; /* Adjust the top value as needed */
     }
 </style>
 <script>
@@ -129,7 +73,29 @@
         },
         data() {
             return {
-                isHeartClick: false
+                isHeartClick: false,
+                products: [
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '台中'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '新北'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '台中'
+                    },
+                    {
+                        imgSrc: 'https://placekitten.com/900/600',
+                        imgAlt: 'Card Image',
+                        productArea: '高雄'
+                    }
+                ]
             }
         },
         methods: {
