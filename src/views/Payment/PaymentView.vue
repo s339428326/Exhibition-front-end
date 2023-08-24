@@ -43,7 +43,11 @@
         <div class="row">
             <!-- left side -->
             <!-- Step 1 -->
-            <section :class="`col-8 flex-grow-1 ${page === 1 ? 'd-block' : 'd-none'}`">
+            <section
+                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1 ${
+                    page === 1 ? 'd-block' : 'd-none'
+                }`"
+            >
                 <div class="border rounded-4 shadow-sm p-4 h-100">
                     <h2 class="mb-4 fs-4">購票內容</h2>
                     <ul class="d-flex flex-column gap-4">
@@ -107,7 +111,11 @@
                 </div>
             </section>
             <!-- Step 2 -->
-            <div :class="`col-8 flex-grow-1 ${page === 2 ? 'd-block' : 'd-none'}`">
+            <div
+                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1 ${
+                    page === 2 ? 'd-block' : 'd-none'
+                }`"
+            >
                 <div class="border p-3 rounded-4 shadow-sm">
                     <b-form
                         class="row"
@@ -199,7 +207,11 @@
                 </div>
             </div>
             <!-- Step 3 -->
-            <div :class="`col-8 flex-grow-1  ${page === 3 ? 'd-block' : 'd-none'}`">
+            <div
+                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1  ${
+                    page === 3 ? 'd-block' : 'd-none'
+                }`"
+            >
                 <div class="border p-3 rounded-4 shadow-sm">
                     <b-form
                         class="row"
@@ -285,37 +297,78 @@
                 </div>
             </div>
             <!-- Step 4 -->
-            <div :class="`col-8 flex-grow-1  ${page === 4 ? 'd-block' : 'd-none'}`">
-                <h5>Step 4 最後確認資料</h5>
-                <p>商品：{{ JSON.stringify(cartDataInstance.cartData) }}</p>
-                <p>email:{{ JSON.stringify(form.email) }}</p>
-                <p>name:{{ JSON.stringify(form.name) }}</p>
-                <p>tel:{{ JSON.stringify(form.tel) }}</p>
-                <p>address:{{ JSON.stringify(form.address) }}</p>
-                <p>cardName:{{ JSON.stringify(form.cardName) }}</p>
-                <p>cardNumber:{{ JSON.stringify(form.cardNumber) }}</p>
-                <p>cvc:{{ JSON.stringify(form.cvc) }}</p>
-                <p>cardDate:{{ JSON.stringify(form.cardDate) }}</p>
-                <div class="mt-4 d-flex gap-4">
-                    <button
-                        @click="pageHandler('del')"
-                        class="btn btn-dark w-100"
-                        type="button"
-                    >
-                        上一步
-                    </button>
-                    <!-- change url -->
-                    <button
-                        type="button"
-                        class="btn btn-dark w-100"
-                    >
-                        完成訂單
-                    </button>
+            <div
+                :class="`col-auto col-md-8 flex-grow-1 order-1 order-md-0 ${
+                    page === 4 ? 'd-block' : 'd-none'
+                }`"
+            >
+                <div class="border p-4 rounded-4">
+                    <h2 class="fs-4 fw-medium mb-3">完成訂購</h2>
+
+                    <h3 class="pb-2 mb-4 border-bottom">購買明細</h3>
+                    <ul class="d-flex flex-column gap-4 mb-4">
+                        <li
+                            v-for="(item, index) in cartDataInstance.cartData"
+                            :key="index"
+                        >
+                            <div class="d-flex gap-4 align-items-center">
+                                <!-- img -->
+                                <div>
+                                    <img
+                                        class="img-box-2"
+                                        :src="item.coverImage"
+                                        :alt="item.name"
+                                    />
+                                </div>
+                                <!-- content -->
+                                <div class="d-flex flex-column">
+                                    <p class="fw-medium">{{ item.name }}</p>
+                                    <small>{{ item.date }}</small>
+                                    <small>{{ item.tickType.tickType }}</small>
+                                </div>
+                                <p>數量：{{ item.quantity }}</p>
+                                <p class="fs-6 fw-bold ms-auto">
+                                    NT$ {{ item.price * item.quantity }}
+                                </p>
+                                <!-- delButton -->
+                                <div></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <h3 class="pb-2 mb-3 border-bottom">訂購資訊</h3>
+                    <ul class="d-flex flex-column gap-1">
+                        <li>收件者： {{ form.name }}</li>
+                        <li>信箱： {{ form.email }}</li>
+                        <li>電話： {{ form.tel }}</li>
+                        <li>地址： {{ form.address }}</li>
+                        <li>
+                            信用卡：{{
+                                form.cardNumber
+                                    .split('')
+                                    .map((item, index) => (index < 4 ? item : '*'))
+                                    .join('')
+                            }}
+                        </li>
+                    </ul>
+                    <div class="mt-4 d-flex gap-4">
+                        <button
+                            @click="pageHandler('del')"
+                            class="btn btn-dark w-100"
+                            type="button"
+                        >
+                            上一步
+                        </button>
+                        <!-- change url -->
+                        <button
+                            type="button"
+                            class="btn btn-dark w-100"
+                        >
+                            完成訂單
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <!-- Step -->
-
+            <!-- 完成訂購 -->
             <!-- right side -->
             <section class="col-4 flex-grow-1">
                 <div
@@ -462,5 +515,12 @@
         border-radius: 0.25rem;
         width: 125px;
         height: 125px;
+    }
+
+    .img-box-2 {
+        object-fit: cover;
+        border-radius: 0.25rem;
+        width: 75px;
+        height: 75px;
     }
 </style>
