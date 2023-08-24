@@ -7,22 +7,10 @@
                     購物車
                 </h2>
             </div>
-            <ul class="d-flex gap-2 fs-6 fw-bold align-items-center">
-                <li class="nav-item">
-                    <UserButton />
-                </li>
-                <li class="nav-item">
-                    <CartButton />
-                </li>
-            </ul>
         </nav>
     </header>
 </template>
 
-<script setup>
-    // import { RouterLink } from 'vue-router'
-    import CartButton from '../CartButton.vue'
-    import UserButton from '../UserButton.vue'
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

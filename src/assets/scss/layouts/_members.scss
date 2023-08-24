@@ -1,9 +1,11 @@
-$color: blue;
-body{
-    color: $color;
-    background: $color;
-   
-}
-.item{
+//不要直接使用 標籤選擇器
+// $color: blue;
+// body{
+//     color: $color;
+//     background: $color;
+
+// }
+
+.item {
     font-size: 56px;
 }

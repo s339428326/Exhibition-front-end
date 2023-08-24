@@ -45,7 +45,7 @@
         position: absolute;
         padding: 5px;
         right: 5px; /* Adjust the right value as needed */
-    top: 5px; /* Adjust the top value as needed */
+        top: 5px; /* Adjust the top value as needed */
     }
 </style>
 <script>
