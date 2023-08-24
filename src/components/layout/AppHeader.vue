@@ -36,6 +36,7 @@
 <script setup>
     import { RouterLink } from 'vue-router'
     import UserButton from '../UserButton.vue'
+    import CartButton from '../cartButton.vue'
 </script>
 
 <style lang="scss" scoped>
