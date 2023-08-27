@@ -9,7 +9,7 @@
                     >
                         1
                     </p>
-                    <p class="text-center">確認訂單</p>
+                    <p class="text-center">建立訂單</p>
                 </li>
                 <li class="flex-grow-1 border-bottom border-2 h-0 mt-4"></li>
                 <li class="border-black p-2">
@@ -49,7 +49,7 @@
                 }`"
             >
                 <div class="border rounded-4 shadow-sm p-4 h-100">
-                    <h2 class="mb-4 fs-4">購票內容</h2>
+                    <h2 class="mb-4 fs-4">建立訂單</h2>
                     <ul class="d-flex flex-column gap-4">
                         <li
                             v-for="(item, index) in cartDataInstance.cartData"
@@ -303,7 +303,7 @@
                 }`"
             >
                 <div class="border p-4 rounded-4">
-                    <h2 class="fs-4 fw-medium mb-3">完成訂購</h2>
+                    <h2 class="fs-4 fw-medium mb-3">完成訂單</h2>
 
                     <h3 class="pb-2 mb-4 border-bottom">購買明細</h3>
                     <ul class="d-flex flex-column gap-4 mb-4">
@@ -368,7 +368,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 完成訂購 -->
             <!-- right side -->
             <section class="col-4 flex-grow-1">
                 <div
