@@ -19,6 +19,7 @@ import DeleteCircle from 'vue-material-design-icons/DeleteCircle.vue'
 import HeartOutline from 'vue-material-design-icons/HeartOutline.vue'
 import AccountCircle from 'vue-material-design-icons/AccountCircle.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
+import Close from 'vue-material-design-icons/Close.vue'
 
 //datepicker
 import Datepicker from 'vuejs3-datepicker'
@@ -33,6 +34,7 @@ app.component('HeartIcon', Heart)
 app.component('CartIcon', Cart)
 app.component('DeleteCircleIcon', DeleteCircle)
 app.component('HeartOutlineIcon', HeartOutline)
+app.component('CloseIcon', Close)
 app.component('AccountCircle', AccountCircle)
 app.component('Magnify', Magnify)
 

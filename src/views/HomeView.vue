@@ -1,17 +1,6 @@
 <template>
     <main>
-        <!-- <TheWelcome />
-        <TestToast />
-        <TestPopover class="mt-4 mb-4" /> -->
-        <button
-            type="button"
-            @click="data"
-        >
-            Test
-        </button>
         <div class="container">
-            <!-- D3 map -->
-            <!-- <d-3-map /> -->
             <D3Map />
         </div>
         <div class="container">
@@ -117,24 +106,9 @@
 </style>
 <script setup>
     import { onMounted } from 'vue'
-    // import TheWelcome from '../components/TheWelcome.vue'
-    // import TestToast from '../components/TestToast.vue'
-    // import TestPopover from '../components/TestPopover.vue'
     import Swiper from '../components/Swiper.vue'
     import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
-    import axios from 'axios'
-
-    const data = async () => {
-        try {
-            const res = await axios.get(
-                'https://evening-hollows-08215-2bb8e1b9252d.herokuapp.com/api/v1/exhibition/'
-            )
-            console.log('[test]', res)
-        } catch (error) {
-            console.log('[test]', error)
-        }
-    }
 
     onMounted(() => {
         const exhibitionStore = useExhibitionStore()
