@@ -1,11 +1,6 @@
 <template>
     <main>
-        <!-- <TheWelcome />
-        <TestToast />
-        <TestPopover class="mt-4 mb-4" /> -->
         <div class="container">
-            <!-- D3 map -->
-            <!-- <d-3-map /> -->
             <D3Map />
         </div>
         <div class="container">
@@ -111,9 +106,6 @@
 </style>
 <script setup>
     import { onMounted } from 'vue'
-    // import TheWelcome from '../components/TheWelcome.vue'
-    // import TestToast from '../components/TestToast.vue'
-    // import TestPopover from '../components/TestPopover.vue'
     import Swiper from '../components/Swiper.vue'
     import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
