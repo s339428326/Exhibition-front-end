@@ -49,7 +49,7 @@
 
 <template>
     <button
-        class="btn btn-cart"
+        class="btn btn-cart p-1 bg-light"
         @click="handlerCart"
         type="button"
         data-bs-toggle="offcanvas"
@@ -154,8 +154,8 @@
         position: relative;
         p {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: -12px;
+            right: -12px;
             width: 24px;
             height: 24px;
             border-radius: 50%;

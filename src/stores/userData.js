@@ -43,6 +43,8 @@ export const userDataStore = defineStore('userData', {
                 switch (res.error.message) {
                     case 'EMAIL_NOT_FOUND':
                         return '帳號密碼錯誤, 請重新輸入'
+                    case 'MISSING_PASSWORD':
+                        return '帳號密碼錯誤, 請重新輸入'
                     default:
                         return '伺服器回應錯誤, 請聯絡我們！'
                 }

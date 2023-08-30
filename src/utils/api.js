@@ -1,13 +1,12 @@
 import axios from 'axios'
 
 // baseURL是你API的主要Domain，之後發請求時只要填相對路徑就可以了
-const instance = () =>
-    axios.create({
-        // baseURL待更改為firebase url
-        baseURL: 'https://cloud.culture.tw',
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 20000
-    })
+const instance = axios.create({
+    // baseURL待更改為firebase url
+    baseURL: 'https://cloud.culture.tw',
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 20000
+})
 
 // 此處的instance為我們create的實體
 instance.interceptors.request.use(

@@ -1,10 +1,10 @@
 <template>
-    <header class="text-black">
+    <header class="text-black bg-primary">
         <nav class="container py-4 d-flex justify-content-between align-items-center">
-            <a
-                class="fs-4 fw-bold"
-                href="/"
-                >Logo</a
+            <RouterLink
+                class="fs-4 fw-bold text-black"
+                to="/"
+                >Logo</RouterLink
             >
             <ul class="d-flex gap-3 fs-6 fw-bold align-items-center">
                 <li class="nav-item">
@@ -22,11 +22,11 @@
                         >搜索頁</RouterLink
                     >
                 </li>
-                <li class="nav-item">
-                    <UserButton />
-                </li>
                 <li>
                     <CartButton />
+                </li>
+                <li class="nav-item">
+                    <UserButton />
                 </li>
             </ul>
         </nav>
