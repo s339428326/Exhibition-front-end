@@ -53,9 +53,12 @@
                                     for="login-email"
                                     >信箱</label
                                 >
+
                                 <VeeField
                                     id="login-email"
-                                    class="border-bottom border-top-0 border-start-0 border-end-0 border-black p-1"
+                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
+                                        errors['email'] ? 'border-danger' : 'border-black'
+                                    }`"
                                     placeholder="請輸入信箱"
                                     name="email"
                                     type="email"
@@ -80,7 +83,9 @@
                                 >
                                 <VeeField
                                     id="login-password"
-                                    class="border-bottom border-top-0 border-start-0 border-end-0 border-black p-1"
+                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
+                                        errors['密碼'] ? 'border-danger' : 'border-black'
+                                    }`"
                                     placeholder="請輸入密碼"
                                     name="密碼"
                                     type="password"
