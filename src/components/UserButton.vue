@@ -1,9 +1,11 @@
 <template>
-    <div v-if="userDataStore().userData.isLogin === false">
+    <div v-if="isLogin === false">
         <!-- Button trigger modal -->
         <button
             type="button"
-            class="btn btn-secondary text-white d-flex align-items-center gap-2"
+            :class="`btn btn-secondary text-white d-flex align-items-center gap-2 ${
+                isLoading && 'd-none'
+            }`"
             data-bs-toggle="modal"
             data-bs-target="#loginModal"
         >
@@ -98,8 +100,18 @@
                             <button
                                 class="btn btn-primary w-100"
                                 type="submit"
+                                :disabled="isLoading"
                             >
-                                送出
+                                <template v-if="isLoading === true">
+                                    <span
+                                        class="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    ></span>
+                                    <span class="sr-only">Loading...</span>
+                                </template>
+
+                                <template v-else> 送出 </template>
                             </button>
                             <p class="h-18 text-danger mb-2">{{ resLoginErrorMessage }}</p>
                         </VeeForm>
@@ -197,8 +209,18 @@
                             <button
                                 class="btn btn-primary w-100 mb-2"
                                 type="submit"
+                                :disabled="isLoading"
                             >
-                                註冊
+                                <template v-if="isLoading === true">
+                                    <span
+                                        class="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    ></span>
+                                    <span class="sr-only">Loading...</span>
+                                </template>
+
+                                <template v-else> 註冊 </template>
                             </button>
                             <p class="h-18 text-danger mb-2">{{ resRegisterErrorMessage }}</p>
                         </VeeForm>
@@ -224,8 +246,8 @@
         </div>
     </div>
     <div
-        class="d-flex pointer"
         v-else
+        class="d-flex pointer"
     >
         <b-dropdown
             size="lg"
@@ -236,35 +258,46 @@
             <template #button-content>
                 <img
                     class="avatar me-2"
-                    src="https://fakeimg.pl/200x100/"
+                    :src="`${store.userData.picture}`"
                 />
-                <span class="vertical-align-middle text-dark">userName</span>
+                <span class="vertical-align-middle text-dark">{{ store.userData.name }}</span>
             </template>
             <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
             <b-dropdown-item to="/user/orderSearch">訂單查詢</b-dropdown-item>
             <b-dropdown-item to="/user/editPassword">修改密碼</b-dropdown-item>
             <b-dropdown-item to="/user/favoriteList">收藏展覽</b-dropdown-item>
-            <b-dropdown-item>
-                <button
-                    @click="logout"
-                    class="border-0 bg-transparent"
-                    type="button"
-                >
-                    登出
-                </button>
-            </b-dropdown-item>
+            <b-dropdown-item @click="logout"> 登出 </b-dropdown-item>
         </b-dropdown>
-        <button @click="test">test</button>
     </div>
+
+    <!-- 讀取狀態 -->
+    <!-- isLoading -->
+    <button
+        type="button"
+        :class="`btn btn-secondary text-white d-flex align-items-center gap-2 ${
+            !isLoading && 'd-none'
+        }`"
+    >
+        <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+        ></span>
+        <span class="sr-only">Loading...</span>
+    </button>
 </template>
 
 <script setup>
     import { userDataStore } from '../stores/userData'
-    import { Modal } from '../../node_modules/bootstrap/js/index.esm'
-    import { ref } from 'vue'
+    import { ref, onBeforeMount } from 'vue'
+    import { Modal } from 'bootstrap'
 
-    //[FIX] cookie 驗證
-    // let isLogin = ref(true)
+    //login state
+    const isLogin = ref(false)
+    //loading state
+    const isLoading = ref(false)
+    //store
+    const store = userDataStore()
     //change From View State
     let isRegisterClick = ref(false)
     let resLoginErrorMessage = ref('')
@@ -273,10 +306,37 @@
     const loginRef = ref(null)
     const registerRef = ref(null)
 
-    const test = () => {
-        console.log(userDataStore().userData.isLogin)
-    }
+    //驗證token
+    const verifyToken = async () => {
+        isLoading.value = true
 
+        const token = localStorage.getItem('token')
+        let userId = ''
+        if (token) {
+            userId = await store.confirmToken(token)
+        } else {
+            isLoading.value = false
+            return
+        }
+        //如果失敗跳出運作
+        if (userId === false) {
+            isLogin.value = false
+            isLoading.value = false
+            return
+        }
+
+        const userInfoData = await store.getUserInfoData(userId)
+        console.log('[userInfoData]', userInfoData)
+        isLogin.value = true
+        isLoading.value = false
+    }
+    //fake logoutState
+    const logout = () => {
+        //clear login
+        console.log('登出')
+        localStorage.removeItem('token')
+        isLogin.value = false
+    }
     //change from view
     const changeFromHandler = (e) => {
         e.preventDefault()
@@ -285,14 +345,16 @@
     }
     //登入 handler
     const loginSubmit = async (data) => {
+        isLoading.value = true
         console.log('[loginSubmit ]', data)
-        const userData = await userDataStore().login({
+        const userData = await store.login({
             email: data.email,
             password: data['密碼']
         })
 
         //登入成功
         if (userData === true) {
+            isLogin.value = true
             const modal = Modal.getInstance('#loginModal')
             modal.hide()
         }
@@ -302,16 +364,19 @@
             loginRef.value.resetForm()
             resLoginErrorMessage.value = userData
         }
+        isLoading.value = false
     }
     //註冊 handler
     const registerSubmit = async (data) => {
         console.log('[registerSubmit ]', data)
-        const res = await userDataStore().register({
+        isLoading.value = true
+        const res = await store.register({
             email: data.email,
             password: data['密碼']
         })
         //註冊成功
         if (res === true) {
+            isLogin.value = true
             const modal = Modal.getInstance('#loginModal')
             modal.hide()
         }
@@ -320,11 +385,12 @@
         if (typeof res === 'string') {
             resRegisterErrorMessage.value = res
         }
+        isLoading.value = false
     }
-    //fake logoutState
-    const logout = () => {
-        userDataStore().userData.isLogin = false
-    }
+
+    onBeforeMount(() => {
+        verifyToken()
+    })
 </script>
 
 <style lang="scss" scoped>

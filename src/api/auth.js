@@ -29,13 +29,15 @@ export const login = async (data) => {
 }
 
 //取得使用者auth資料
-export const getUserAuthData = async (data) => {
+export const getUserAuthData = async (token) => {
     try {
-        const res = await axios.post(url('/v1/accounts:signInWithPassword'), data)
-        console.log('[login]', res)
+        const res = await axios.post(url('/v1/accounts:lookup'), {
+            idToken: token
+        })
+        console.log('[getUserAuthData]', res)
         return res
     } catch (error) {
-        console.log('[login]', error.response.data.error.message)
+        console.log('[getUserAuthData]', error.response.data.error.message)
         return error.response.data
     }
 }
