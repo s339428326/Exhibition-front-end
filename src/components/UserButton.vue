@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLogin === false">
+    <div v-if="userDataStore().userData.isLogin === false">
         <!-- Button trigger modal -->
         <button
             type="button"
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <p class="fw-bold text-center fs-4">
+                        <p class="fw-bold text-center fs-4 text-dark">
                             {{ isRegisterClick ? '註冊' : '登入' }}
                         </p>
 
@@ -41,7 +41,7 @@
                         <VeeForm
                             v-slot="{ errors }"
                             v-if="isRegisterClick === false"
-                            class="d-flex flex-column mb-2"
+                            class="d-flex flex-column"
                             ref="loginRef"
                             @submit="loginSubmit"
                         >
@@ -95,19 +95,20 @@
                                     class="errorMessage"
                                 ></p>
                             </div>
-                            <p class="h-18 text-danger">{{ resErrorMessage }}</p>
                             <button
-                                class="btn btn-primary w-100 mb-2"
+                                class="btn btn-primary w-100"
                                 type="submit"
                             >
                                 送出
                             </button>
+                            <p class="h-18 text-danger mb-2">{{ resLoginErrorMessage }}</p>
                         </VeeForm>
                         <!-- registerFrom -->
                         <VeeForm
                             v-else
+                            ref="registerRef"
                             v-slot="{ errors }"
-                            class="d-flex flex-column mb-2"
+                            class="d-flex flex-column"
                             @submit="registerSubmit"
                         >
                             <div class="d-flex flex-column gap-1 mb-1">
@@ -199,11 +200,11 @@
                             >
                                 註冊
                             </button>
+                            <p class="h-18 text-danger mb-2">{{ resRegisterErrorMessage }}</p>
                         </VeeForm>
 
                         <div class="d-flex gap-2">
                             <button
-                                ref="registerRef"
                                 @click="changeFromHandler"
                                 class="btn btn-secondary text-white"
                                 type="button"
@@ -233,13 +234,11 @@
             no-caret
         >
             <template #button-content>
-                <AccountCircle class="me-1" />
-                <template v-if="isLogin">
-                    <span class="vertical-align-middle">登出</span>
-                </template>
-                <template v-else>
-                    <span class="vertical-align-middle">登入</span>
-                </template>
+                <img
+                    class="avatar me-2"
+                    src="https://fakeimg.pl/200x100/"
+                />
+                <span class="vertical-align-middle text-dark">userName</span>
             </template>
             <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
             <b-dropdown-item to="/user/orderSearch">訂單查詢</b-dropdown-item>
@@ -247,6 +246,7 @@
             <b-dropdown-item to="/user/favoriteList">收藏展覽</b-dropdown-item>
             <b-dropdown-item>
                 <button
+                    @click="logout"
                     class="border-0 bg-transparent"
                     type="button"
                 >
@@ -254,23 +254,28 @@
                 </button>
             </b-dropdown-item>
         </b-dropdown>
+        <button @click="test">test</button>
     </div>
-    <p>{{ JSON.stringify(isRegisterClick.value) }}</p>
 </template>
 
 <script setup>
     import { userDataStore } from '../stores/userData'
-    import { Modal } from 'bootstrap'
+    import { Modal } from '../../node_modules/bootstrap/js/index.esm'
     import { ref } from 'vue'
 
     //[FIX] cookie 驗證
-    let isLogin = ref(false)
+    // let isLogin = ref(true)
     //change From View State
     let isRegisterClick = ref(false)
-    let resErrorMessage = ref('')
+    let resLoginErrorMessage = ref('')
+    let resRegisterErrorMessage = ref('')
     //Form ref
     const loginRef = ref(null)
     const registerRef = ref(null)
+
+    const test = () => {
+        console.log(userDataStore().userData.isLogin)
+    }
 
     //change from view
     const changeFromHandler = (e) => {
@@ -278,11 +283,9 @@
         isRegisterClick.value = !isRegisterClick.value
         console.log(isRegisterClick.value)
     }
-
     //登入 handler
     const loginSubmit = async (data) => {
-        console.log('click')
-        console.log(data)
+        console.log('[loginSubmit ]', data)
         const userData = await userDataStore().login({
             email: data.email,
             password: data['密碼']
@@ -290,7 +293,6 @@
 
         //登入成功
         if (userData === true) {
-            isLogin.value = true
             const modal = Modal.getInstance('#loginModal')
             modal.hide()
         }
@@ -298,15 +300,42 @@
         //登入失敗
         if (typeof userData === 'string') {
             loginRef.value.resetForm()
-            resErrorMessage.value = userData
+            resLoginErrorMessage.value = userData
         }
     }
-
     //註冊 handler
-    const registerSubmit = async () => {}
+    const registerSubmit = async (data) => {
+        console.log('[registerSubmit ]', data)
+        const res = await userDataStore().register({
+            email: data.email,
+            password: data['密碼']
+        })
+        //註冊成功
+        if (res === true) {
+            const modal = Modal.getInstance('#loginModal')
+            modal.hide()
+        }
+
+        //註冊失敗
+        if (typeof res === 'string') {
+            resRegisterErrorMessage.value = res
+        }
+    }
+    //fake logoutState
+    const logout = () => {
+        userDataStore().userData.isLogin = false
+    }
 </script>
 
 <style lang="scss" scoped>
+    .avatar {
+        border-radius: 50%;
+        object-fit: cover;
+        width: 36px;
+        height: 36px;
+        vertical-align: middle;
+    }
+
     .h-18 {
         height: 18px;
     }

@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
-import { createUser, login } from '../api/user'
+import { createUser, login } from '../api/auth'
 
 export const userDataStore = defineStore('userData', {
     state: () => ({
-        userData: {}
+        userData: {
+            isLogin: false
+        }
     }),
     getters: {},
     actions: {
@@ -14,14 +16,25 @@ export const userDataStore = defineStore('userData', {
         },
         //註冊
         async register(data) {
-            try {
-                const res = await createUser({
-                    ...data,
-                    returnSecureToken: true
-                })
-                console.log(res)
-            } catch (error) {
-                console.log(error)
+            const res = await createUser({
+                ...data,
+                returnSecureToken: true
+            })
+
+            //成功
+            if (res.data) {
+                this.userData = { ...res.data, isLogin: true }
+                return true
+            }
+            //失敗
+            if (res?.error) {
+                switch (res.error.message) {
+                    case 'EMAIL_EXISTS':
+                        return '信箱已存在, 請重新填寫'
+
+                    default:
+                        return '伺服器回應錯誤, 請聯絡我們！'
+                }
             }
         },
         //登入
@@ -35,7 +48,10 @@ export const userDataStore = defineStore('userData', {
             console.log('[loginHandler]:取得登入訊息', res)
 
             //成功
-            this.userData = { ...res.data }
+            if (res.data) {
+                this.userData = { ...res.data, isLogin: true }
+                return true
+            }
 
             //失敗
             if (res?.error) {
@@ -43,14 +59,12 @@ export const userDataStore = defineStore('userData', {
                 switch (res.error.message) {
                     case 'EMAIL_NOT_FOUND':
                         return '帳號密碼錯誤, 請重新輸入'
-                    case 'MISSING_PASSWORD':
+                    case 'INVALID_PASSWORD':
                         return '帳號密碼錯誤, 請重新輸入'
                     default:
                         return '伺服器回應錯誤, 請聯絡我們！'
                 }
             }
-
-            return true
         },
         //登出
         async logout() {}
