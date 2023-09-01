@@ -10,11 +10,6 @@ export const userDataStore = defineStore('userData', {
     }),
     getters: {},
     actions: {
-        //更新購物車指定商品數量
-        updateCartItem(data, index) {
-            this.cartData.splice(index, 1, data)
-            localStorage.setItem('cart', JSON.stringify(this.cartData))
-        },
         //註冊
         async register(data) {
             //Step.1 註冊用戶
@@ -89,8 +84,12 @@ export const userDataStore = defineStore('userData', {
                 switch (res.error.message) {
                     case 'EMAIL_NOT_FOUND':
                         return '帳號密碼錯誤, 請重新輸入'
+                    case 'MISSING_EMAIL':
+                        return '信箱未輸入'
                     case 'INVALID_PASSWORD':
                         return '帳號密碼錯誤, 請重新輸入'
+                    case 'MISSING_PASSWORD':
+                        return '密碼未輸入'
                     default:
                         return '伺服器回應錯誤, 請聯絡我們！'
                 }
