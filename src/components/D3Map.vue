@@ -1,7 +1,7 @@
 <template>
     <section class="row py-4">
         <div
-            class="col-12 col-lg-6 mb-2 mb-md-0"
+            class="col-12 col-lg-6 mb-2 mb-md-0 bg-light rounded-4"
             id="map-container"
             ref="map"
         >
@@ -9,11 +9,13 @@
         </div>
         <div class="col-12 col-lg-6">
             <h5>目前選擇項目：{{ currentCounty }}</h5>
-            <div v-for="(item, index) in products" :key="index">
-
+            <div
+                v-for="(item, index) in products"
+                :key="index"
+            >
                 <b-card
                     overlay
-                    style="max-width: 100%;"
+                    style="max-width: 100%"
                     :img-src="item.imgSrc"
                     :img-alt="item.imgAlt"
                     text-variant="white"
@@ -21,38 +23,39 @@
                 >
                     <b-card-text>
                         {{ (index + 1).toString().padStart(2, '0') }}
-                        <p
-                        :class="`my-2 fs-4`"
-                        >{{ item.productName }}</p>
-                        <p :class="`position-absolute bottom-0 start-0 p-2`" 
-                        >{{ item.productDate }}</p>
+                        <p :class="`my-2 fs-4`">{{ item.productName }}</p>
+                        <p :class="`position-absolute bottom-0 start-0 p-2`">
+                            {{ item.productDate }}
+                        </p>
                     </b-card-text>
                 </b-card>
             </div>
         </div>
     </section>
 </template>
+
 <style lang="scss">
     body {
         background: #fff;
     }
 
     .county {
-        fill: #ebf0e4;
-        stroke: gray;
-        stroke-width: 0.1px;
+        fill: #d9d9d9;
+        stroke: #f8f9fa;
+        stroke-width: 4px;
     }
 
     .county:hover {
-        fill: red;
+        fill: #828282;
     }
     .active {
-        fill: #8fcf36;
+        fill: #4e4e4e;
     }
-    .img-fit{
+    .img-fit {
         object-fit: contain;
     }
 </style>
+
 <script>
     import * as d3 from 'd3'
     import * as topojson from 'topojson'
@@ -70,22 +73,22 @@
                         imgSrc: 'https://picsum.photos/450/150/?image=42',
                         imgAlt: 'Card Image',
                         productArea: '台中',
-                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲',
-                        productDate:'2023/07/01'
+                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲',
+                        productDate: '2023/07/01'
                     },
                     {
                         imgSrc: 'https://picsum.photos/450/150/?image=43',
                         imgAlt: 'Card Image',
                         productArea: '新北',
-                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲2',
-                        productDate:'2023/07/01'
+                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲2',
+                        productDate: '2023/07/01'
                     },
                     {
                         imgSrc: 'https://picsum.photos/450/150/?image=41',
                         imgAlt: 'Card Image',
                         productArea: '台中',
-                        productName:'花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲3',
-                        productDate:'2023/07/01'
+                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲3',
+                        productDate: '2023/07/01'
                     }
                 ]
             }
@@ -144,7 +147,6 @@
                     .geoPath()
                     .projection(d3.geoMercator().center([centerX, centerY]).scale(rwdScale))
 
-                //無作用
                 const data = jsonFile
                 console.log(data)
 
@@ -176,4 +178,3 @@
         }
     }
 </script>
-<style scoped></style>

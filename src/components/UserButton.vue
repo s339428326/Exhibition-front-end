@@ -41,192 +41,79 @@
 
                         <!-- loginFrom -->
                         <VeeForm
-                            v-slot="{ errors }"
+                            v-slot="{ errors, meta }"
                             v-if="isRegisterClick === false"
                             class="d-flex flex-column"
                             ref="loginRef"
                             @submit="loginSubmit"
                         >
-                            <div class="d-flex flex-column">
-                                <label
-                                    class="text-dark"
-                                    for="login-email"
-                                    >信箱</label
-                                >
-
-                                <VeeField
-                                    id="login-email"
-                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
-                                        errors['email'] ? 'border-danger' : 'border-black'
-                                    }`"
-                                    placeholder="請輸入信箱"
-                                    name="email"
-                                    type="email"
-                                    rules="required|email"
-                                />
-                                <ErrorMessage
-                                    v-if="errors['email']"
-                                    as="p"
-                                    class="text-danger errorMessage"
-                                    name="email"
-                                />
-                                <p
-                                    v-else
-                                    class="errorMessage"
-                                ></p>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <label
-                                    for="login-password"
-                                    class="text-dark"
-                                    >密碼</label
-                                >
-                                <VeeField
-                                    id="login-password"
-                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
-                                        errors['密碼'] ? 'border-danger' : 'border-black'
-                                    }`"
-                                    placeholder="請輸入密碼"
-                                    name="密碼"
-                                    type="password"
-                                    rules="required|min:8"
-                                />
-                                <ErrorMessage
-                                    v-if="errors['密碼']"
-                                    as="p"
-                                    class="text-danger errorMessage"
-                                    name="密碼"
-                                />
-                                <p
-                                    v-else
-                                    class="errorMessage"
-                                ></p>
-                            </div>
-                            <button
-                                class="btn btn-primary w-100"
-                                type="submit"
-                                :disabled="isLoading"
-                            >
-                                <template v-if="isLoading === true">
-                                    <span
-                                        class="spinner-border spinner-border-sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    ></span>
-                                    <span class="sr-only">Loading...</span>
-                                </template>
-
-                                <template v-else> 送出 </template>
-                            </button>
+                            <!-- 切割範圍 -->
+                            <Field
+                                id="login-email"
+                                labelName="信箱"
+                                placeholder="請輸入信箱"
+                                type="email"
+                                name="email"
+                                rules="email"
+                                :errors="errors"
+                            />
+                            <Field
+                                id="login-password"
+                                labelName="密碼"
+                                placeholder="請輸入密碼"
+                                type="password"
+                                name="密碼"
+                                rules="min:8"
+                                :errors="errors"
+                                aria-required="true"
+                            />
+                            <SubmitBtn
+                                :isLoading="isLoading"
+                                :meta="meta"
+                                name="登入"
+                            />
                             <p class="h-18 text-danger mb-2">{{ resLoginErrorMessage }}</p>
                         </VeeForm>
                         <!-- registerFrom -->
                         <VeeForm
                             v-else
                             ref="registerRef"
-                            v-slot="{ errors }"
+                            v-slot="{ errors, meta }"
                             class="d-flex flex-column"
                             @submit="registerSubmit"
                         >
-                            <div class="d-flex flex-column gap-1 mb-1">
-                                <label
-                                    class="text-dark"
-                                    for="register-email"
-                                    >信箱</label
-                                >
-                                <VeeField
-                                    id="register-email"
-                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
-                                        errors['email'] ? 'border-danger' : 'border-black'
-                                    }`"
-                                    placeholder="請輸入信箱"
-                                    name="email"
-                                    type="email"
-                                    rules="required|email"
-                                />
-
-                                <ErrorMessage
-                                    v-if="errors['email']"
-                                    as="p"
-                                    class="text-danger errorMessage"
-                                    name="email"
-                                />
-                                <p
-                                    v-else
-                                    class="errorMessage"
-                                ></p>
-                            </div>
-                            <div class="d-flex flex-column gap-1 mb-1">
-                                <label
-                                    class="text-dark"
-                                    for="register-password"
-                                    >密碼</label
-                                >
-                                <VeeField
-                                    id="register-password"
-                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
-                                        errors['密碼'] ? 'border-danger' : 'border-black'
-                                    }`"
-                                    placeholder="請輸入密碼"
-                                    name="密碼"
-                                    type="password"
-                                    rules="required|min:8"
-                                />
-
-                                <ErrorMessage
-                                    v-if="errors['密碼']"
-                                    as="p"
-                                    class="text-danger errorMessage"
-                                    name="密碼"
-                                />
-                                <p
-                                    v-else
-                                    class="errorMessage"
-                                ></p>
-                            </div>
-                            <div class="d-flex flex-column gap-1 mb-1">
-                                <label
-                                    class="text-dark"
-                                    for="register-confirmPassword"
-                                    >請再次確認密碼</label
-                                >
-                                <VeeField
-                                    id="register-confirmPassword"
-                                    :class="`border-bottom border-top-0 border-start-0 border-end-0  p-1 ${
-                                        errors['確認密碼'] ? 'border-danger' : 'border-black'
-                                    }`"
-                                    placeholder="請再次輸入密碼"
-                                    type="password"
-                                    name="確認密碼"
-                                    rules="required|min:8|confirmed:@密碼"
-                                />
-                                <ErrorMessage
-                                    v-if="errors['確認密碼']"
-                                    as="p"
-                                    class="text-danger errorMessage"
-                                    name="確認密碼"
-                                />
-                                <p
-                                    v-else
-                                    class="errorMessage"
-                                ></p>
-                            </div>
-                            <button
-                                class="btn btn-primary w-100 mb-2"
-                                type="submit"
-                                :disabled="isLoading"
-                            >
-                                <template v-if="isLoading === true">
-                                    <span
-                                        class="spinner-border spinner-border-sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    ></span>
-                                    <span class="sr-only">Loading...</span>
-                                </template>
-
-                                <template v-else> 註冊 </template>
-                            </button>
+                            <Field
+                                id="register-email"
+                                labelName="信箱"
+                                name="email"
+                                type="email"
+                                placeholder="請輸入信箱"
+                                rules="required|email"
+                                :errors="errors"
+                            />
+                            <Field
+                                id="register-password"
+                                labelName="密碼"
+                                name="密碼"
+                                type="password"
+                                placeholder="請輸入密碼"
+                                rules="required|min:8"
+                                :errors="errors"
+                            />
+                            <Field
+                                id="register-password"
+                                labelName="請再次確認密碼"
+                                name="確認密碼"
+                                type="password"
+                                placeholder="請輸入密碼"
+                                rules="required|min:8|confirmed:@密碼"
+                                :errors="errors"
+                            />
+                            <SubmitBtn
+                                :isLoading="isLoading"
+                                :meta="meta"
+                                name="註冊"
+                            />
                             <p class="h-18 text-danger mb-2">{{ resRegisterErrorMessage }}</p>
                         </VeeForm>
 
@@ -265,7 +152,7 @@
                     class="avatar me-2"
                     :src="`${store.userData.picture}`"
                 />
-                <span class="vertical-align-middle text-dark">{{ store.userData.name }}</span>
+                <span class="vertical-align-middle text-light">{{ store.userData.name }}</span>
             </template>
             <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
             <b-dropdown-item to="/user/orderSearch">訂單查詢</b-dropdown-item>
@@ -296,6 +183,8 @@
     import { userDataStore } from '../stores/userData'
     import { ref, onBeforeMount } from 'vue'
     import { Modal } from 'bootstrap'
+    import Field from '@/components/Form/Field.vue'
+    import SubmitBtn from '@/components/Form/SubmitBtn.vue'
 
     //login state
     const isLogin = ref(false)
@@ -409,11 +298,6 @@
 
     .h-18 {
         height: 18px;
-    }
-
-    .errorMessage {
-        font-size: 0.8rem;
-        height: 19.2px;
     }
 
     .close {
