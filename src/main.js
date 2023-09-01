@@ -28,6 +28,7 @@ import HeartOutline from 'vue-material-design-icons/HeartOutline.vue'
 import AccountCircle from 'vue-material-design-icons/AccountCircle.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 
 //datepicker
 import Datepicker from 'vuejs3-datepicker'
@@ -66,6 +67,7 @@ app.component('HeartOutlineIcon', HeartOutline)
 app.component('CloseIcon', Close)
 app.component('AccountCircle', AccountCircle)
 app.component('Magnify', Magnify)
+app.component('ChevronRight', ChevronRight)
 
 app.component('Datepicker', Datepicker)
 

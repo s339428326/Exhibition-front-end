@@ -1,35 +1,66 @@
 <template>
     <section class="row py-4">
         <div
-            class="col-12 col-lg-6 mb-2 mb-md-0 bg-light rounded-4"
+            class="col-12 col-lg-6 mb-2 mb-md-0 position-relative"
             id="map-container"
             ref="map"
         >
+            <div class="position-absolute">
+                <h5 class="fs-3 fw-medium p-4">{{ currentCounty }}</h5>
+            </div>
             <svg id="map"></svg>
         </div>
         <div class="col-12 col-lg-6">
-            <h5>目前選擇項目：{{ currentCounty }}</h5>
-            <div
-                v-for="(item, index) in products"
+            <div class="col-6 ms-auto mb-4">
+                <div class="position-relative titleView text-light px-3 py-4">
+                    <h1 class="title-1 d-flex flex-column">
+                        <p class="font-pathway">2023</p>
+                        <p class="fs-7">展覽售票檢索</p>
+                    </h1>
+                    <div class="text-end">
+                        <p class="fs-7">最新展覽資訊</p>
+                        <p class="fs-7">New Exhibition Information</p>
+                    </div>
+                </div>
+            </div>
+
+            <ul
+                v-for="(item, index) in exhibitionListView"
                 :key="index"
             >
-                <b-card
-                    overlay
-                    style="max-width: 100%"
-                    :img-src="item.imgSrc"
-                    :img-alt="item.imgAlt"
-                    text-variant="white"
-                    :class="`img-fit position-relative`"
-                >
-                    <b-card-text>
-                        {{ (index + 1).toString().padStart(2, '0') }}
-                        <p :class="`my-2 fs-4`">{{ item.productName }}</p>
-                        <p :class="`position-absolute bottom-0 start-0 p-2`">
-                            {{ item.productDate }}
+                <li class="mb-4">
+                    <!-- time -->
+                    <div
+                        class="d-flex align-items-end gap-0 lh-1 border-bottom border-3 border-dark gap-3 mb-2"
+                    >
+                        <div class="font-quantum">
+                            <p class="fs-1">{{ new Date(item.startDate).getFullYear() }}</p>
+                            <div class="fs-3 d-flex align-items-center">
+                                <span>{{
+                                    `${new Date(item.startDate).getMonth()}.${new Date(
+                                        item.startDate
+                                    ).getDate()}`
+                                }}</span>
+                                <ChevronRight :size="32" />
+                                <span>{{
+                                    `${new Date(item.endDate).getMonth()}.${new Date(
+                                        item.endDate
+                                    ).getDate()}`
+                                }}</span>
+                            </div>
+                        </div>
+                        <p class="fs-4 mb-2 fw-bold list-title">
+                            {{ item.name }}
                         </p>
-                    </b-card-text>
-                </b-card>
-            </div>
+                        <button class="font-quantum border-0 bg-transparent ms-auto fs-4">
+                            more
+                        </button>
+                    </div>
+                    <div class="fw-medium list-content">
+                        {{ item.introduce }}
+                    </div>
+                </li>
+            </ul>
         </div>
     </section>
 </template>
@@ -39,6 +70,57 @@
         background: #fff;
     }
 
+    .img-fit {
+        object-fit: contain;
+    }
+
+    .fs-7 {
+        font-size: 14px;
+    }
+
+    //Top3 展覽用
+    .list-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .list-content {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    //Home page 斜線設計區塊
+    .titleView {
+        background-color: #0e0e0eb2;
+        .title-1 {
+            p:first-child {
+                font-size: 3rem;
+                line-height: 1.2;
+            }
+        }
+    }
+
+    .titleView::after {
+        position: absolute;
+        top: 50%;
+        left: 3%;
+        content: '';
+        display: block;
+        width: 95%;
+        height: 2px;
+        transform: rotate(330deg);
+        background-color: white;
+    }
+
+    .lh-1 {
+        line-height: 1;
+    }
+
+    //D3 使用樣式
     .county {
         fill: #d9d9d9;
         stroke: #f8f9fa;
@@ -48,11 +130,9 @@
     .county:hover {
         fill: #828282;
     }
+
     .active {
         fill: #4e4e4e;
-    }
-    .img-fit {
-        object-fit: contain;
     }
 </style>
 
@@ -60,6 +140,7 @@
     import * as d3 from 'd3'
     import * as topojson from 'topojson'
     import jsonFile from '../assets/json/COUNTY_MOI_1090820.json'
+    import { getAllExhibition } from '../api/exhibition'
 
     export default {
         data() {
@@ -67,40 +148,41 @@
             return {
                 w: window.innerWidth,
                 h: window.innerHeight,
-                currentCounty: '台北市',
-                products: [
-                    {
-                        imgSrc: 'https://picsum.photos/450/150/?image=42',
-                        imgAlt: 'Card Image',
-                        productArea: '台中',
-                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲',
-                        productDate: '2023/07/01'
-                    },
-                    {
-                        imgSrc: 'https://picsum.photos/450/150/?image=43',
-                        imgAlt: 'Card Image',
-                        productArea: '新北',
-                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲2',
-                        productDate: '2023/07/01'
-                    },
-                    {
-                        imgSrc: 'https://picsum.photos/450/150/?image=41',
-                        imgAlt: 'Card Image',
-                        productArea: '台中',
-                        productName: '花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲陳瑞瓊膠彩畫花曲花曲3',
-                        productDate: '2023/07/01'
-                    }
-                ]
+                currentCounty: '臺北市',
+                exhibitionList: [],
+                exhibitionListView: []
             }
         },
-        mounted() {
+        async mounted() {
             this.draw()
             window.addEventListener('resize', this.handleResize)
+            await this.getExhibitionData()
+            this.getExhibitionView('臺北')
         },
         unmounted() {
             window.removeEventListener('resize', this.handleResize)
         },
         methods: {
+            getExhibitionView(country) {
+                //filter location
+                this.exhibitionListView = this.exhibitionList
+                    .filter((item) => item.location.country === country)
+                    .sort((a, b) => b.viewer - a.viewer)
+                    .splice(0, 3)
+            },
+            async getExhibitionData() {
+                const data = await getAllExhibition()
+                const dataArr = Object.entries(data.data).map(([key, value]) => {
+                    //[BUG 後端時間補正]
+                    if (value.startDate < 1000000000000) {
+                        value.startDate = value.startDate * 1000
+                        value.endDate = value.endDate * 1000
+                    }
+                    return { id: key, ...value }
+                })
+                console.log('[Home Data] Array', dataArr)
+                this.exhibitionList = dataArr
+            },
             //新增自適應 innerWidth for map
             handleResize() {
                 // d3.select('#map').remove()
@@ -158,13 +240,19 @@
                     .enter()
                     .append('path')
                     //新增監聽事件
-                    .on('click', (e, d) => {
+                    .on('click', async (e, d) => {
                         console.log('click', d.properties['COUNTYNAME'])
                         this.currentCounty = d.properties['COUNTYNAME']
+
+                        console.log(this.currentCounty.slice(0, 2))
+                        this.getExhibitionView(this.currentCounty.slice(0, 2))
+
                         const activeList = document.querySelectorAll('.active')
+
                         activeList.forEach((item) => {
                             item.classList.remove('active')
                         })
+
                         e.target.classList.add('active')
                     })
                     .attr('d', path)

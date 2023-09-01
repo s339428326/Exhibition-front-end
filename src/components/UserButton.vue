@@ -1,4 +1,5 @@
 <template>
+    <!-- 切割元件LoginModal -->
     <div v-if="isLogin === false">
         <!-- Button trigger modal -->
         <button
@@ -137,6 +138,7 @@
             </div>
         </div>
     </div>
+    <!-- 切割元件 UserBtn -->
     <div
         v-else
         class="d-flex pointer"
