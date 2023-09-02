@@ -141,7 +141,7 @@
     import * as topojson from 'topojson'
     import jsonFile from '../assets/json/COUNTY_MOI_1090820.json'
     import { exhibitionStore } from '../stores/exhibitionList'
-
+    import _ from 'lodash'
     export default {
         data() {
             //memo map list title
@@ -150,8 +150,7 @@
                 h: window.innerHeight,
                 currentCounty: '臺北市',
                 store: exhibitionStore(),
-                exhibitionListView: [],
-                isResize: false
+                exhibitionListView: []
             }
         },
         async mounted() {
@@ -162,7 +161,7 @@
             this.getExhibitionView('臺北')
         },
         unmounted() {
-            window.removeEventListener('resize', this.handleResize)
+            window.removeEventListener('resize', _.debounce(this.handleResize), 1000)
         },
         methods: {
             getExhibitionView(country) {
@@ -175,19 +174,14 @@
             //新增自適應 innerWidth for map
             handleResize() {
                 // d3.select('#map').remove()
-                let useDebounceValue = this.isResize
                 //等3 sec 執行
-                setTimeout(() => {
-                    this.isResize = false
-                }, 500)
-                if (!this.isResize) {
-                    this.draw()
-                    this.w = window.innerWidth
-                    this.w = window.innerHeight
-                }
+                this.draw()
+                this.w = window.innerWidth
+                this.w = window.innerHeight
             },
             //draw map
             async draw() {
+                console.log('render')
                 //refer: https://www.letswrite.tw/d3-vue-taiwan-map/
                 let width = this.$refs.map.offsetWidth - 12
                 let height = window.innerHeight
