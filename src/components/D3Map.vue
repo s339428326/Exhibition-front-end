@@ -11,8 +11,8 @@
             <svg id="map"></svg>
         </div>
         <div class="col-12 col-lg-6">
-            <div class="col-6 ms-auto mb-4">
-                <div class="position-relative titleView text-light px-3 py-4">
+            <div class="ms-auto mb-4">
+                <div class="position-relative titleView text-light px-3 py-4 overflow-hidden">
                     <h1 class="title-1 d-flex flex-column">
                         <p class="font-pathway">2023</p>
                         <p class="fs-7">展覽售票檢索</p>
@@ -140,7 +140,7 @@
     import * as d3 from 'd3'
     import * as topojson from 'topojson'
     import jsonFile from '../assets/json/COUNTY_MOI_1090820.json'
-    import { getAllExhibition } from '../api/exhibition'
+    import { exhibitionStore } from '../stores/exhibitionList'
 
     export default {
         data() {
@@ -149,14 +149,16 @@
                 w: window.innerWidth,
                 h: window.innerHeight,
                 currentCounty: '臺北市',
-                exhibitionList: [],
-                exhibitionListView: []
+                store: exhibitionStore(),
+                exhibitionListView: [],
+                isResize: false
             }
         },
         async mounted() {
             this.draw()
             window.addEventListener('resize', this.handleResize)
-            await this.getExhibitionData()
+            //
+            await this.store.getAllExhibitionData()
             this.getExhibitionView('臺北')
         },
         unmounted() {
@@ -165,30 +167,24 @@
         methods: {
             getExhibitionView(country) {
                 //filter location
-                this.exhibitionListView = this.exhibitionList
+                this.exhibitionListView = this.store.exhibitionList
                     .filter((item) => item.location.country === country)
                     .sort((a, b) => b.viewer - a.viewer)
                     .splice(0, 3)
             },
-            async getExhibitionData() {
-                const data = await getAllExhibition()
-                const dataArr = Object.entries(data.data).map(([key, value]) => {
-                    //[BUG 後端時間補正]
-                    if (value.startDate < 1000000000000) {
-                        value.startDate = value.startDate * 1000
-                        value.endDate = value.endDate * 1000
-                    }
-                    return { id: key, ...value }
-                })
-                console.log('[Home Data] Array', dataArr)
-                this.exhibitionList = dataArr
-            },
             //新增自適應 innerWidth for map
             handleResize() {
                 // d3.select('#map').remove()
-                this.draw()
-                this.w = window.innerWidth
-                this.w = window.innerHeight
+                let useDebounceValue = this.isResize
+                //等3 sec 執行
+                setTimeout(() => {
+                    this.isResize = false
+                }, 500)
+                if (!this.isResize) {
+                    this.draw()
+                    this.w = window.innerWidth
+                    this.w = window.innerHeight
+                }
             },
             //draw map
             async draw() {
@@ -230,7 +226,7 @@
                     .projection(d3.geoMercator().center([centerX, centerY]).scale(rwdScale))
 
                 const data = jsonFile
-                console.log(data)
+                // console.log(data)
 
                 const geometries = topojson.feature(data, data.objects['COUNTY_MOI_1090820'])
                 svg.append('path')

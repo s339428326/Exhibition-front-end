@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const api_url = 'https://exhibition-app-1ab50-default-rtdb.asia-southeast1.firebasedatabase.app'
 
+
 const url = (str) => `${api_url}${str}?key=${import.meta.env?.VITE_firebaseApiKey}`
 
 //取得用戶個人資料
