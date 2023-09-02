@@ -1,9 +1,9 @@
 <template>
     <button
         @click="swiper.slidePrev"
-        :class="`btn btn-primary  ${isBeginning && 'disabled'}`"
+        :class="`${className} ${isBeginning && 'disabled'} `"
     >
-        prev
+        <slot></slot>
     </button>
 </template>
 <style lang="scss"></style>
@@ -14,6 +14,7 @@
     const swiper = useSwiper()
 
     defineProps({
-        isBeginning: Boolean
+        isBeginning: Boolean,
+        className: String
     })
 </script>

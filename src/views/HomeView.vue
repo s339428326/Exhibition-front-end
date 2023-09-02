@@ -6,7 +6,19 @@
         <section class="container">
             <div class="d-flex"></div>
         </section>
-        <!-- section title -->
+        <!-- Exhibition reviews  -->
+        <section class="bg-secondary pb-5">
+            <div class="container">
+                <!-- section title -->
+                <h2 class="fs-2 font-quantum py-4">
+                    <span class="text-danger">Exhibition </span>
+                    <span class="text-light">reviews</span>
+                </h2>
+                <div class="row">
+                    <Swiper />
+                </div>
+            </div>
+        </section>
         <div class="bg-success">
             <div class="container">
                 <h2 class="fs-1 font-quantum py-4">
@@ -15,8 +27,8 @@
                 </h2>
             </div>
         </div>
-        <section class="container mb-5">
-            <div class="row flex-row align-items-center">
+        <section class="mb-5">
+            <div class="container row flex-row align-items-center">
                 <div class="col-12 col-lg-7">
                     <img
                         class="object-fit-cover w-100"
@@ -60,25 +72,8 @@
                 </div>
             </div>
         </section>
-        <div class="bg-secondary">
-            <div class="container">
-                <h2 class="fs-2 font-quantum py-4">
-                    <span class="text-danger">Hot </span>
-                    <span class="text-light">Exhibition</span>
-                </h2>
-            </div>
-        </div>
 
-        <section class="container">
-            <div class="hot-information">
-                <div class="hot-title d-flex align-items-center">
-                    <h3 class="me-1">熱門展覽資訊</h3>
-                    <span>Start-2023</span>
-                </div>
-                <p>Hot Exhibition information</p>
-                <Swiper />
-            </div>
-        </section>
+        <section class="container"></section>
     </main>
 </template>
 
