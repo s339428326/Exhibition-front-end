@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        {{ sliderIndex }}
+        <!-- {{ sliderIndex }} -->
     </div>
 
     <!-- @swiper="onSwiper" :slides-per-view="1"  :space-between="0"-->
@@ -13,13 +13,37 @@
         @slideChange="onSlideChange"
     >
         <swiper-slide class="d-flex">
-            <div class="user-content rounded-4 p-3 -t-10">
+            <div class="user-content p-4 -t-10 bg-light">
                 <!-- user avatar -->
-                <img
-                    src=""
-                    alt=""
-                />
+                <div class="d-flex gap-4 font-pathway mb-4">
+                    <div>
+                        <img
+                            class="user-avatar"
+                            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2680&q=80"
+                            alt="user"
+                        />
+                    </div>
+                    <div class="d-flex flex-column my-auto">
+                        <p class="fs-4">Tom</p>
+                        <div class="d-flex gap-1">
+                            <!-- 整數 -->
+                            <Star
+                                v-for="(item, index) in Array.from(Array(4).keys())"
+                                :key="index"
+                            />
+                            <!-- 有小數點 -->
+                            <StarHalfFull
+                                v-for="(item, index) in Array.from(Array(1).keys())"
+                                :key="index"
+                            />
+                        </div>
+                    </div>
+                </div>
                 <!-- review -->
+                <div>
+                    展覽內容相當有趣, 已經很久沒有觀看展覽感謝Art Search Fair
+                    平台讓在空閒之餘找到可以找到如此適合放送的展覽
+                </div>
             </div>
             <div class="card-end ms-auto position-relative">
                 <div
@@ -27,12 +51,12 @@
                 >
                     <div class="w-100 text-end">
                         <h3
-                            class="fs-2 font-pathway fw-medium mt-auto pb-2 border-bottom d-inline px-3"
+                            class="fs-1 font-pathway fw-medium mt-auto pb-2 border-bottom d-inline px-3"
                         >
                             展覽title
                         </h3>
                         <!-- font-pathway -->
-                        <p class="fs-1 font-quantum">2023.10.01 ~ 2023.12.31</p>
+                        <p class="fs-4 font-pathway">2023.10.01 ~ 2023.12.31</p>
                     </div>
                 </div>
                 <img
@@ -43,57 +67,73 @@
             </div>
         </swiper-slide>
         <swiper-slide class="d-flex">
-            <div class="user-content border rounded">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum
-                non debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat
-                nisi sequi voluptatem porro vitae amet cupiditate nemo dolorum!
+            <div class="user-content p-4 -t-10 bg-light">
+                <!-- user avatar -->
+                <div class="d-flex gap-4 font-pathway mb-4">
+                    <div>
+                        <img
+                            class="user-avatar"
+                            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2680&q=80"
+                            alt="user"
+                        />
+                    </div>
+                    <div class="d-flex flex-column my-auto">
+                        <p class="fs-4">Tom</p>
+                        <div class="d-flex gap-1">
+                            <!-- 整數 -->
+                            <Star
+                                v-for="(item, index) in Array.from(Array(4).keys())"
+                                :key="index"
+                            />
+                            <!-- 有小數點 -->
+                            <StarHalfFull
+                                v-for="(item, index) in Array.from(Array(1).keys())"
+                                :key="index"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <!-- review -->
+                <div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum eveniet
+                    recusandae quis. Nisi, ullam eos? Expedita, deserunt ad eveniet dolore odio
+                    suscipit, error provident eum itaque accusantium est rem aperiam?
+                </div>
             </div>
-            <div class="ms-auto">
+            <div class="card-end ms-auto position-relative">
+                <div
+                    class="position-absolute z-3 top-0 start-0 end-0 bottom-0 ms-5 text-white d-flex align-items-end justify-content-end p-4"
+                >
+                    <div class="w-100 text-end">
+                        <h3
+                            class="fs-1 font-pathway fw-medium mt-auto pb-2 border-bottom d-inline px-3"
+                        >
+                            展覽title
+                        </h3>
+                        <!-- font-pathway -->
+                        <p class="fs-4 font-pathway">2023.10.01 ~ 2023.12.31</p>
+                    </div>
+                </div>
                 <img
                     class="img-box"
-                    src="https://images.unsplash.com/photo-1587653263995-422546a7a569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2536&q=80"
+                    src="https://images.unsplash.com/photo-1573455494060-c5595004fb6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2640&q=80"
                     alt=""
                 />
             </div>
         </swiper-slide>
-        <swiper-slide class="d-flex">
-            <div class="user-content border rounded">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum
-                non debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat
-                nisi sequi voluptatem porro vitae amet cupiditate nemo dolorum!
-            </div>
-            <div class="ms-auto">
-                <img
-                    class="img-box"
-                    src="https://images.unsplash.com/photo-1542931287-023b922fa89b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80"
-                    alt=""
-                />
-            </div>
-        </swiper-slide>
-        <swiper-slide class="d-flex">
-            <div class="user-content border rounded">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum
-                non debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat
-                nisi sequi voluptatem porro vitae amet cupiditate nemo dolorum!
-            </div>
-            <div class="ms-auto">
-                <img
-                    class="img-box"
-                    src="https://images.unsplash.com/photo-1587653263995-422546a7a569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2536&q=80"
-                    alt=""
-                />
-            </div>
-        </swiper-slide>
+
         <PrevBtn
-            :class-name="'position-absolute top-50 start-0 translate-middle-y z-1 border-3 rounded-circle p-4 btn border border-success text-success'"
+            :class-name="'position-absolute top-50 start-0 translate-middle-y z-1 border-3 rounded-circle p-2 btn border border-white text-white'"
             :is-beginning="isBeginning"
-            >pre</PrevBtn
         >
+            <ChevronLeft :size="48" />
+        </PrevBtn>
         <NextBtn
-            :class-name="'position-absolute top-50 end-0 translate-middle-y z-1  border-3 rounded-circle p-4 btn border border-success text-success'"
+            :class-name="'position-absolute top-50 end-0 translate-middle-y z-1  border-3 rounded-circle p-2 btn border border-white text-white'"
             :is-end="isEnd"
-            >next</NextBtn
         >
+            <ChevronRight :size="48" />
+        </NextBtn>
     </swiper>
 </template>
 <style lang="scss">
@@ -130,11 +170,20 @@
         position: relative;
         margin-top: auto;
         margin-bottom: auto;
+        border-radius: 1rem;
         background-color: white;
         transform: translateX(20%);
         width: 40%;
-        height: 70%;
+        height: 60%;
+        /* box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175); */
         z-index: 3;
+    }
+
+    .user-avatar {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
     }
 </style>
 <script setup>
@@ -172,3 +221,48 @@
         sliderIndex.value = activeIndex
     }
 </script>
+
+<!-- <template>
+    <swiper-slide class="d-flex">
+        <div class="user-content border rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum non
+            debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat nisi sequi
+            voluptatem porro vitae amet cupiditate nemo dolorum!
+        </div>
+        <div class="ms-auto">
+            <img
+                class="img-box"
+                src="https://images.unsplash.com/photo-1587653263995-422546a7a569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2536&q=80"
+                alt=""
+            />
+        </div>
+    </swiper-slide>
+    <swiper-slide class="d-flex">
+        <div class="user-content border rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum non
+            debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat nisi sequi
+            voluptatem porro vitae amet cupiditate nemo dolorum!
+        </div>
+        <div class="ms-auto">
+            <img
+                class="img-box"
+                src="https://images.unsplash.com/photo-1542931287-023b922fa89b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80"
+                alt=""
+            />
+        </div>
+    </swiper-slide>
+    <swiper-slide class="d-flex">
+        <div class="user-content border rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas necessitatibus ipsum non
+            debitis laudantium voluptas, architecto molestiae saepe possimus. Hic quaerat nisi sequi
+            voluptatem porro vitae amet cupiditate nemo dolorum!
+        </div>
+        <div class="ms-auto">
+            <img
+                class="img-box"
+                src="https://images.unsplash.com/photo-1587653263995-422546a7a569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2536&q=80"
+                alt=""
+            />
+        </div>
+    </swiper-slide>
+</template> -->

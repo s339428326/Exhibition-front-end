@@ -7,10 +7,10 @@
             <div class="d-flex"></div>
         </section>
         <!-- Exhibition reviews  -->
-        <section class="bg-secondary pb-5">
+        <section class="bg-secondary pb-5 pt-4">
             <div class="container">
                 <!-- section title -->
-                <h2 class="fs-2 font-quantum py-4">
+                <h2 class="fs-2 font-quantum border d-inline-block px-4 py-2 border-4">
                     <span class="text-danger">Exhibition </span>
                     <span class="text-light">reviews</span>
                 </h2>
@@ -27,8 +27,8 @@
                 </h2>
             </div>
         </div>
-        <section class="mb-5">
-            <div class="container row flex-row align-items-center">
+        <section class="container mb-5">
+            <div class="row flex-row align-items-center">
                 <div class="col-12 col-lg-7">
                     <img
                         class="object-fit-cover w-100"

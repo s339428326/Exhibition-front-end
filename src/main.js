@@ -29,6 +29,9 @@ import AccountCircle from 'vue-material-design-icons/AccountCircle.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
+import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarHalfFull from 'vue-material-design-icons/StarHalfFull.vue'
 
 //datepicker
 import Datepicker from 'vuejs3-datepicker'
@@ -68,6 +71,9 @@ app.component('CloseIcon', Close)
 app.component('AccountCircle', AccountCircle)
 app.component('Magnify', Magnify)
 app.component('ChevronRight', ChevronRight)
+app.component('ChevronLeft', ChevronLeft)
+app.component('Star', Star)
+app.component('StarHalfFull', StarHalfFull)
 
 app.component('Datepicker', Datepicker)
 
