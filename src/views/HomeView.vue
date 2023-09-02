@@ -3,89 +3,73 @@
         <div class="container">
             <D3Map />
         </div>
-        <div class="container">
-            <div>
-                <b-card
-                    no-body
-                    class="overflow-hidden border-0 mb-40"
-                >
-                    <b-row no-gutters>
-                        <b-col md="6">
-                            <b-card-img
-                                src="https://fakeimg.pl/356x160/"
-                                class="rounded-0 h-100"
-                            ></b-card-img>
-                        </b-col>
-                        <b-col md="6">
-                            <b-card-body title="專屬你的展覽清單 創建您的藝術之旅">
-                                <b-card-text>
-                                    通過將喜歡的展覽加入您的清單，您可以快速查看和比較展覽的時間、地點和主題，確保您不會錯過任何一個重要的藝術活動。
-                                </b-card-text>
-                            </b-card-body>
-                        </b-col>
-                    </b-row>
-                </b-card>
-                <b-card
-                    no-body
-                    class="overflow-hidden border-0 mb-40"
-                >
-                    <b-row no-gutters>
-                        <b-col md="6">
-                            <b-card-body title="多元收藏搜尋 尋找獨一無二的藝術珍品">
-                                <b-card-text>
-                                    專為藝術愛好者和收藏家設計的寶庫。我們為您提供多元的展覽搜尋體驗，不論您對古董、當代藝術還是民族文化感興趣，我們都能滿足您的需求。
-                                </b-card-text>
-                            </b-card-body>
-                        </b-col>
-                        <b-col md="6">
-                            <b-card-img
-                                src="https://fakeimg.pl/356x160/"
-                                class="rounded-0 h-100"
-                            ></b-card-img>
-                        </b-col>
-                    </b-row>
-                </b-card>
-                <b-card
-                    no-body
-                    class="overflow-hidden border-0 mb-40"
-                >
-                    <b-row no-gutters>
-                        <b-col md="6">
-                            <b-card-img
-                                src="https://fakeimg.pl/356x160/"
-                                class="rounded-0 h-100"
-                            ></b-card-img>
-                        </b-col>
-                        <b-col md="6">
-                            <b-card-body title="清楚易懂的展覽資訊 讓藝術世界觸手可及">
-                                <b-card-text>
-                                    我們深知尋找展覽資訊可能是一個繁瑣且耗時的過程，因此我們致力於提供清楚易懂的展覽資訊，讓藝術世界觸手可及。
-                                </b-card-text>
-                            </b-card-body>
-                        </b-col>
-                    </b-row>
-                </b-card>
-                <b-card
-                    no-body
-                    class="overflow-hidden border-0 mb-40"
-                >
-                    <b-row no-gutters>
-                        <b-col md="6">
-                            <b-card-body title="體驗全新的藝術尋覓之旅">
-                                <b-card-text>
-                                    無論您是追求藝術收藏的高手，還是對藝術有著初生之犢的好奇心，我們將竭誠為您提供多元、個性化的展覽搜索服務。
-                                </b-card-text>
-                            </b-card-body>
-                        </b-col>
-                        <b-col md="6">
-                            <b-card-img
-                                src="https://fakeimg.pl/356x160/"
-                                class="rounded-0 h-100"
-                            ></b-card-img>
-                        </b-col>
-                    </b-row>
-                </b-card>
+        <section class="container">
+            <div class="d-flex"></div>
+        </section>
+        <!-- section title -->
+        <div class="bg-success">
+            <div class="container">
+                <h2 class="fs-1 font-quantum py-4">
+                    <span class="text-secondary">Recommend </span>
+                    <span class="text-light">reason</span>
+                </h2>
             </div>
+        </div>
+        <section class="container mb-5">
+            <div class="row flex-row align-items-center">
+                <div class="col-12 col-lg-7">
+                    <img
+                        class="object-fit-cover w-100"
+                        src="../assets/images/home-1.png"
+                        alt=""
+                    />
+                </div>
+                <div class="col-12 col-lg-5">
+                    <h2 class="fs-4 fw-medium mb-2">專屬你的展覽清單 創建您的藝術之旅</h2>
+                    <p class="">
+                        通過將喜歡的展覽加入您的清單，您可以快速查看和比較展覽的時間、地點和主題，確保您不會錯過任何一個重要的藝術活動。
+                    </p>
+                </div>
+            </div>
+            <div class="row flex-row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <img
+                        class="object-fit-cover w-100"
+                        src="../assets/images/home-2.png"
+                        alt=""
+                    />
+                    <div>
+                        <h2 class="fs-4 fw-medium mb-2">多元收藏搜尋 尋找獨一無二的藝術珍品</h2>
+                        <p class="">
+                            專為藝術愛好者和收藏家設計的寶庫。我們為您提供多元的展覽搜尋體驗，不論您對古董、當代藝術還是民族文化感興趣，我們都能滿足您的需求。
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <img
+                        class="object-fit-cover w-100"
+                        src="../assets/images/home-3.png"
+                        alt=""
+                    />
+                    <div>
+                        <h2 class="fs-4 fw-medium mb-2">清楚易懂的展覽資訊 讓藝術世界觸手可及</h2>
+                        <p class="">
+                            我們深知尋找展覽資訊可能是一個繁瑣且耗時的過程，因此我們致力於提供清楚易懂的展覽資訊，讓藝術世界觸手可及。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="bg-secondary">
+            <div class="container">
+                <h2 class="fs-2 font-quantum py-4">
+                    <span class="text-danger">Hot </span>
+                    <span class="text-light">Exhibition</span>
+                </h2>
+            </div>
+        </div>
+
+        <section class="container">
             <div class="hot-information">
                 <div class="hot-title d-flex align-items-center">
                     <h3 class="me-1">熱門展覽資訊</h3>
@@ -94,24 +78,23 @@
                 <p>Hot Exhibition information</p>
                 <Swiper />
             </div>
-        </div>
+        </section>
     </main>
 </template>
 
 <style lang="scss">
-    $spacer: 1rem !default;
     .mb-40 {
-        margin-bottom: $spacer * 2.5;
+        margin-bottom: 40px;
     }
 </style>
 <script setup>
     import { onMounted } from 'vue'
     import Swiper from '../components/Swiper.vue'
-    import { useExhibitionStore } from '../stores/exhibitionList'
+    // import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
 
     onMounted(() => {
-        const exhibitionStore = useExhibitionStore()
-        exhibitionStore.getExhibitionData()
+        // const exhibitionStore = useExhibitionStore()
+        // exhibitionStore.getExhibitionData()
     })
 </script>

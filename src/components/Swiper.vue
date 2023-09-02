@@ -1,34 +1,17 @@
 <template>
     <swiper
-        :slidesPerView="3"
-        :spaceBetween="2"
+        :modules="[Navigation]"
+        :slides-per-view="3"
+        :space-between="50"
         :navigation="true"
-        :modules="modules"
-        class="mySwiper px-5"
+        :pagination="{ clickable: true }"
     >
-        <swiper-slide
-            v-for="(item, index) in products"
-            :key="index"
-        >
-            <div>
-                <b-card
-                    overlay
-                    :img-src="item.imgSrc"
-                    :img-alt="item.imgAlt"
-                    class="position-relative"
-                >
-                    <span class="tag bg-warning fw-bold">{{ item.productArea }}</span>
-
-                    <LikeButton
-                        :className="`bg-transparent border-0 heart`"
-                        :data="{ name: 'test', location: '台中' }"
-                        :isLike="isHeartClick"
-                        :handler="handlerLike"
-                    >
-                    </LikeButton>
-                </b-card>
-            </div>
-        </swiper-slide>
+        <swiper-slide>Slide 1</swiper-slide>
+        <swiper-slide>Slide 2</swiper-slide>
+        <swiper-slide>Slide 3</swiper-slide>
+        <swiper-slide>Slide 4</swiper-slide>
+        <NextBtn />
+        <PrevBtn />
     </swiper>
 </template>
 <style lang="scss">
@@ -48,67 +31,21 @@
         top: 5px; /* Adjust the top value as needed */
     }
 </style>
-<script>
-    // Import Swiper Vue.js components
+<script setup>
+    // Swiper Component
     import { Swiper, SwiperSlide } from 'swiper/vue'
+    // Swiper controller hook
+    import { Navigation } from 'swiper/modules'
+    import NextBtn from './Swiper/NextBtn.vue'
+    import PrevBtn from './Swiper/PrevBtn.vue'
 
-    // Import Swiper styles
+    //Swiper default styles
     import 'swiper/css'
     import 'swiper/css/navigation'
-    // import './style.css';
-    // import required modules
-    import { Navigation } from 'swiper/modules'
-    import LikeButton from '../components/LikeButton.vue'
-
-    export default {
-        components: {
-            Swiper,
-            SwiperSlide,
-            LikeButton
-        },
-        setup() {
-            return {
-                modules: [Navigation]
-            }
-        },
-        data() {
-            return {
-                isHeartClick: false,
-                products: [
-                    {
-                        imgSrc: 'https://placekitten.com/900/600',
-                        imgAlt: 'Card Image',
-                        productArea: '台中'
-                    },
-                    {
-                        imgSrc: 'https://placekitten.com/900/600',
-                        imgAlt: 'Card Image',
-                        productArea: '新北'
-                    },
-                    {
-                        imgSrc: 'https://placekitten.com/900/600',
-                        imgAlt: 'Card Image',
-                        productArea: '台中'
-                    },
-                    {
-                        imgSrc: 'https://placekitten.com/900/600',
-                        imgAlt: 'Card Image',
-                        productArea: '高雄'
-                    }
-                ]
-            }
-        },
-        methods: {
-            handlerLike() {
-                //demo for HeartIcon to HeartOutlineIcon
-                this.isHeartClick = !this.isHeartClick
-                console.log(
-                    '[Like btn]',
-                    this.isHeartClick,
-                    this.data,
-                    'feature: 等待開發Like FireBase 資料 及 新增 pinia store使用'
-                )
-            }
-        }
-    }
+    // const onSwiper = (swiper) => {
+    //     console.log(swiper)
+    // }
+    // const onSlideChange = () => {
+    //     console.log('slide change')
+    // }
 </script>
