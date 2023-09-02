@@ -1,7 +1,7 @@
 <template>
     <button
         @click="swiper.slidePrev"
-        class="btn btn-primary"
+        :class="`btn btn-primary  ${isBeginning && 'disabled'}`"
     >
         prev
     </button>
@@ -12,5 +12,8 @@
     import { useSwiper } from 'swiper/vue'
 
     const swiper = useSwiper()
-    // const swiperSlide = useSwiperSlide()
+
+    defineProps({
+        isBeginning: Boolean
+    })
 </script>

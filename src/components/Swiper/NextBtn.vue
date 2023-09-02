@@ -1,17 +1,18 @@
 <template>
     <button
         @click="swiper.slideNext()"
-        class="btn btn-primary"
+        :class="`btn btn-primary  ${isEnd && 'disabled'}`"
     >
         next
-        <p>Current slide is {{ swiperSlide.isActive ? 'active' : 'not active' }}</p>
     </button>
 </template>
 <style lang="scss"></style>
 <script setup>
     // Swiper controller hook
-    import { useSwiper, useSwiperSlide } from 'swiper/vue'
-
+    import { useSwiper } from 'swiper/vue'
     const swiper = useSwiper()
-    const swiperSlide = useSwiperSlide()
+
+    defineProps({
+        isEnd: Boolean
+    })
 </script>

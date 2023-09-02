@@ -1,17 +1,19 @@
 <template>
     <swiper
-        :modules="[Navigation]"
+        :modules="[]"
         :slides-per-view="3"
         :space-between="50"
         :navigation="true"
         :pagination="{ clickable: true }"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
     >
         <swiper-slide>Slide 1</swiper-slide>
         <swiper-slide>Slide 2</swiper-slide>
         <swiper-slide>Slide 3</swiper-slide>
         <swiper-slide>Slide 4</swiper-slide>
-        <NextBtn />
-        <PrevBtn />
+        <PrevBtn :is-beginning="isBeginning" />
+        <NextBtn :is-end="isEnd" />
     </swiper>
 </template>
 <style lang="scss">
@@ -32,20 +34,29 @@
     }
 </style>
 <script setup>
+    import { ref } from 'vue'
     // Swiper Component
     import { Swiper, SwiperSlide } from 'swiper/vue'
     // Swiper controller hook
     import { Navigation } from 'swiper/modules'
     import NextBtn from './Swiper/NextBtn.vue'
     import PrevBtn from './Swiper/PrevBtn.vue'
+    // import ActiveTest from './Swiper/ActiveTest.vue'
+
+    const isBeginning = ref(true)
+    const isEnd = ref(false)
 
     //Swiper default styles
     import 'swiper/css'
-    import 'swiper/css/navigation'
-    // const onSwiper = (swiper) => {
-    //     console.log(swiper)
-    // }
-    // const onSlideChange = () => {
-    //     console.log('slide change')
-    // }
+    const onSwiper = (swiper) => {
+        console.log(swiper)
+    }
+    const onSlideChange = (data) => {
+        //emit change
+        console.log('slide change', data)
+        const { isBeginning: startState, isEnd: endState } = data
+        console.log(startState, endState)
+        isBeginning.value = startState
+        isEnd.value = endState
+    }
 </script>
