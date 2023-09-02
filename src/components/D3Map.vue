@@ -150,7 +150,8 @@
                 h: window.innerHeight,
                 currentCounty: '臺北市',
                 store: exhibitionStore(),
-                exhibitionListView: []
+                exhibitionListView: [],
+                isResize: false
             }
         },
         async mounted() {
@@ -174,9 +175,16 @@
             //新增自適應 innerWidth for map
             handleResize() {
                 // d3.select('#map').remove()
-                this.draw()
-                this.w = window.innerWidth
-                this.w = window.innerHeight
+                let useDebounceValue = this.isResize
+                //等3 sec 執行
+                setTimeout(() => {
+                    this.isResize = false
+                }, 500)
+                if (!this.isResize) {
+                    this.draw()
+                    this.w = window.innerWidth
+                    this.w = window.innerHeight
+                }
             },
             //draw map
             async draw() {
@@ -218,7 +226,7 @@
                     .projection(d3.geoMercator().center([centerX, centerY]).scale(rwdScale))
 
                 const data = jsonFile
-                console.log(data)
+                // console.log(data)
 
                 const geometries = topojson.feature(data, data.objects['COUNTY_MOI_1090820'])
                 svg.append('path')
