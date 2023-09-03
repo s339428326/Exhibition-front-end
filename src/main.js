@@ -34,7 +34,7 @@ import Star from 'vue-material-design-icons/Star.vue'
 import StarHalfFull from 'vue-material-design-icons/StarHalfFull.vue'
 
 //datepicker
-import Datepicker from 'vuejs3-datepicker'
+// import Datepicker from 'vuejs3-datepicker'
 const app = createApp(App)
 
 app.use(router)
@@ -75,6 +75,6 @@ app.component('ChevronLeft', ChevronLeft)
 app.component('Star', Star)
 app.component('StarHalfFull', StarHalfFull)
 
-app.component('Datepicker', Datepicker)
+// app.component('Datepicker', Datepicker)
 
 app.mount('#app')

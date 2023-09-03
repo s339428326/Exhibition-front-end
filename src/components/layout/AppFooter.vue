@@ -127,7 +127,7 @@
     }
 
     .footer-link {
-        color: $secondary;
+        color: white;
         font-size: 14px;
     }
 

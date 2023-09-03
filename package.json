@@ -16,6 +16,7 @@
         "@popperjs/core": "^2.11.8",
         "@vee-validate/i18n": "^4.11.3",
         "@vee-validate/rules": "^4.11.3",
+        "@vuepic/vue-datepicker": "^6.0.3",
         "axios": "^1.4.0",
         "bootstrap": "^5.3.1",
         "bootstrap-vue-next": "^0.9.24",
@@ -29,8 +30,7 @@
         "vite": "^4.4.9",
         "vue": "^3.3.4",
         "vue-material-design-icons": "^5.2.0",
-        "vue-router": "^4.2.2",
-        "vuejs3-datepicker": "^1.0.19"
+        "vue-router": "^4.2.2"
     },
     "devDependencies": {
         "@rushstack/eslint-patch": "^1.2.0",

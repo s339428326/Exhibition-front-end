@@ -1,34 +1,52 @@
 <template>
-    <section class="row py-4">
+    <section class="row py-4 min-h-861">
+        <div class="map-title d-block d-md-none">
+            <div class="position-relative titleView text-light px-3 py-1 overflow-hidden d-flex">
+                <h1 class="title-1 d-flex flex-column w-100 mt-2">
+                    <p class="fs-5">城市</p>
+                    <p class="fw-bold fs-1">{{ currentCounty }}</p>
+                </h1>
+                <div class="ms-auto mt-auto p-2 w-100 text-end">
+                    <p class="fs-1 font-pathway">2023</p>
+                    <p class="fs-5">最新展覽資訊</p>
+                </div>
+            </div>
+        </div>
         <div
-            class="col-12 col-lg-6 mb-2 mb-md-0 position-relative"
+            class="col-12 col-lg-6 mb-2 mb-md-0 position-relative mb-4 mb-md-0"
             id="map-container"
             ref="map"
         >
-            <div class="position-absolute">
-                <h5 class="fs-3 fw-medium p-4">{{ currentCounty }}</h5>
+            <div class="position-absolute map-title d-none d-md-block">
+                <div
+                    class="position-relative titleView text-light px-3 py-1 overflow-hidden d-flex"
+                >
+                    <h1 class="title-1 d-flex flex-column w-100 mt-2">
+                        <p class="fs-5">城市</p>
+                        <p class="fw-bold fs-4">{{ currentCounty }}</p>
+                    </h1>
+                    <div class="ms-auto mt-auto p-2 w-100 text-end">
+                        <p class="fs-1 font-pathway">2023</p>
+                        <p class="fs-7">最新展覽資訊</p>
+                    </div>
+                </div>
             </div>
             <svg id="map"></svg>
         </div>
         <div class="col-12 col-lg-6">
-            <div class="ms-auto mb-4">
-                <div class="position-relative titleView text-light px-3 py-4 overflow-hidden">
-                    <h1 class="title-1 d-flex flex-column">
-                        <p class="font-pathway">2023</p>
-                        <p class="fs-7">展覽售票檢索</p>
-                    </h1>
-                    <div class="text-end">
-                        <p class="fs-7">最新展覽資訊</p>
-                        <p class="fs-7">New Exhibition Information</p>
-                    </div>
-                </div>
-            </div>
-
-            <ul
-                v-for="(item, index) in exhibitionListView"
-                :key="index"
-            >
-                <li class="mb-4">
+            <ul class="d-flex flex-column gap-2">
+                <li
+                    v-for="(item, index) in exhibitionListView"
+                    :key="index"
+                    @click="changeExhibitionView(index)"
+                >
+                    <img
+                        :class="`image-box rounded-4 mb-4 ${
+                            exhibitionShowIndex !== index && 'd-none'
+                        }  `"
+                        :src="`${item.image}`"
+                        :alt="item.name"
+                    />
                     <!-- time -->
                     <div
                         class="d-flex align-items-end gap-0 lh-1 border-bottom border-3 border-dark gap-3 mb-2"
@@ -78,7 +96,18 @@
         font-size: 14px;
     }
 
+    .min-h-861 {
+        min-height: 861px;
+    }
+
     //Top3 展覽用
+    .image-box {
+        object-fit: cover;
+        object-position: top;
+        width: 100%;
+        max-height: 300px;
+    }
+
     .list-title {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -95,10 +124,12 @@
 
     //Home page 斜線設計區塊
     .titleView {
+        min-width: 250px;
+        min-height: 150px;
         background-color: #0e0e0eb2;
         .title-1 {
             p:first-child {
-                font-size: 3rem;
+                font-size: 1.5rem;
                 line-height: 1.2;
             }
         }
@@ -150,20 +181,26 @@
                 h: window.innerHeight,
                 currentCounty: '臺北市',
                 store: exhibitionStore(),
-                exhibitionListView: []
+                exhibitionListView: [],
+                exhibitionShowIndex: 0
             }
         },
         async mounted() {
             this.draw()
             window.addEventListener('resize', this.handleResize)
-            //
             await this.store.getAllExhibitionData()
             this.getExhibitionView('臺北')
         },
         unmounted() {
-            window.removeEventListener('resize', _.debounce(this.handleResize), 1000)
+            window.removeEventListener('resize', this.handleResize)
         },
         methods: {
+            changeExhibitionView(index) {
+                const current = this.exhibitionListView[index]
+                this.exhibitionListView[index] = this.exhibitionListView[0]
+                this.exhibitionListView.splice(0, 1, current)
+            },
+
             getExhibitionView(country) {
                 //filter location
                 this.exhibitionListView = this.store.exhibitionList
@@ -174,39 +211,36 @@
             //新增自適應 innerWidth for map
             handleResize() {
                 // d3.select('#map').remove()
-                //等3 sec 執行
                 this.draw()
                 this.w = window.innerWidth
-                this.w = window.innerHeight
             },
             //draw map
             async draw() {
                 console.log('render')
                 //refer: https://www.letswrite.tw/d3-vue-taiwan-map/
-                let width = this.$refs.map.offsetWidth - 12
-                let height = window.innerHeight
+                let width = this.$refs.map?.offsetWidth - 12
+                let height = 816
 
                 // const w = window.screen.width
                 let rwdScale = 11000 //rwd scale number
                 let centerX = 122
-                let centerY = 24.3
+                let centerY = 24.5
                 if (this.w > 992) {
                     rwdScale = 11000 //pc
                     centerX = 122
-                    centerY = 24.3
-                    height = this.h * 0.6
+                    centerY = 24.5
                 } else if (this.w <= 992 && this.w > 414) {
                     width = this.$refs.map.offsetWidth - 24
                     rwdScale = 9000 //pc
                     centerX = 122.6
                     centerY = 24
-                    height = this.h * 0.5
+                    height = height * 0.8
                 } else {
                     width = this.$refs.map.offsetWidth - 24
                     rwdScale = 6000 //mobile
                     centerX = 123.8
                     centerY = 23.3
-                    height = this.h * 0.5
+                    height = height * 0.6
                 }
 
                 document.querySelector('#map').innerHTML = ''
@@ -250,6 +284,12 @@
                     // 加上簡易版本 tooltip
                     .append('title')
                     .text((d) => d.properties['COUNTYNAME'])
+
+                document.querySelectorAll('.county').forEach((item) => {
+                    if (item.textContent === this.currentCounty) {
+                        item.classList.add('active')
+                    }
+                })
 
                 return svg
             }

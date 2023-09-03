@@ -1,306 +1,186 @@
 <template>
-    <div class="container my-5">
-        <div class="row mb-3">
-            <div class="col-6 d-flex">
-                <b-form-input
-                    v-model="keyword"
-                    placeholder="請輸入關鍵字"
-                ></b-form-input>
-                <Magnify class="ms-2 fs-4 pointer" />
+    <div :class="`d-flex `">
+        <!-- filter side -->
+        <div :class="`side border-end ${isFilterShow ? 'w-20 ' : 'border-none'}`">
+            <div :class="`m-4 ${isFilterShow && 'd-none'}`">
+                <div class="d-flex gap-2 align-items-center border-bottom pb-4 mb-4 px-3">
+                    <input
+                        id="date-valid"
+                        class=""
+                        type="checkbox"
+                        name="checkbox"
+                    />
+                    <!--  -->
+                    <label
+                        for="date-valid"
+                        class="pb-1"
+                        >顯示已結束展覽</label
+                    >
+                </div>
+                <div>
+                    <p class="fw-bold mb-2">類型</p>
+                    <!-- component radioList -->
+                    <ul class="type-list rounded-3 border mb-1">
+                        <li class="border-bottom p-2">
+                            <div>
+                                <input
+                                    class="me-2"
+                                    id="type-all"
+                                    type="radio"
+                                    name="type"
+                                    value="all"
+                                    checked="true"
+                                />
+                                <label for="type-all">全部</label>
+                            </div>
+                        </li>
+                        <li
+                            class="p-2 border-bottom"
+                            v-for="(item, index) in filterData.typeArr.slice(
+                                0,
+                                filterData.typeQuantity
+                            )"
+                            :key="index"
+                        >
+                            <div>
+                                <input
+                                    class="me-2"
+                                    :id="item"
+                                    type="radio"
+                                    name="type"
+                                    :value="item"
+                                />
+                                <label
+                                    class=""
+                                    :for="item"
+                                >
+                                    {{ item }}</label
+                                >
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex px-1">
+                        <button
+                            :class="`border-0 bg-transparent fw-bold ${
+                                filterData.typeQuantity < 6 && 'd-none'
+                            }`"
+                            type="button"
+                            @click="typeQtyHandler('reset')"
+                        >
+                            收回
+                        </button>
+                        <button
+                            @click="typeQtyHandler('add')"
+                            :class="`border-0 bg-transparent fw-bold ms-auto ${
+                                filterData.typeArr.length < 5 && 'd-none'
+                            }`"
+                            type="button"
+                        >
+                            顯示更多
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col">
-                <p class="d-inline-block">熱門類型：</p>
-                <ul class="d-inline-flex tagList">
-                    <li
-                        v-for="(tagItem, idx) in tagList"
-                        :key="idx"
-                        class="pointer"
-                    >
-                        <span class="btn btn-primary rounded-pill px-3 py-1 me-1">{{
-                            tagItem
-                        }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="row mt-5 gx-5">
-            <div class="col-3 border border-2 py-3 rounded-3 shadow">
-                <div class="mb-3">
-                    <b-form-checkbox
-                        id="isShowEnded-checkbox"
-                        v-model="isShowEnded"
-                        name="isShowEnded-checkbox"
-                        value="true"
-                        unchecked-value="false"
-                    >
-                        顯示已結束展覽
-                    </b-form-checkbox>
-                </div>
-                <div class="mb-3">
-                    <RadioList
-                        label="類型"
-                        name="type-radios"
-                        :options="typeOptions"
-                        v-model="typeSelected"
-                        @update="updateType"
-                        className="typeList"
-                        btnName="顯示更多"
-                        @btnEvent="showMoreType"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <DatePicker
-                        label="開始時間"
-                        @update="updateStartTime"
-                        class="mb-3"
-                    />
-                    <DatePicker
-                        label="結束時間"
-                        @update="updateEndTime"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <InputRange
-                        label="價格"
-                        v-model="priceSelected"
-                        @update="updatePrice"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <b-form-group
-                        label="地區"
-                        v-slot="{ filterInput }"
-                    >
-                        <b-form-input
-                            v-model="filterArea"
-                            placeholder="請輸入地區"
-                            :aria-describedby="filterInput"
-                            class="mb-2"
-                        ></b-form-input>
-                        <RadioList
-                            label=""
-                            name="area-radios"
-                            :options="areaOptions"
-                            v-model="areaSelected"
-                            @update="updateArea"
-                            className="areaList"
-                        />
-                    </b-form-group>
-                </div>
-            </div>
-            <div class="col-9">
-                <p class="mb-3">搜索結果項目：213</p>
-                <ul class="fairList row row-cols-sm-1 row row-cols-md-2 row row-cols-lg-3">
-                    <li
-                        v-for="(fairItem, idx) in fairList"
-                        :key="idx"
-                        class="my-2 hover-scale"
-                    >
-                        <CardFair
-                            :title="fairItem.title"
-                            :imgSrc="fairItem.imgSrc"
-                            :linkTo="fairItem.linkTo"
-                            :textContent="fairItem.textContent"
-                        />
-                    </li>
-                </ul>
-            </div>
+        <!-- main -->
+        <div class="w-75 flex-grow-1">
+            <button
+                type="button"
+                @click="filterShowHandler"
+            >
+                Filter
+                {{ isFilterShow }}
+            </button>
+            {{ new Date(filterSetData.endDate) }}
+            {{ filterData.typeQuantity }}
+            <!-- 這裡更新資料連動去init Filter Data -->
         </div>
     </div>
 </template>
 
 <script setup>
-    import CardFair from '@/components/card/CardFair.vue'
-    import RadioList from '@/components/inputRadio/RadioList.vue'
-    import InputRange from '@/components/inputRange/inputRange.vue'
-    import DatePicker from '@/components/datePicker/datePicker.vue'
+    // import CardFair from '@/components/card/CardFair.vue'
+    // import DatePicker from '@/components/datePicker/datePicker.vue'
+    // import RadioList from '@/components/inputRadio/RadioList.vue'
+    // import InputRange from '@/components/inputRange/inputRange.vue'
 
-    import { ref } from 'vue'
-    const keyword = ref(null)
-    const tagList = ref(['科技', '藝文', '影視'])
+    import { ref, onMounted } from 'vue'
+    import { exhibitionStore } from '../stores/exhibitionList'
 
-    const isShowEnded = ref(null)
-
-    // 類型清單
-    const typeOptions = ref([
-        {
-            name: '全部',
-            value: '全部'
-        },
-        {
-            name: '藝文',
-            value: '藝文'
-        },
-        {
-            name: '科技',
-            value: '科技'
-        },
-        {
-            name: '影視',
-            value: '影視'
-        },
-        {
-            name: '戲劇',
-            value: '戲劇'
+    onMounted(async () => {
+        if (store.value.exhibitionList.length === 0) {
+            await store.value.getAllExhibitionData() // 取得展覽全部資料
         }
-    ])
-    const anotherTypeOptions = ref([
-        {
-            name: '親子',
-            value: '親子'
-        },
-        {
-            name: '講座',
-            value: '講座'
+        initFilterData() //初始化篩選器資料
+        console.log('[BeforeMount]', store.value.exhibitionList)
+    })
+
+    //exhibition Data
+    const store = ref(exhibitionStore())
+
+    //filter data
+    const filterData = ref({
+        typeArr: [],
+        typeQuantity: 5
+    })
+
+    //Filter setting Data
+    const filterSetData = ref({
+        dateValid: false,
+        type: 'all',
+        startDate: 0,
+        endDate: new Date().getTime() + 90 * 24 * 60 * 60 * 100,
+        minPrice: 0,
+        maxPrice: 3000,
+        location: 'all'
+    })
+
+    //init Filter Data
+    const initFilterData = () => {
+        filterData.value.typeArr = Array.from(
+            new Set(store.value.exhibitionList.map((item) => item.type))
+        )
+    }
+
+    //side bar show
+    const isFilterShow = ref(false)
+    const filterShowHandler = () => {
+        isFilterShow.value = !isFilterShow.value
+    }
+
+    //filter type show Quantity
+    const typeQtyHandler = (controller) => {
+        switch (controller) {
+            case 'add':
+                filterData.value.typeQuantity += 5
+                break
+            case 'reset':
+                filterData.value.typeQuantity = 5
+                break
         }
-    ])
-    const typeSelected = ref(null)
-    const updateType = (newVal) => {
-        typeSelected.value = newVal
     }
-    const showMoreType = () => {
-        anotherTypeOptions.value.forEach((item) => {
-            typeOptions.value.push(item)
-        })
-    }
-
-    // 地區清單
-    const filterArea = ref(null)
-
-    const areaOptions = ref([
-        { name: '全部', value: '全部' },
-        { name: '台北', value: '台北' },
-        { name: '新北', value: '新北' },
-        { name: '基隆', value: '基隆' },
-        { name: '桃園', value: '桃園' },
-        { name: '新竹', value: '新竹' },
-        { name: '苗栗', value: '苗栗' },
-        { name: '台中', value: '台中' },
-        { name: '南投', value: '南投' },
-        { name: '彰化', value: '彰化' },
-        { name: '雲林', value: '雲林' },
-        { name: '嘉義', value: '嘉義' },
-        { name: '台南', value: '台南' },
-        { name: '高雄', value: '高雄' },
-        { name: '屏東', value: '屏東' },
-        { name: '台東', value: '台東' },
-        { name: '花蓮', value: '花蓮' },
-        { name: '宜蘭', value: '宜蘭' }
-    ])
-    const areaSelected = ref(null)
-    const updateArea = (newVal) => {
-        areaSelected.value = newVal
-    }
-
-    // 價格
-    const priceSelected = ref(null)
-    const updatePrice = (newVal) => {
-        priceSelected.value = newVal
-    }
-
-    // 時間
-    const startTime = ref(new Date())
-    const updateStartTime = (newVal) => {
-        startTime.value = newVal
-    }
-
-    const endTime = ref(new Date())
-    const updateEndTime = (newVal) => {
-        endTime.value = newVal
-    }
-
-    const fairList = ref([
-        {
-            title: 'A Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=22',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'B Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=23',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'C Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=24',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'D Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=25',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'E Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=26',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        }
-    ])
 </script>
 
-<style lang="scss" scoped>
-    // .fairList {
-    //     margin-left: -8px;
-    //     margin-right: -8px;
-    //     li {
-    //         width: calc((100% / 3) - 32px);
-    //         transition: 0.3s ease-in-out;
+<style lang="scss">
+    //filter slider
+    .side {
+        overflow: hidden;
+        /* transform: translateX(-100%); */
+        width: 25%;
+        transition: all 0.25s ease-in;
+    }
 
-    //         @include media-lg {
-    //             width: calc((100% / 2) - 16px);
-    //         }
+    .w-75 {
+        width: 75%;
+    }
 
-    //         @include media-sm {
-    //             width: 100%;
-    //         }
-
-    //         &:hover {
-    //             transform: scale(1.04);
-    //         }
-    //     }
-    // }
-
-    .hover-scale {
-        transition: 0.3s ease-in-out;
-        &:hover {
-            transform: scale(1.04);
+    .type-list {
+        li:last-child {
+            border-bottom: 0px !important;
         }
     }
 
-    :deep(.areaList) {
-        height: 210px;
-        overflow: auto;
-    }
-
-    :deep(.typeList),
-    :deep(.areaList) {
-        .form-check {
-            border: 1px solid $gray-500;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            margin-bottom: 0;
-            padding-left: 36px;
-
-            &:first-of-type {
-                border-radius: 6px 6px 0 0;
-            }
-            &:last-of-type {
-                border-radius: 0 0 6px 6px;
-            }
-        }
-    }
-
-    .shadow {
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    .w-20 {
+        width: 0%;
     }
 </style>
