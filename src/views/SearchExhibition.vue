@@ -14,7 +14,7 @@
                         name="checkbox"
                         :checked="filterSetData.dateValid"
                     />
-                    <!--  -->
+                    <!-- :checked="" -->
                     <p
                         for="date-valid"
                         class="pb-1"
@@ -168,19 +168,32 @@
                 </VeeForm>
                 <!-- 地區 -->
                 <div>
-                    <p class="fs-7 mb-2 fw-bold">城市</p>
+                    <p class="fs-7 mb-2 fw-bold">城市 {{ filterData.cityKeyWord }}</p>
                     <input
+                        @input="searchCityHandler"
                         class="border w-100 rounded px-2 py-1 mb-2"
                         type="search"
                         placeholder="篩選城市名稱"
-                        name=""
-                        id=""
+                        name="cityKeyWord"
+                        id="cityKeyWord"
                     />
-
                     <ul class="city-list border rounded-3">
+                        <li class="p-2 border-bottom">
+                            <div @click="filterSetHandler('city', 'all')">
+                                <input
+                                    class="me-2"
+                                    id="all"
+                                    type="radio"
+                                    name="city"
+                                    value="all"
+                                    :checked="filterSetData.city === 'all'"
+                                />
+                                <span for="all">全部</span>
+                            </div>
+                        </li>
                         <li
                             class="p-2 border-bottom"
-                            v-for="(item, index) in cityArr"
+                            v-for="(item, index) in filterData.cityArr"
                             :key="index"
                         >
                             <div @click="filterSetHandler('city', item)">
@@ -188,7 +201,7 @@
                                     class="me-2"
                                     :id="item"
                                     type="radio"
-                                    name="type"
+                                    name="city"
                                     :value="item"
                                     :checked="filterSetData.city === item"
                                 />
@@ -206,7 +219,16 @@
         </div>
         <!-- main -->
         <div class="container">
+            <div class="my-4 p-4 border rounded-3">
+                <input
+                    type="search"
+                    name=""
+                    id=""
+                />
+            </div>
+
             <button
+                class="btn border"
                 type="button"
                 @click="filterShowHandler"
             >
@@ -216,6 +238,7 @@
             {{ new Date(filterSetData.endDate) }}
             <p>篩選器 {{ filterSetData }}</p>
             <p>展覽資料 {{ store.exhibitionList.map((item) => item.location.country) }}</p>
+            {{ route.query }}
         </div>
     </div>
 </template>
@@ -224,6 +247,7 @@
     // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
     import { ref, watch, onMounted } from 'vue'
+    import _ from 'lodash'
     import { exhibitionStore } from '../stores/exhibitionList'
     import { useRoute, useRouter } from 'vue-router'
 
@@ -233,29 +257,6 @@
 
     //exhibition Data
     const store = ref(exhibitionStore())
-
-    const cityArr = [
-        '臺北',
-        '新北',
-        '桃園',
-        '臺中',
-        '台南',
-        '高雄',
-        '新竹',
-        '苗栗',
-        '彰化',
-        '南投',
-        '雲林',
-        '嘉義',
-        '屏東',
-        '宜蘭',
-        '花蓮',
-        '臺東',
-        '澎湖',
-        '金門',
-        '連江',
-        '基隆'
-    ]
 
     //url query
     const route = useRoute()
@@ -268,17 +269,32 @@
         isFilterShow.value = !isFilterShow.value
     }
 
-    onMounted(async () => {
-        if (store.value.exhibitionList.length === 0) {
-            await store.value.getAllExhibitionData() // 取得展覽全部資料
-        }
-        initFilterData() //初始化篩選器資料
-        console.log('[BeforeMount]', store.value.exhibitionList)
-    })
-
     //filter data
     const filterData = ref({
         typeArr: [],
+        cityArr: [
+            '臺北',
+            '新北',
+            '桃園',
+            '臺中',
+            '台南',
+            '高雄',
+            '新竹',
+            '苗栗',
+            '彰化',
+            '南投',
+            '雲林',
+            '嘉義',
+            '屏東',
+            '宜蘭',
+            '花蓮',
+            '臺東',
+            '澎湖',
+            '金門',
+            '連江',
+            '基隆'
+        ],
+        cityKeyWord: '',
         typeQuantity: 5
     })
 
@@ -293,20 +309,65 @@
         city: 'all'
     })
 
+    onMounted(async () => {
+        if (store.value.exhibitionList.length === 0) {
+            await store.value.getAllExhibitionData() // 取得展覽全部資料
+        }
+        initFilterData() //初始化篩選器資料
+        console.log('[BeforeMount]', store.value.exhibitionList)
+        console.log('[BeforeMount]', route.query)
+
+        watch(filterSetData.value, () => {
+            if (typeof filterSetData.value.startDate === 'object') {
+                filterSetData.value.startDate = new Date(filterSetData.value.startDate).getTime()
+            }
+            if (typeof filterSetData.value.endDate === 'object') {
+                filterSetData.value.endDate = new Date(filterSetData.value.endDate).getTime()
+            }
+            router.replace({
+                name: 'SearchExhibition',
+                query: filterSetData.value
+            })
+        })
+    })
+
     //init Filter Data
     const initFilterData = () => {
         //init type data
         filterData.value.typeArr = Array.from(
             new Set(store.value.exhibitionList.map((item) => item.type))
         )
-        console.log('[init]')
+
+        //query setting
+        if (Object.keys(route.query).length > 0) {
+            const { dateValid, type, startDate, endDate, minPrice, maxPrice, city } = route.query
+            const reSetData = {
+                dateValid: dateValid === 'true',
+                type,
+                startDate: parseInt(startDate),
+                endDate: parseInt(endDate),
+                minPrice: parseInt(minPrice),
+                maxPrice: parseInt(maxPrice),
+                city
+            }
+            // //fix
+            filterSetData.value = { ...filterSetData.value, ...reSetData }
+        }
     }
 
-    //[Filter type] controller current type value
+    //[Filter setting Data] controller current type value
     const filterSetHandler = (keyName, value) => {
         console.log('click', keyName, value)
+
         filterSetData.value[`${keyName}`] = value
+
+        console.log('[fetch Data]', 123)
     }
+
+    //[Filter Data] controller
+    const searchCityHandler = _.debounce((e) => {
+        filterData.value.cityKeyWord = e.target.value
+    }, 300)
 
     //[Filter type] show Quantity
     const typeQtyHandler = (controller) => {
@@ -319,26 +380,6 @@
                 break
         }
     }
-
-    //watch filterData to fetch api.
-    watch(filterSetData.value, (newValue) => {
-        console.log('[Fetch Filter Data]', newValue)
-        console.log(typeof filterSetData.value.startDate, filterSetData.value.startDate)
-
-        if (typeof filterSetData.value.startDate === 'object') {
-            filterSetData.value.startDate = new Date(filterSetData.value.startDate).getTime()
-        }
-
-        if (typeof filterSetData.value.endDate === 'object') {
-            filterSetData.value.endDate = new Date(filterSetData.value.endDate).getTime()
-        }
-
-        console.log('change', filterSetData.value)
-        router.replace({
-            name: 'SearchExhibition',
-            query: newValue
-        })
-    })
 </script>
 
 <style lang="scss">
