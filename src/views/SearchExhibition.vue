@@ -247,7 +247,6 @@
     // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
     import { ref, watch, onMounted } from 'vue'
-    import _ from 'lodash'
     import { exhibitionStore } from '../stores/exhibitionList'
     import { useRoute, useRouter } from 'vue-router'
 
@@ -269,31 +268,33 @@
         isFilterShow.value = !isFilterShow.value
     }
 
+    const cityArr = [
+        '臺北',
+        '新北',
+        '桃園',
+        '臺中',
+        '臺南',
+        '高雄',
+        '新竹',
+        '苗栗',
+        '彰化',
+        '南投',
+        '雲林',
+        '嘉義',
+        '屏東',
+        '宜蘭',
+        '花蓮',
+        '臺東',
+        '澎湖',
+        '金門',
+        '連江',
+        '基隆'
+    ]
+
     //filter data
     const filterData = ref({
         typeArr: [],
-        cityArr: [
-            '臺北',
-            '新北',
-            '桃園',
-            '臺中',
-            '台南',
-            '高雄',
-            '新竹',
-            '苗栗',
-            '彰化',
-            '南投',
-            '雲林',
-            '嘉義',
-            '屏東',
-            '宜蘭',
-            '花蓮',
-            '臺東',
-            '澎湖',
-            '金門',
-            '連江',
-            '基隆'
-        ],
+        cityArr,
         cityKeyWord: '',
         typeQuantity: 5
     })
@@ -365,9 +366,13 @@
     }
 
     //[Filter Data] controller
-    const searchCityHandler = _.debounce((e) => {
+    const searchCityHandler = (e) => {
+        e.preventDefault()
         filterData.value.cityKeyWord = e.target.value
-    }, 300)
+        if (e.target.value === '') filterData.value.cityArr = cityArr
+        console.log(filterData.value.cityArr.filter((item) => item.includes(e.target.value)))
+        filterData.value.cityArr = cityArr.filter((item) => item.includes(e.target.value))
+    }
 
     //[Filter type] show Quantity
     const typeQtyHandler = (controller) => {
