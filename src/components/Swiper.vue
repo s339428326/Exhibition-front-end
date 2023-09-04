@@ -1,8 +1,4 @@
 <template>
-    <div class="">
-        <!-- {{ sliderIndex }} -->
-    </div>
-
     <!-- @swiper="onSwiper" :slides-per-view="1"  :space-between="0"-->
     <swiper
         class="col-12 position-relative"
@@ -42,7 +38,7 @@
                 <!-- review -->
                 <div>
                     展覽內容相當有趣, 已經很久沒有觀看展覽感謝Art Search Fair
-                    平台讓在空閒之餘找到可以找到如此適合放送的展覽
+                    平台讓在空閒之餘找到可以找到如此適合放鬆的展覽
                 </div>
             </div>
             <div class="card-end ms-auto position-relative">

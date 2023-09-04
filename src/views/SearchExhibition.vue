@@ -1,306 +1,422 @@
 <template>
-    <div class="container my-5">
-        <div class="row mb-3">
-            <div class="col-6 d-flex">
-                <b-form-input
-                    v-model="keyword"
-                    placeholder="請輸入關鍵字"
-                ></b-form-input>
-                <Magnify class="ms-2 fs-4 pointer" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <p class="d-inline-block">熱門類型：</p>
-                <ul class="d-inline-flex tagList">
-                    <li
-                        v-for="(tagItem, idx) in tagList"
-                        :key="idx"
-                        class="pointer"
-                    >
-                        <span class="btn btn-primary rounded-pill px-3 py-1 me-1">{{
-                            tagItem
-                        }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="row mt-5 gx-5">
-            <div class="col-3 border border-2 py-3 rounded-3 shadow">
-                <div class="mb-3">
-                    <b-form-checkbox
-                        id="isShowEnded-checkbox"
-                        v-model="isShowEnded"
-                        name="isShowEnded-checkbox"
-                        value="true"
-                        unchecked-value="false"
+    <div class="d-flex position-relative">
+        <!-- filter side -->
+        <div :class="`side border-end ${isFilterShow ? 'w-0' : 'border-none'}`">
+            <div :class="`m-4 ${isFilterShow && 'd-none'}`">
+                <!-- header -->
+                <div
+                    @click="filterSetHandler('dateValid', !filterSetData.dateValid)"
+                    class="d-flex gap-2 align-items-center border-bottom pb-4 mb-4 px-3"
+                >
+                    <input
+                        id="date-valid"
+                        type="checkbox"
+                        name="checkbox"
+                        :checked="filterSetData.dateValid"
+                    />
+                    <!-- :checked="" -->
+                    <p
+                        for="date-valid"
+                        class="pb-1"
                     >
                         顯示已結束展覽
-                    </b-form-checkbox>
+                    </p>
                 </div>
+                <!-- Type -->
                 <div class="mb-3">
-                    <RadioList
-                        label="類型"
-                        name="type-radios"
-                        :options="typeOptions"
-                        v-model="typeSelected"
-                        @update="updateType"
-                        className="typeList"
-                        btnName="顯示更多"
-                        @btnEvent="showMoreType"
-                    />
+                    <p class="fw-bold mb-2">類型</p>
+                    <!-- component radioList -->
+                    <ul class="type-list rounded-3 border mb-1">
+                        <li class="border-bottom p-2">
+                            <div @click="filterSetHandler('type', 'all')">
+                                <input
+                                    class="me-2"
+                                    id="type-all"
+                                    type="radio"
+                                    name="type"
+                                    value="all"
+                                    :checked="filterSetData.type === 'all'"
+                                />
+                                <span for="type-all">全部</span>
+                            </div>
+                        </li>
+                        <li
+                            class="p-2 border-bottom"
+                            v-for="(item, index) in filterData.typeArr.slice(
+                                0,
+                                filterData.typeQuantity
+                            )"
+                            :key="index"
+                        >
+                            <div @click="filterSetHandler('type', item)">
+                                <input
+                                    class="me-2"
+                                    :id="item"
+                                    type="radio"
+                                    name="type"
+                                    :value="item"
+                                    :checked="filterSetData.type === item"
+                                />
+                                <span
+                                    class=""
+                                    :for="item"
+                                >
+                                    {{ item }}</span
+                                >
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-flex px-1">
+                        <button
+                            :class="`border-0 bg-transparent fw-bold ${
+                                filterData.typeQuantity < 6 && 'd-none'
+                            }`"
+                            type="button"
+                            @click="typeQtyHandler('reset')"
+                        >
+                            收回
+                        </button>
+                        <button
+                            @click="typeQtyHandler('add')"
+                            :class="`border-0 bg-transparent fw-bold ms-auto ${
+                                filterData.typeArr.length < 5 && 'd-none'
+                            }`"
+                            type="button"
+                        >
+                            顯示更多
+                        </button>
+                    </div>
                 </div>
-
-                <div class="mb-3">
+                <!-- Time -->
+                <div class="mb-2">
+                    <p class="fw-bold mb-2">展覽期間</p>
                     <DatePicker
-                        label="開始時間"
-                        @update="updateStartTime"
-                        class="mb-3"
+                        v-model="filterSetData.startDate"
+                        class="mb-2"
+                        type="number"
+                        placeholder="開始時間"
                     />
+
+                    <!--  v-model="filterSetData.startDate" -->
                     <DatePicker
-                        label="結束時間"
-                        @update="updateEndTime"
+                        placeholder="結束時間"
+                        v-model="filterSetData.endDate"
                     />
                 </div>
-
-                <div class="mb-3">
-                    <InputRange
-                        label="價格"
-                        v-model="priceSelected"
-                        @update="updatePrice"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <b-form-group
-                        label="地區"
-                        v-slot="{ filterInput }"
-                    >
-                        <b-form-input
-                            v-model="filterArea"
-                            placeholder="請輸入地區"
-                            :aria-describedby="filterInput"
-                            class="mb-2"
-                        ></b-form-input>
-                        <RadioList
-                            label=""
-                            name="area-radios"
-                            :options="areaOptions"
-                            v-model="areaSelected"
-                            @update="updateArea"
-                            className="areaList"
+                <!-- price two range -->
+                <p class="mb-2 fw-bold">價格</p>
+                <VeeForm
+                    v-slot="{ errors }"
+                    @submit="submit"
+                >
+                    <div class="d-flex flex-column">
+                        <p class="mb-1 fs-7">最小票價</p>
+                        <VeeField
+                            v-model="filterSetData.minPrice"
+                            :class="`border rounded py-1 px-2 ${
+                                errors[`最小價格`] ? 'border-danger' : 'border'
+                            }`"
+                            placeholder="最小價格"
+                            name="最小價格"
+                            type="number"
+                            oninput="value=value.replace(/[^\d]/g,'')"
+                            :rules="{
+                                min_value: 0,
+                                max_value: filterSetData.maxPrice,
+                                numeric: true
+                            }"
                         />
-                    </b-form-group>
+                        <ErrorMessage
+                            v-if="errors[`最小價格`]"
+                            as="p"
+                            class="text-danger errorMessage"
+                            name="最小價格"
+                        />
+                        <p
+                            v-else
+                            class="errorMessage"
+                        ></p>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="mb-1 fs-7">最大票價</p>
+                        <VeeField
+                            v-model="filterSetData.maxPrice"
+                            :class="`border rounded py-1 px-2 ${
+                                errors[`最大價格`] ? 'border-danger' : 'border'
+                            }`"
+                            placeholder="最大價格"
+                            name="最大價格"
+                            type="number"
+                            oninput="value=value.replace(/[^\d]/g,'')"
+                            :rules="{
+                                min_value: filterSetData.minPrice,
+                                max_value: 100000,
+                                numeric: true
+                            }"
+                        />
+                        <ErrorMessage
+                            v-if="errors[`最大價格`]"
+                            as="p"
+                            class="text-danger errorMessage"
+                            name="最大價格"
+                        />
+                        <p
+                            v-else
+                            class="errorMessage"
+                        ></p>
+                    </div>
+                </VeeForm>
+                <!-- 地區 -->
+                <div>
+                    <p class="fs-7 mb-2 fw-bold">城市 {{ filterData.cityKeyWord }}</p>
+                    <input
+                        @input="searchCityHandler"
+                        class="border w-100 rounded px-2 py-1 mb-2"
+                        type="search"
+                        placeholder="篩選城市名稱"
+                        name="cityKeyWord"
+                        id="cityKeyWord"
+                    />
+                    <ul class="city-list border rounded-3">
+                        <li class="p-2 border-bottom">
+                            <div @click="filterSetHandler('city', 'all')">
+                                <input
+                                    class="me-2"
+                                    id="all"
+                                    type="radio"
+                                    name="city"
+                                    value="all"
+                                    :checked="filterSetData.city === 'all'"
+                                />
+                                <span for="all">全部</span>
+                            </div>
+                        </li>
+                        <li
+                            class="p-2 border-bottom"
+                            v-for="(item, index) in filterData.cityArr"
+                            :key="index"
+                        >
+                            <div @click="filterSetHandler('city', item)">
+                                <input
+                                    class="me-2"
+                                    :id="item"
+                                    type="radio"
+                                    name="city"
+                                    :value="item"
+                                    :checked="filterSetData.city === item"
+                                />
+                                <span
+                                    class=""
+                                    :for="item"
+                                >
+                                    {{ item }}
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="col-9">
-                <p class="mb-3">搜索結果項目：213</p>
-                <ul class="fairList row row-cols-sm-1 row row-cols-md-2 row row-cols-lg-3">
-                    <li
-                        v-for="(fairItem, idx) in fairList"
-                        :key="idx"
-                        class="my-2 hover-scale"
-                    >
-                        <CardFair
-                            :title="fairItem.title"
-                            :imgSrc="fairItem.imgSrc"
-                            :linkTo="fairItem.linkTo"
-                            :textContent="fairItem.textContent"
-                        />
-                    </li>
-                </ul>
+        </div>
+        <!-- main -->
+        <div class="container">
+            <div class="my-4 p-4 border rounded-3">
+                <input
+                    type="search"
+                    name=""
+                    id=""
+                />
             </div>
+
+            <button
+                class="btn border"
+                type="button"
+                @click="filterShowHandler"
+            >
+                Filter
+                {{ isFilterShow }}
+            </button>
+            {{ new Date(filterSetData.endDate) }}
+            <p>篩選器 {{ filterSetData }}</p>
+            <p>展覽資料 {{ store.exhibitionList.map((item) => item.location.country) }}</p>
+            {{ route.query }}
         </div>
     </div>
 </template>
 
 <script setup>
-    import CardFair from '@/components/card/CardFair.vue'
-    import RadioList from '@/components/inputRadio/RadioList.vue'
-    import InputRange from '@/components/inputRange/inputRange.vue'
-    import DatePicker from '@/components/datePicker/datePicker.vue'
+    // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
-    import { ref } from 'vue'
-    const keyword = ref(null)
-    const tagList = ref(['科技', '藝文', '影視'])
+    import { ref, watch, onMounted } from 'vue'
+    import _ from 'lodash'
+    import { exhibitionStore } from '../stores/exhibitionList'
+    import { useRoute, useRouter } from 'vue-router'
 
-    const isShowEnded = ref(null)
-
-    // 類型清單
-    const typeOptions = ref([
-        {
-            name: '全部',
-            value: '全部'
-        },
-        {
-            name: '藝文',
-            value: '藝文'
-        },
-        {
-            name: '科技',
-            value: '科技'
-        },
-        {
-            name: '影視',
-            value: '影視'
-        },
-        {
-            name: '戲劇',
-            value: '戲劇'
-        }
-    ])
-    const anotherTypeOptions = ref([
-        {
-            name: '親子',
-            value: '親子'
-        },
-        {
-            name: '講座',
-            value: '講座'
-        }
-    ])
-    const typeSelected = ref(null)
-    const updateType = (newVal) => {
-        typeSelected.value = newVal
+    const submit = (e) => {
+        e.preventDefault()
     }
-    const showMoreType = () => {
-        anotherTypeOptions.value.forEach((item) => {
-            typeOptions.value.push(item)
+
+    //exhibition Data
+    const store = ref(exhibitionStore())
+
+    //url query
+    const route = useRoute()
+    const router = useRouter()
+
+    ////////////filter////////////
+    //side bar show
+    const isFilterShow = ref(false)
+    const filterShowHandler = () => {
+        isFilterShow.value = !isFilterShow.value
+    }
+
+    //filter data
+    const filterData = ref({
+        typeArr: [],
+        cityArr: [
+            '臺北',
+            '新北',
+            '桃園',
+            '臺中',
+            '台南',
+            '高雄',
+            '新竹',
+            '苗栗',
+            '彰化',
+            '南投',
+            '雲林',
+            '嘉義',
+            '屏東',
+            '宜蘭',
+            '花蓮',
+            '臺東',
+            '澎湖',
+            '金門',
+            '連江',
+            '基隆'
+        ],
+        cityKeyWord: '',
+        typeQuantity: 5
+    })
+
+    //Filter setting Data
+    const filterSetData = ref({
+        dateValid: false,
+        type: 'all',
+        startDate: 0,
+        endDate: new Date().getTime() + 365 * 24 * 60 * 60 * 100,
+        minPrice: 1,
+        maxPrice: 100000,
+        city: 'all'
+    })
+
+    onMounted(async () => {
+        if (store.value.exhibitionList.length === 0) {
+            await store.value.getAllExhibitionData() // 取得展覽全部資料
+        }
+        initFilterData() //初始化篩選器資料
+        console.log('[BeforeMount]', store.value.exhibitionList)
+        console.log('[BeforeMount]', route.query)
+
+        watch(filterSetData.value, () => {
+            if (typeof filterSetData.value.startDate === 'object') {
+                filterSetData.value.startDate = new Date(filterSetData.value.startDate).getTime()
+            }
+            if (typeof filterSetData.value.endDate === 'object') {
+                filterSetData.value.endDate = new Date(filterSetData.value.endDate).getTime()
+            }
+            router.replace({
+                name: 'SearchExhibition',
+                query: filterSetData.value
+            })
         })
-    }
+    })
 
-    // 地區清單
-    const filterArea = ref(null)
+    //init Filter Data
+    const initFilterData = () => {
+        //init type data
+        filterData.value.typeArr = Array.from(
+            new Set(store.value.exhibitionList.map((item) => item.type))
+        )
 
-    const areaOptions = ref([
-        { name: '全部', value: '全部' },
-        { name: '台北', value: '台北' },
-        { name: '新北', value: '新北' },
-        { name: '基隆', value: '基隆' },
-        { name: '桃園', value: '桃園' },
-        { name: '新竹', value: '新竹' },
-        { name: '苗栗', value: '苗栗' },
-        { name: '台中', value: '台中' },
-        { name: '南投', value: '南投' },
-        { name: '彰化', value: '彰化' },
-        { name: '雲林', value: '雲林' },
-        { name: '嘉義', value: '嘉義' },
-        { name: '台南', value: '台南' },
-        { name: '高雄', value: '高雄' },
-        { name: '屏東', value: '屏東' },
-        { name: '台東', value: '台東' },
-        { name: '花蓮', value: '花蓮' },
-        { name: '宜蘭', value: '宜蘭' }
-    ])
-    const areaSelected = ref(null)
-    const updateArea = (newVal) => {
-        areaSelected.value = newVal
-    }
-
-    // 價格
-    const priceSelected = ref(null)
-    const updatePrice = (newVal) => {
-        priceSelected.value = newVal
-    }
-
-    // 時間
-    const startTime = ref(new Date())
-    const updateStartTime = (newVal) => {
-        startTime.value = newVal
-    }
-
-    const endTime = ref(new Date())
-    const updateEndTime = (newVal) => {
-        endTime.value = newVal
-    }
-
-    const fairList = ref([
-        {
-            title: 'A Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=22',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'B Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=23',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'C Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=24',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'D Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=25',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'E Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=26',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
+        //query setting
+        if (Object.keys(route.query).length > 0) {
+            const { dateValid, type, startDate, endDate, minPrice, maxPrice, city } = route.query
+            const reSetData = {
+                dateValid: dateValid === 'true',
+                type,
+                startDate: parseInt(startDate),
+                endDate: parseInt(endDate),
+                minPrice: parseInt(minPrice),
+                maxPrice: parseInt(maxPrice),
+                city
+            }
+            // //fix
+            filterSetData.value = { ...filterSetData.value, ...reSetData }
         }
-    ])
+    }
+
+    //[Filter setting Data] controller current type value
+    const filterSetHandler = (keyName, value) => {
+        console.log('click', keyName, value)
+
+        filterSetData.value[`${keyName}`] = value
+
+        console.log('[fetch Data]', 123)
+    }
+
+    //[Filter Data] controller
+    const searchCityHandler = _.debounce((e) => {
+        filterData.value.cityKeyWord = e.target.value
+    }, 300)
+
+    //[Filter type] show Quantity
+    const typeQtyHandler = (controller) => {
+        switch (controller) {
+            case 'add':
+                filterData.value.typeQuantity += 5
+                break
+            case 'reset':
+                filterData.value.typeQuantity = 5
+                break
+        }
+    }
 </script>
 
-<style lang="scss" scoped>
-    // .fairList {
-    //     margin-left: -8px;
-    //     margin-right: -8px;
-    //     li {
-    //         width: calc((100% / 3) - 32px);
-    //         transition: 0.3s ease-in-out;
+<style lang="scss">
+    //filter slider
+    .side {
+        overflow: hidden;
+        min-width: 288px;
+        transition: all 0.25s ease-in;
+        background-color: white;
 
-    //         @include media-lg {
-    //             width: calc((100% / 2) - 16px);
-    //         }
-
-    //         @include media-sm {
-    //             width: 100%;
-    //         }
-
-    //         &:hover {
-    //             transform: scale(1.04);
-    //         }
-    //     }
-    // }
-
-    .hover-scale {
-        transition: 0.3s ease-in-out;
-        &:hover {
-            transform: scale(1.04);
+        @media screen and (min-width: 1608px) {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
         }
     }
 
-    :deep(.areaList) {
-        height: 210px;
-        overflow: auto;
+    .main-content {
+        width: calc(100% - 288px);
     }
 
-    :deep(.typeList),
-    :deep(.areaList) {
-        .form-check {
-            border: 1px solid $gray-500;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            margin-bottom: 0;
-            padding-left: 36px;
-
-            &:first-of-type {
-                border-radius: 6px 6px 0 0;
-            }
-            &:last-of-type {
-                border-radius: 0 0 6px 6px;
-            }
+    .type-list {
+        li:last-child {
+            border-bottom: 0px !important;
         }
     }
 
-    .shadow {
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    .city-list {
+        max-height: 380px;
+        overflow-y: scroll;
+        li:last-child {
+            border-bottom: 0px !important;
+        }
+    }
+
+    .w-0 {
+        min-width: 0;
     }
 </style>

@@ -34,14 +34,14 @@
                             <li class="fw-bold mb-3">商業合作</li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >成為合作夥伴</router-link
                                 >
                             </li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >聯盟行銷合作</router-link
                                 >
@@ -51,14 +51,14 @@
                             <li class="fw-bold mb-3">關於我們</li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >企業徵才</router-link
                                 >
                             </li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >相關新聞</router-link
                                 >
@@ -68,14 +68,14 @@
                             <li class="fw-bold mb-3">取得協助</li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >常見問題</router-link
                                 >
                             </li>
                             <li>
                                 <router-link
-                                    class="nav-link"
+                                    class="footer-link"
                                     to="#"
                                     >歷史訂單</router-link
                                 >
@@ -90,12 +90,12 @@
                 <p class="text-center">© 2023 Art Search Fair All Rights Reserved.</p>
                 <div class="d-flex gap-2">
                     <router-link
-                        class="nav-link"
+                        class="footer-link"
                         to="#"
                         >隱私權政策</router-link
                     >
                     <router-link
-                        class="nav-link"
+                        class="footer-link"
                         to="#"
                         >使用者條款</router-link
                     >
@@ -126,9 +126,9 @@
         font-family: 'Alata', sans-serif;
     }
 
-    .nav-link {
-        color: $secondary;
-        font-size: 14px !important;
+    .footer-link {
+        color: white;
+        font-size: 14px;
     }
 
     .footer--items__list {
