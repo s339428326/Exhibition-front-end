@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+//Fix GitHub Page SPA router
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'

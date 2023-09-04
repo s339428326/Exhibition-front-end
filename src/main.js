@@ -19,6 +19,9 @@ import AllRules from '@vee-validate/rules'
 import { localize, setLocale } from '@vee-validate/i18n'
 // 引入中文繁體檔案
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
+//Vue Datepicker
+import DatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 //icons
 import Heart from 'vue-material-design-icons/Heart.vue'
@@ -57,10 +60,13 @@ configure({
 })
 setLocale('zh_TW')
 
-// 掛載 Global 的 VeeValidate 元件
+// VeeValidate 元件
 app.component('VeeField', Field)
 app.component('VeeForm', Form)
 app.component('ErrorMessage', ErrorMessage)
+
+//
+app.component('DatePicker', DatePicker)
 
 //icons components
 app.component('HeartIcon', Heart)
