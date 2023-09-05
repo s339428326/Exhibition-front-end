@@ -7,10 +7,10 @@
             <div class="d-flex"></div>
         </section>
         <!-- Exhibition reviews  -->
-        <section class="bg-secondary pb-5 pt-4">
+        <section class="bg-secondary pb-4 pb-lg-5 pt-4">
             <div class="container">
                 <!-- section title -->
-                <h2 class="fs-2 font-quantum border d-inline-block px-4 py-2 border-4">
+                <h2 class="fs-2 font-quantum border d-inline-block px-4 py-2 border-4 mb-3">
                     <span class="text-danger">Exhibition </span>
                     <span class="text-light">reviews</span>
                 </h2>

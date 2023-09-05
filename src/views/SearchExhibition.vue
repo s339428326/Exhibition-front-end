@@ -1,8 +1,17 @@
 <template>
-    <div class="d-flex position-relative">
+    <div class="d-flex">
         <!-- filter side -->
         <div :class="`side border-end ${isFilterShow ? 'w-0' : 'border-none'}`">
             <div :class="`m-4 ${isFilterShow && 'd-none'}`">
+                <div class="w-100 mb-2 d-block d-md-none">
+                    <button
+                        class="btn border"
+                        @click="filterShowHandler"
+                    >
+                        <CloseIcon />
+                        <span> Close</span>
+                    </button>
+                </div>
                 <!-- header -->
                 <div
                     @click="filterSetHandler('dateValid', !filterSetData.dateValid)"
@@ -218,27 +227,38 @@
             </div>
         </div>
         <!-- main -->
-        <div class="container">
-            <div class="my-4 p-4 border rounded-3">
-                <input
-                    type="search"
-                    name=""
-                    id=""
-                />
+        <div class="container position-relative px-3">
+            <div class="border">
+                <p>開發資料</p>
+                <p>req query 檢查資料 {{ route.query }}</p>
+            </div>
+            <div class="my-4 rounded-3">
+                <!-- 展覽搜索 -->
+                <div>
+                    <input
+                        class="border rounded-1 px-2 py-1"
+                        type="search"
+                        placeholder="輸入展覽名稱"
+                        name=""
+                        id=""
+                    />
+                </div>
             </div>
 
+            <!-- :class="`btn  d-flex align-items-center gap-2  ${
+                    isFilterShow ? 'btn-outline-dark' : 'btn-dark'
+                }`" -->
             <button
-                class="btn border"
+                class="border position-absolute top-0 start-0"
                 type="button"
                 @click="filterShowHandler"
             >
-                Filter
-                {{ isFilterShow }}
+                <FilterMenu />
+                <span> 篩選器</span>
             </button>
-            {{ new Date(filterSetData.endDate) }}
-            <p>篩選器 {{ filterSetData }}</p>
-            <p>展覽資料 {{ store.exhibitionList.map((item) => item.location.country) }}</p>
-            {{ route.query }}
+            <p>篩選器 {{ filterSetData }} 這裡需要設定 增加樣式</p>
+            <p></p>
+            <p>展覽資料 {{ store.exhibitionList.map((item) => item.name) }}</p>
         </div>
     </div>
 </template>
@@ -249,6 +269,9 @@
     import { ref, watch, onMounted } from 'vue'
     import { exhibitionStore } from '../stores/exhibitionList'
     import { useRoute, useRouter } from 'vue-router'
+    // import gsap from 'gsap'
+
+    import _ from 'lodash'
 
     const submit = (e) => {
         e.preventDefault()
@@ -394,12 +417,13 @@
         min-width: 288px;
         transition: all 0.25s ease-in;
         background-color: white;
-
-        @media screen and (min-width: 1608px) {
+        @media screen and (max-width: 768px) {
             position: absolute;
+            min-width: unset;
             top: 0;
-            bottom: 0;
+            right: 0;
             left: 0;
+            z-index: 9999;
         }
     }
 
