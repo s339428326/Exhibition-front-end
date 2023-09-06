@@ -12,9 +12,6 @@ import './assets/scss/styles.scss'
 // 註冊pinia
 import { createPinia } from 'pinia'
 
-//JS 動畫 插件
-import gsap from 'gsap'
-
 //使用 VeeValidate 表單驗證工具
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
 import AllRules from '@vee-validate/rules'
