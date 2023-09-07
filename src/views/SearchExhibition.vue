@@ -203,19 +203,18 @@
 
     const pageCountHandler = (key) => {
         //算出 總數 除以 每頁顯示資料筆數, 是否有餘數
-        const roundMod = store.exhibitionList.length % page.value.limit > 0 ? 1 : 0
-        //總數除以 每頁顯示資料筆數, 無條件進位 + roundMod
-        const maxPage = Math.floor(store.exhibitionList.length / page.value.limit) + roundMod
+        const roundMod = exhViewData.value.length % page.value.limit > 0 ? 1 : 0
+        //總數除以 每頁顯示資料筆數, 無條件捨去 + roundMod
+        const maxPage = Math.floor(exhViewData.value.length / page.value.limit) + roundMod
         //兩相加得出 總共 page 切換可以換幾Round
-        const roundClickCounter = maxPage / page.value.pageView - 1
+        const roundClickCounter = Math.ceil(maxPage / page.value.pageView)
 
         switch (key) {
             case 'next':
-                if (page.value.counter > roundClickCounter) return
+                if (page.value.counter + 1 >= roundClickCounter) return
                 console.log(page.value.counter, roundClickCounter)
                 page.value.counter++
                 page.value.currentPage = page.value.counter * page.value.pageView + 1
-
                 break
             case 'pre':
                 if (page.value.counter === 0) return
@@ -223,6 +222,15 @@
                 page.value.currentPage = page.value.counter * page.value.pageView + 1
                 break
         }
+    }
+
+    const pageListInit = () => {
+        pageList.value = Array.from(
+            Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
+        ).slice(
+            page.value.counter * page.value.pageView,
+            (page.value.counter + 1) * page.value.pageView
+        )
     }
 
     ////////////filter Show Modal////////////
@@ -280,6 +288,8 @@
             delete newValue['minPrice']
         }
 
+        //
+        pageListInit()
         // console.log('queryDataView', newValue)
         queryData.value = { ...newValue }
     }
@@ -388,21 +398,9 @@
         filterExhList()
 
         //page
-
-        pageList.value = Array.from(
-            Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
-        ).slice(
-            page.value.counter * page.value.pageView,
-            (page.value.counter + 1) * page.value.pageView
-        )
-
+        pageListInit()
         watch(page.value, () => {
-            pageList.value = Array.from(
-                Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
-            ).slice(
-                page.value.counter * page.value.pageView,
-                (page.value.counter + 1) * page.value.pageView
-            )
+            pageListInit()
         })
 
         //[remove filter side hidden]
@@ -417,6 +415,9 @@
         queryDataView(route.query) //update query
         // [Feature filter]
         filterExhList()
+        page.value.counter = 0
+        page.value.currentPage = 1 // update query init page
+        pageListInit()
     })
 </script>
 
