@@ -131,19 +131,25 @@
                     class="p-1 border border-1 rounded bg-transparent"
                 >
                     <ChevronLeft />
-                    <span>上一頁</span>
+                    <span>返回</span>
                 </button>
                 <!--  -->
                 <ul class="pagination d-flex gap-1">
                     <!-- page number -->
                     <!-- <li class="border p-2 rounded">1</li> -->
                     <li
-                        @click="pageHandler(index + 1)"
+                        @click="pageHandler(item + 1)"
                         v-for="(item, index) in pageList"
                         :key="index"
-                        class="border p-2 rounded"
+                        :class="`border p-2 rounded ${
+                            page.currentPage === item + 1 && ' bg-primary text-white'
+                        }`"
                     >
-                        <button class="border-0 bg-transparent">
+                        <button
+                            :class="`border-0 bg-transparent ${
+                                page.currentPage === item + 1 && '  text-white'
+                            }`"
+                        >
                             {{ item + 1 }}
                         </button>
                     </li>
@@ -154,7 +160,7 @@
                     class="p-1 border border-1 rounded bg-transparent"
                 >
                     <ChevronRight />
-                    <span>下一頁</span>
+                    <span>更多</span>
                 </button>
             </nav>
         </div>
@@ -181,8 +187,8 @@
 
     const page = ref({
         nextBtnDisable: false,
-        counter: 0,
-        pageView: 2, //每次顯示 X 頁 btn 顯示於畫面
+        counter: 0, // 記錄是第幾Round切換 page list
+        pageView: 3, //每次顯示 X 頁 btn 顯示於畫面
         limit: 8, // 每頁有幾筆資料
         currentPage: 1 //目前顯示資料的頁數
     })
@@ -196,16 +202,25 @@
     }
 
     const pageCountHandler = (key) => {
-        console.log(page.value.maxPage)
+        //算出 總數 除以 每頁顯示資料筆數, 是否有餘數
+        const roundMod = store.exhibitionList.length % page.value.limit > 0 ? 1 : 0
+        //總數除以 每頁顯示資料筆數, 無條件進位 + roundMod
+        const maxPage = Math.floor(store.exhibitionList.length / page.value.limit) + roundMod
+        //兩相加得出 總共 page 切換可以換幾Round
+        const roundClickCounter = maxPage / page.value.pageView - 1
+
         switch (key) {
             case 'next':
+                if (page.value.counter > roundClickCounter) return
+                console.log(page.value.counter, roundClickCounter)
                 page.value.counter++
-                console.log(pageList.value[pageList.value.length - 1] + 1)
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
+
                 break
             case 'pre':
                 if (page.value.counter === 0) return
                 page.value.counter--
-                console.log(page.value.counter)
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
                 break
         }
     }
