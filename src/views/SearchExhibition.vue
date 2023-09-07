@@ -1,422 +1,440 @@
 <template>
-    <div class="d-flex position-relative">
+    <div class="d-flex">
         <!-- filter side -->
-        <div :class="`side border-end ${isFilterShow ? 'w-0' : 'border-none'}`">
-            <div :class="`m-4 ${isFilterShow && 'd-none'}`">
-                <!-- header -->
-                <div
-                    @click="filterSetHandler('dateValid', !filterSetData.dateValid)"
-                    class="d-flex gap-2 align-items-center border-bottom pb-4 mb-4 px-3"
-                >
-                    <input
-                        id="date-valid"
-                        type="checkbox"
-                        name="checkbox"
-                        :checked="filterSetData.dateValid"
-                    />
-                    <!-- :checked="" -->
-                    <p
-                        for="date-valid"
-                        class="pb-1"
-                    >
-                        顯示已結束展覽
-                    </p>
-                </div>
-                <!-- Type -->
-                <div class="mb-3">
-                    <p class="fw-bold mb-2">類型</p>
-                    <!-- component radioList -->
-                    <ul class="type-list rounded-3 border mb-1">
-                        <li class="border-bottom p-2">
-                            <div @click="filterSetHandler('type', 'all')">
-                                <input
-                                    class="me-2"
-                                    id="type-all"
-                                    type="radio"
-                                    name="type"
-                                    value="all"
-                                    :checked="filterSetData.type === 'all'"
-                                />
-                                <span for="type-all">全部</span>
-                            </div>
-                        </li>
-                        <li
-                            class="p-2 border-bottom"
-                            v-for="(item, index) in filterData.typeArr.slice(
-                                0,
-                                filterData.typeQuantity
-                            )"
-                            :key="index"
-                        >
-                            <div @click="filterSetHandler('type', item)">
-                                <input
-                                    class="me-2"
-                                    :id="item"
-                                    type="radio"
-                                    name="type"
-                                    :value="item"
-                                    :checked="filterSetData.type === item"
-                                />
-                                <span
-                                    class=""
-                                    :for="item"
-                                >
-                                    {{ item }}</span
-                                >
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="d-flex px-1">
-                        <button
-                            :class="`border-0 bg-transparent fw-bold ${
-                                filterData.typeQuantity < 6 && 'd-none'
-                            }`"
-                            type="button"
-                            @click="typeQtyHandler('reset')"
-                        >
-                            收回
-                        </button>
-                        <button
-                            @click="typeQtyHandler('add')"
-                            :class="`border-0 bg-transparent fw-bold ms-auto ${
-                                filterData.typeArr.length < 5 && 'd-none'
-                            }`"
-                            type="button"
-                        >
-                            顯示更多
-                        </button>
-                    </div>
-                </div>
-                <!-- Time -->
-                <div class="mb-2">
-                    <p class="fw-bold mb-2">展覽期間</p>
-                    <DatePicker
-                        v-model="filterSetData.startDate"
-                        class="mb-2"
-                        type="number"
-                        placeholder="開始時間"
-                    />
-
-                    <!--  v-model="filterSetData.startDate" -->
-                    <DatePicker
-                        placeholder="結束時間"
-                        v-model="filterSetData.endDate"
-                    />
-                </div>
-                <!-- price two range -->
-                <p class="mb-2 fw-bold">價格</p>
-                <VeeForm
-                    v-slot="{ errors }"
-                    @submit="submit"
-                >
-                    <div class="d-flex flex-column">
-                        <p class="mb-1 fs-7">最小票價</p>
-                        <VeeField
-                            v-model="filterSetData.minPrice"
-                            :class="`border rounded py-1 px-2 ${
-                                errors[`最小價格`] ? 'border-danger' : 'border'
-                            }`"
-                            placeholder="最小價格"
-                            name="最小價格"
-                            type="number"
-                            oninput="value=value.replace(/[^\d]/g,'')"
-                            :rules="{
-                                min_value: 0,
-                                max_value: filterSetData.maxPrice,
-                                numeric: true
-                            }"
-                        />
-                        <ErrorMessage
-                            v-if="errors[`最小價格`]"
-                            as="p"
-                            class="text-danger errorMessage"
-                            name="最小價格"
-                        />
-                        <p
-                            v-else
-                            class="errorMessage"
-                        ></p>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <p class="mb-1 fs-7">最大票價</p>
-                        <VeeField
-                            v-model="filterSetData.maxPrice"
-                            :class="`border rounded py-1 px-2 ${
-                                errors[`最大價格`] ? 'border-danger' : 'border'
-                            }`"
-                            placeholder="最大價格"
-                            name="最大價格"
-                            type="number"
-                            oninput="value=value.replace(/[^\d]/g,'')"
-                            :rules="{
-                                min_value: filterSetData.minPrice,
-                                max_value: 100000,
-                                numeric: true
-                            }"
-                        />
-                        <ErrorMessage
-                            v-if="errors[`最大價格`]"
-                            as="p"
-                            class="text-danger errorMessage"
-                            name="最大價格"
-                        />
-                        <p
-                            v-else
-                            class="errorMessage"
-                        ></p>
-                    </div>
-                </VeeForm>
-                <!-- 地區 -->
-                <div>
-                    <p class="fs-7 mb-2 fw-bold">城市 {{ filterData.cityKeyWord }}</p>
-                    <input
-                        @input="searchCityHandler"
-                        class="border w-100 rounded px-2 py-1 mb-2"
-                        type="search"
-                        placeholder="篩選城市名稱"
-                        name="cityKeyWord"
-                        id="cityKeyWord"
-                    />
-                    <ul class="city-list border rounded-3">
-                        <li class="p-2 border-bottom">
-                            <div @click="filterSetHandler('city', 'all')">
-                                <input
-                                    class="me-2"
-                                    id="all"
-                                    type="radio"
-                                    name="city"
-                                    value="all"
-                                    :checked="filterSetData.city === 'all'"
-                                />
-                                <span for="all">全部</span>
-                            </div>
-                        </li>
-                        <li
-                            class="p-2 border-bottom"
-                            v-for="(item, index) in filterData.cityArr"
-                            :key="index"
-                        >
-                            <div @click="filterSetHandler('city', item)">
-                                <input
-                                    class="me-2"
-                                    :id="item"
-                                    type="radio"
-                                    name="city"
-                                    :value="item"
-                                    :checked="filterSetData.city === item"
-                                />
-                                <span
-                                    class=""
-                                    :for="item"
-                                >
-                                    {{ item }}
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <Filter
+            :is-filter-show="isFilterShow"
+            :filter-show-handler="filterShowHandler"
+            :resetKeyName="resetKeyName"
+            @reset="resetTypeStr"
+        />
         <!-- main -->
-        <div class="container">
-            <div class="my-4 p-4 border rounded-3">
-                <input
-                    type="search"
-                    name=""
-                    id=""
-                />
-            </div>
+        <div class="container position-relative px-3">
+            <div class="mt-5 rounded-3">
+                <!-- 展覽搜索 -->
+                <div class="mb-2">
+                    <input
+                        @input="searchKeyWordHandler"
+                        class="search-keyword border rounded-1 px-2 py-1"
+                        type="search"
+                        placeholder="輸入展覽名稱"
+                    />
+                </div>
+                <div class="mb-2">
+                    <p :class="`fs-7 ${!searchKeyWord.length > 0 && 'd-none'}`">
+                        搜索關鍵字：{{ searchKeyWord }}
+                    </p>
+                    <p class="fs-7">總搜索筆數({{ exhViewData.length }})</p>
+                </div>
 
+                <!-- filter tag-->
+                <div class="d-flex gap-2 mb-4">
+                    <div
+                        class="d-flex gap-2 align-items-center fs-7 border bg-transparent p-1 rounded"
+                        v-for="(item, key, index) in queryData"
+                        :key="index"
+                    >
+                        <!-- clear button -->
+                        <button
+                            class="p-0 border-0 bg-transparent"
+                            @click="resetFilterSetHandler(key)"
+                        >
+                            <CloseIcon :size="18" />
+                        </button>
+                        <!-- filter tag name -->
+                        <p class="">
+                            {{ `${key === 'dateValid' ? `顯示結束展覽` : ''}` }}
+                            {{
+                                `${
+                                    key === 'startDate'
+                                        ? `始於 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{
+                                `${
+                                    key === 'endDate'
+                                        ? `結束 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{ `${key === 'type' ? `類別 ${item}` : ''}` }}
+                            {{ `${key === 'minPrice' ? `最小價格 ${item}` : ''}` }}
+                            {{ `${key === 'maxPrice' ? `最大價格 ${item}` : ''}` }}
+                            {{ `${key === 'city' ? `城市 ${item}` : ''}` }}
+                        </p>
+                    </div>
+                    <!-- {{ key }} {{ item }} -->
+                </div>
+            </div>
+            <!-- 篩選器 控制btn -->
             <button
-                class="btn border"
+                class="btn"
                 type="button"
                 @click="filterShowHandler"
             >
-                Filter
-                {{ isFilterShow }}
+                <FilterMenu />
+                <span> 篩選器</span>
             </button>
-            {{ new Date(filterSetData.endDate) }}
-            <p>篩選器 {{ filterSetData }}</p>
-            <p>展覽資料 {{ store.exhibitionList.map((item) => item.location.country) }}</p>
-            {{ route.query }}
+            <!-- 展覽卡片 -->
+            <div class="row">
+                <div
+                    v-for="(item, index) in exhViewData.slice(
+                        page.limit * (page.currentPage - 1),
+                        page.limit * page.currentPage
+                    )"
+                    :key="index"
+                    class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
+                >
+                    <div class="border position-relative shadow rounded-3 overflow-hidden">
+                        <!-- city -->
+                        <div
+                            class="position-absolute bg-secondary text-white px-3 py-2 border-bottom-end-3"
+                        >
+                            {{ item?.location.country }}
+                        </div>
+                        <!-- header -->
+                        <div class="rounded">
+                            <img
+                                class="image-box hover-scale"
+                                :src="item?.image"
+                                :alt="item.name"
+                            />
+                        </div>
+                        <!-- exh content -->
+                        <div class="p-3">
+                            <!-- exh title  -->
+                            <div class="card-title fw-bold">
+                                <p>{{ item?.name }}</p>
+                            </div>
+                            <!-- exh-date -->
+                            <div class="d-flex gap-2 mb-1">
+                                <span>{{ new Date(item?.startDate).toLocaleDateString() }}</span>
+                                <span>~</span>
+                                <span>{{ new Date(item?.endDate).toLocaleDateString() }}</span>
+                            </div>
+                            <!-- exh type -->
+                            <ul class="d-flex">
+                                <li
+                                    class="border py-1 px-2 bg-success text-white rounded-pill fs-7"
+                                >
+                                    {{ item?.type }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 分頁元件 -->
+            <nav class="d-flex justify-content-center gap-1 mt-5 mb-5">
+                <button
+                    @click="pageCountHandler('pre')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronLeft />
+                    <span>返回</span>
+                </button>
+                <!--  -->
+                <ul class="pagination d-flex gap-1">
+                    <!-- page number -->
+                    <!-- <li class="border p-2 rounded">1</li> -->
+                    <li
+                        @click="pageHandler(item + 1)"
+                        v-for="(item, index) in pageList"
+                        :key="index"
+                        :class="`border p-2 rounded ${
+                            page.currentPage === item + 1 && ' bg-primary text-white'
+                        }`"
+                    >
+                        <button
+                            :class="`border-0 bg-transparent ${
+                                page.currentPage === item + 1 && '  text-white'
+                            }`"
+                        >
+                            {{ item + 1 }}
+                        </button>
+                    </li>
+                </ul>
+
+                <button
+                    @click="pageCountHandler('next')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronRight />
+                    <span>更多</span>
+                </button>
+            </nav>
         </div>
     </div>
 </template>
 
 <script setup>
+    // import gsap from 'gsap'
+    import _ from 'lodash'
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+    import { useRoute, useRouter } from 'vue-router'
+    import { exhibitionStore } from '../stores/exhibitionList'
+    import Filter from '../components/Filter.vue'
     // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
-    import { ref, watch, onMounted } from 'vue'
-    import _ from 'lodash'
-    import { exhibitionStore } from '../stores/exhibitionList'
-    import { useRoute, useRouter } from 'vue-router'
-
-    const submit = (e) => {
-        e.preventDefault()
-    }
-
-    //exhibition Data
-    const store = ref(exhibitionStore())
-
-    //url query
+    const store = exhibitionStore()
     const route = useRoute()
     const router = useRouter()
 
-    ////////////filter////////////
-    //side bar show
+    const searchKeyWord = ref('')
+    const queryData = ref()
+    const resetKeyName = ref('')
+    const exhViewData = ref([...store.exhibitionList])
+
+    const page = ref({
+        nextBtnDisable: false,
+        counter: 0, // 記錄是第幾Round切換 page list
+        pageView: 3, //每次顯示 X 頁 btn 顯示於畫面
+        limit: 8, // 每頁有幾筆資料
+        currentPage: 1 //目前顯示資料的頁數
+    })
+    const pageList = ref([])
+
+    /////////////////page components////////////////////
+
+    //page change handler
+    const pageHandler = (currentPage) => {
+        page.value.currentPage = currentPage
+    }
+
+    const pageCountHandler = (key) => {
+        //算出 總數 除以 每頁顯示資料筆數, 是否有餘數
+        const roundMod = exhViewData.value.length % page.value.limit > 0 ? 1 : 0
+        //總數除以 每頁顯示資料筆數, 無條件捨去 + roundMod
+        const maxPage = Math.floor(exhViewData.value.length / page.value.limit) + roundMod
+        //兩相加得出 總共 page 切換可以換幾Round
+        const roundClickCounter = Math.ceil(maxPage / page.value.pageView)
+
+        switch (key) {
+            case 'next':
+                if (page.value.counter + 1 >= roundClickCounter) return
+                console.log(page.value.counter, roundClickCounter)
+                page.value.counter++
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
+                break
+            case 'pre':
+                if (page.value.counter === 0) return
+                page.value.counter--
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
+                break
+        }
+    }
+
+    const pageListInit = () => {
+        pageList.value = Array.from(
+            Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
+        ).slice(
+            page.value.counter * page.value.pageView,
+            (page.value.counter + 1) * page.value.pageView
+        )
+    }
+
+    ////////////filter Show Modal////////////
     const isFilterShow = ref(false)
+
     const filterShowHandler = () => {
         isFilterShow.value = !isFilterShow.value
+        if (isFilterShow.value === false) {
+            const mediaQuery = window.matchMedia('(min-width:768px)')
+            if (mediaQuery) document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
+        }
     }
 
-    //filter data
-    const filterData = ref({
-        typeArr: [],
-        cityArr: [
-            '臺北',
-            '新北',
-            '桃園',
-            '臺中',
-            '台南',
-            '高雄',
-            '新竹',
-            '苗栗',
-            '彰化',
-            '南投',
-            '雲林',
-            '嘉義',
-            '屏東',
-            '宜蘭',
-            '花蓮',
-            '臺東',
-            '澎湖',
-            '金門',
-            '連江',
-            '基隆'
-        ],
-        cityKeyWord: '',
-        typeQuantity: 5
-    })
+    //篩選data (暫時使用通知 子元件重置設定)
+    const resetTypeStr = () => {
+        resetKeyName.value = ''
+    }
 
-    //Filter setting Data
-    const filterSetData = ref({
-        dateValid: false,
-        type: 'all',
-        startDate: 0,
-        endDate: new Date().getTime() + 365 * 24 * 60 * 60 * 100,
-        minPrice: 1,
-        maxPrice: 100000,
-        city: 'all'
-    })
+    //Reset Filter 單項目設置
+    const resetFilterSetHandler = (keyName) => {
+        resetKeyName.value = keyName
+    }
 
-    onMounted(async () => {
-        if (store.value.exhibitionList.length === 0) {
-            await store.value.getAllExhibitionData() // 取得展覽全部資料
+    //提取query string資料, 賦予queryData
+    const queryDataView = (data) => {
+        //排除 初始數據做呈現
+        const { city, dateValid, startDate, endDate, maxPrice, minPrice, type } = data
+        const newValue = {
+            dateValid: dateValid === 'false' ? null : dateValid,
+            city: city === 'all' ? null : city,
+            startDate: startDate !== '0' && startDate !== undefined ? parseInt(startDate) : null,
+            endDate: endDate !== '0' && endDate !== undefined ? parseInt(endDate) : null,
+            maxPrice: maxPrice === '100000' ? null : parseInt(maxPrice),
+            minPrice: minPrice === '0' ? null : parseInt(minPrice),
+            type: type === 'all' ? null : type
         }
-        initFilterData() //初始化篩選器資料
-        console.log('[BeforeMount]', store.value.exhibitionList)
-        console.log('[BeforeMount]', route.query)
 
-        watch(filterSetData.value, () => {
-            if (typeof filterSetData.value.startDate === 'object') {
-                filterSetData.value.startDate = new Date(filterSetData.value.startDate).getTime()
+        Object.keys(newValue).forEach((keyName) => {
+            if (newValue[keyName] === null || newValue[keyName] === undefined) {
+                delete newValue[keyName]
             }
-            if (typeof filterSetData.value.endDate === 'object') {
-                filterSetData.value.endDate = new Date(filterSetData.value.endDate).getTime()
+
+            if (keyName === 'maxPrice' || keyName === 'minPrice') {
+                if (isNaN(newValue[keyName])) {
+                    delete newValue[keyName]
+                }
             }
-            router.replace({
-                name: 'SearchExhibition',
-                query: filterSetData.value
-            })
         })
-    })
 
-    //init Filter Data
-    const initFilterData = () => {
-        //init type data
-        filterData.value.typeArr = Array.from(
-            new Set(store.value.exhibitionList.map((item) => item.type))
-        )
-
-        //query setting
-        if (Object.keys(route.query).length > 0) {
-            const { dateValid, type, startDate, endDate, minPrice, maxPrice, city } = route.query
-            const reSetData = {
-                dateValid: dateValid === 'true',
-                type,
-                startDate: parseInt(startDate),
-                endDate: parseInt(endDate),
-                minPrice: parseInt(minPrice),
-                maxPrice: parseInt(maxPrice),
-                city
-            }
-            // //fix
-            filterSetData.value = { ...filterSetData.value, ...reSetData }
+        //price 沒有通過篩選 刪除
+        if (newValue.maxPrice < newValue.minPrice || newValue.maxPrice > 100000) {
+            delete newValue['maxPrice']
+            delete newValue['minPrice']
         }
+
+        //
+        pageListInit()
+        // console.log('queryDataView', newValue)
+        queryData.value = { ...newValue }
     }
 
-    //[Filter setting Data] controller current type value
-    const filterSetHandler = (keyName, value) => {
-        console.log('click', keyName, value)
-
-        filterSetData.value[`${keyName}`] = value
-
-        console.log('[fetch Data]', 123)
-    }
-
-    //[Filter Data] controller
-    const searchCityHandler = _.debounce((e) => {
-        filterData.value.cityKeyWord = e.target.value
+    //關鍵字搜索
+    const searchKeyWordHandler = _.debounce((e) => {
+        searchKeyWord.value = e.target.value
+        //add q
+        router.replace({
+            name: 'SearchExhibition',
+            query: { ...route.query, keyWord: searchKeyWord.value }
+        })
     }, 300)
 
-    //[Filter type] show Quantity
-    const typeQtyHandler = (controller) => {
-        switch (controller) {
-            case 'add':
-                filterData.value.typeQuantity += 5
-                break
-            case 'reset':
-                filterData.value.typeQuantity = 5
-                break
+    //依據queryData篩選資料
+    //data,filter
+    const filterExhList = () => {
+        console.log('[filterExhList start]', queryData.value)
+        let data = [...store.exhibitionList]
+        const filter = queryData.value
+
+        if (Object.keys(filter).map((item) => item).length === 0) {
+            console.log('全部展示')
+            // exhViewData.value = store.exhibitionList
+        }
+
+        Object.entries(filter).forEach(([key, value]) => {
+            console.log(key, value)
+            //增加 filter 項目
+            //dateValid, city,startDate, endDate, maxPrice, minPrice, type
+            switch (key) {
+                case 'dateValid':
+                    if (value === false) return
+                    data = data.filter((item) => item.endDate > new Date().getTime())
+                    console.log('篩選中-1:dateValid', data)
+                    break
+                case 'city':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.location.country === value)
+                    console.log('篩選中-2:city', data)
+                    break
+                case 'startDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.startDate >= value)
+                    console.log('篩選中-3:startDate', data)
+                    break
+                case 'endDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.endDate <= value)
+                    break
+                case 'maxPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.maxPrice >= value)
+                    break
+                case 'minPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.minPice <= value)
+                    break
+                case 'type':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.type === value)
+            }
+        })
+
+        //queryData(不包含keyword), filter keyword
+
+        if (route.query.keyWord !== '' && route.query.keyWord) {
+            console.log(route.query.keyWord)
+            data = data.filter((item) => item.name.includes(route.query.keyWord))
+            console.log('search', data)
+        }
+
+        exhViewData.value = data
+        console.log('[filterExhlist] result:', exhViewData.value)
+    }
+
+    const resizeHandler = () => {
+        const mediaQuery = window.matchMedia('(max-width:768px)')
+        console.log(mediaQuery)
+        if (mediaQuery.matches === false) {
+            document.querySelector('body').style = null
+        }
+        if (mediaQuery.matches === true && isFilterShow) {
+            document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
         }
     }
+
+    onMounted(async () => {
+        if (store.exhibitionList.length === 0) {
+            await store.getAllExhibitionData() // 取得展覽全部資料
+        }
+        queryDataView(route.query) //初始化 query
+
+        //set query keyword
+        if (route.query.keyWord) {
+            document.querySelector('.search-keyword').value = route.query.keyWord
+            searchKeyWord.value = route.query.keyWord
+        }
+        //[Feature Page slice]
+        exhViewData.value = store?.exhibitionList.filter(
+            (item) => item.endDate > new Date().getTime()
+        )
+        // 展覽檢索
+        filterExhList()
+
+        //page
+        pageListInit()
+        watch(page.value, () => {
+            pageListInit()
+        })
+
+        //[remove filter side hidden]
+        window.addEventListener('resize', resizeHandler)
+    })
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', resizeHandler)
+    })
+
+    watch(route, () => {
+        queryDataView(route.query) //update query
+        // [Feature filter]
+        filterExhList()
+        page.value.counter = 0
+        page.value.currentPage = 1 // update query init page
+        pageListInit()
+    })
 </script>
 
-<style lang="scss">
-    //filter slider
-    .side {
+<style lang="scss" scoped>
+    .card-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
         overflow: hidden;
-        min-width: 288px;
-        transition: all 0.25s ease-in;
-        background-color: white;
-
-        @media screen and (min-width: 1608px) {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-        }
     }
 
-    .main-content {
-        width: calc(100% - 288px);
+    .image-box {
+        object-fit: cover;
+        height: 175px;
     }
 
-    .type-list {
-        li:last-child {
-            border-bottom: 0px !important;
-        }
-    }
-
-    .city-list {
-        max-height: 380px;
-        overflow-y: scroll;
-        li:last-child {
-            border-bottom: 0px !important;
-        }
-    }
-
-    .w-0 {
-        min-width: 0;
+    .border-bottom-end-3 {
+        border-bottom-right-radius: 1.5rem;
     }
 </style>

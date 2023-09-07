@@ -35,6 +35,7 @@ import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarHalfFull from 'vue-material-design-icons/StarHalfFull.vue'
+import FilterMenu from 'vue-material-design-icons/FilterMenu.vue'
 
 //datepicker
 // import Datepicker from 'vuejs3-datepicker'
@@ -80,6 +81,7 @@ app.component('ChevronRight', ChevronRight)
 app.component('ChevronLeft', ChevronLeft)
 app.component('Star', Star)
 app.component('StarHalfFull', StarHalfFull)
+app.component('FilterMenu', FilterMenu)
 
 // app.component('Datepicker', Datepicker)
 
