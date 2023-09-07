@@ -1,6 +1,41 @@
 import { defineStore } from 'pinia'
 import $axios from 'axios'
 
+function dateTimeApart(dateTime) {
+    const targetDate = dateTime.split(' ')[0]
+    const targetTime = dateTime.split(' ')[1]
+
+    const _yr = targetDate.split('/')[0]
+    const _mth = targetDate.split('/')[1]
+    const _day = targetDate.split('/')[2]
+
+    const _hr = targetTime.split(':')[0]
+    const _min = targetTime.split(':')[1]
+    const _scd = targetTime.split(':')[2]
+    return {
+        _yr,
+        _mth,
+        _day,
+        _hr,
+        _min,
+        _scd
+    }
+}
+
+function converTotimeStamp(dateTime) {
+    const dayObj = dateTimeApart(dateTime)
+    const newDateTime = new Date(
+        dayObj._yr,
+        dayObj._mth - 1,
+        dayObj._day,
+        dayObj._hr,
+        dayObj._min,
+        dayObj._scd
+    ).getTime()
+
+    return Math.floor(newDateTime / 1000)
+}
+
 export const useExhibitionStore = defineStore('exhibition', {
     state: () => ({
         rawExhibitionList: []
@@ -11,13 +46,23 @@ export const useExhibitionStore = defineStore('exhibition', {
                 const datas = state.rawExhibitionList
                 let newDatas = []
 
-                datas.forEach((data) => {
+                const filterData = datas.filter((item) => {
+                    return item.imageUrl
+                })
+
+                filterData.forEach((data) => {
                     let temp = {
-                        title: data.title,
+                        Uid: data.UID,
+                        name: data.title,
                         location: data.showInfo[0].location,
+                        locationName: data.showInfo[0].locationName,
                         price: data.showInfo[0].price,
-                        startDate: data.startDate,
-                        endDate: data.endDate
+                        startDate: converTotimeStamp(data.showInfo[0].time),
+                        endDate: converTotimeStamp(data.showInfo[0].endTime),
+                        introduce: data.descriptionFilterHtml,
+                        sourceWebPromote: data.sourceWebPromote,
+                        viewer: data.hitRate,
+                        image: data.imageUrl
                     }
 
                     newDatas.push(temp)
