@@ -4,119 +4,253 @@
         <Filter
             :is-filter-show="isFilterShow"
             :filter-show-handler="filterShowHandler"
+            :resetKeyName="resetKeyName"
+            @reset="resetTypeStr"
         />
         <!-- main -->
         <div class="container position-relative px-3">
             <div class="mt-5 rounded-3">
                 <!-- 展覽搜索 -->
-                <div>
+                <div class="mb-2">
                     <input
-                        class="border rounded-1 px-2 py-1"
+                        @input="searchKeyWordHandler"
+                        class="search-keyword border rounded-1 px-2 py-1"
                         type="search"
                         placeholder="輸入展覽名稱"
-                        name=""
-                        id=""
                     />
                 </div>
-                {{ queryData }}
-            </div>
+                <div class="mb-2">
+                    <p :class="`fs-7 ${!searchKeyWord.length > 0 && 'd-none'}`">
+                        搜索關鍵字：{{ searchKeyWord }}
+                    </p>
+                    <p class="fs-7">總搜索筆數({{ exhViewData.length }})</p>
+                </div>
 
-            <!-- :class="`btn  d-flex align-items-center gap-2  ${
-                    isFilterShow ? 'btn-outline-dark' : 'btn-dark'
-                }`" -->
+                <!-- filter tag-->
+                <div class="d-flex gap-2 mb-4">
+                    <div
+                        class="d-flex gap-2 align-items-center fs-7 border bg-transparent p-1 rounded"
+                        v-for="(item, key, index) in queryData"
+                        :key="index"
+                    >
+                        <!-- clear button -->
+                        <button
+                            class="p-0 border-0 bg-transparent"
+                            @click="resetFilterSetHandler(key)"
+                        >
+                            <CloseIcon :size="18" />
+                        </button>
+                        <!-- filter tag name -->
+                        <p class="">
+                            {{ `${key === 'dateValid' ? `顯示結束展覽` : ''}` }}
+                            {{
+                                `${
+                                    key === 'startDate'
+                                        ? `始於 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{
+                                `${
+                                    key === 'endDate'
+                                        ? `結束 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{ `${key === 'type' ? `類別 ${item}` : ''}` }}
+                            {{ `${key === 'minPrice' ? `最小價格 ${item}` : ''}` }}
+                            {{ `${key === 'maxPrice' ? `最大價格 ${item}` : ''}` }}
+                            {{ `${key === 'city' ? `城市 ${item}` : ''}` }}
+                        </p>
+                    </div>
+                    <!-- {{ key }} {{ item }} -->
+                </div>
+            </div>
+            <!-- 篩選器 控制btn -->
             <button
-                class="btn position-absolute top-0 start-0"
+                class="btn"
                 type="button"
                 @click="filterShowHandler"
             >
                 <FilterMenu />
                 <span> 篩選器</span>
             </button>
-            <p>篩選器 這裡需要設定 增加樣式</p>
+            <!-- 展覽卡片 -->
             <div class="row">
-                <div class="col-12 col-md-6 col-lg-4">
+                <div
+                    v-for="(item, index) in exhViewData.slice(
+                        page.limit * (page.currentPage - 1),
+                        page.limit * page.currentPage
+                    )"
+                    :key="index"
+                    class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
+                >
                     <div class="border position-relative shadow rounded-3 overflow-hidden">
                         <!-- city -->
                         <div
                             class="position-absolute bg-secondary text-white px-3 py-2 border-bottom-end-3"
                         >
-                            {{ store.exhibitionList.map((item) => item)[0]?.location.country }}
+                            {{ item?.location.country }}
                         </div>
                         <!-- header -->
                         <div class="rounded">
                             <img
-                                class="object-fit-cover"
-                                :src="store.exhibitionList.map((item) => item)[0]?.image"
-                                alt=""
+                                class="image-box hover-scale"
+                                :src="item?.image"
+                                :alt="item.name"
                             />
                         </div>
                         <!-- exh content -->
                         <div class="p-3">
                             <!-- exh title  -->
-                            <div class="fw-bold fs-5">
-                                <p>{{ store.exhibitionList.map((item) => item)[0]?.name }}</p>
+                            <div class="card-title fw-bold">
+                                <p>{{ item?.name }}</p>
                             </div>
                             <!-- exh-date -->
                             <div class="d-flex gap-2 mb-1">
-                                <span>{{
-                                    new Date(
-                                        store.exhibitionList.map((item) => item)[0]?.startDate
-                                    ).toLocaleDateString()
-                                }}</span>
+                                <span>{{ new Date(item?.startDate).toLocaleDateString() }}</span>
                                 <span>~</span>
-                                <span>{{
-                                    new Date(
-                                        store.exhibitionList.map((item) => item)[0]?.endDate
-                                    ).toLocaleDateString()
-                                }}</span>
+                                <span>{{ new Date(item?.endDate).toLocaleDateString() }}</span>
                             </div>
                             <!-- exh type -->
                             <ul class="d-flex">
                                 <li
                                     class="border py-1 px-2 bg-success text-white rounded-pill fs-7"
                                 >
-                                    {{ store.exhibitionList.map((item) => item)[0]?.type }}
+                                    {{ item?.type }}
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- 分頁元件 -->
+            <nav class="d-flex justify-content-center gap-1 mt-5 mb-5">
+                <button
+                    @click="pageCountHandler('pre')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronLeft />
+                    <span>上一頁</span>
+                </button>
+                <!--  -->
+                <ul class="pagination d-flex gap-1">
+                    <!-- page number -->
+                    <!-- <li class="border p-2 rounded">1</li> -->
+                    <li
+                        @click="pageHandler(index + 1)"
+                        v-for="(item, index) in pageList"
+                        :key="index"
+                        class="border p-2 rounded"
+                    >
+                        <button class="border-0 bg-transparent">
+                            {{ item + 1 }}
+                        </button>
+                    </li>
+                </ul>
+
+                <button
+                    @click="pageCountHandler('next')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronRight />
+                    <span>下一頁</span>
+                </button>
+            </nav>
         </div>
     </div>
 </template>
 
 <script setup>
-    // import _ from 'lodash'
     // import gsap from 'gsap'
-    import { ref, onMounted, watch } from 'vue'
-    import { useRoute } from 'vue-router'
+    import _ from 'lodash'
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+    import { useRoute, useRouter } from 'vue-router'
     import { exhibitionStore } from '../stores/exhibitionList'
     import Filter from '../components/Filter.vue'
     // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
     const store = exhibitionStore()
     const route = useRoute()
+    const router = useRouter()
 
+    const searchKeyWord = ref('')
     const queryData = ref()
-    const filterExhData = ref()
+    const resetKeyName = ref('')
+    const exhViewData = ref([...store.exhibitionList])
 
+    const page = ref({
+        nextBtnDisable: false,
+        counter: 0,
+        pageView: 2, //每次顯示 X 頁 btn 顯示於畫面
+        limit: 8, // 每頁有幾筆資料
+        currentPage: 1 //目前顯示資料的頁數
+    })
+    const pageList = ref([])
+
+    /////////////////page components////////////////////
+
+    //page change handler
+    const pageHandler = (currentPage) => {
+        page.value.currentPage = currentPage
+    }
+
+    const pageCountHandler = (key) => {
+        console.log(page.value.maxPage)
+        switch (key) {
+            case 'next':
+                page.value.counter++
+                console.log(pageList.value[pageList.value.length - 1] + 1)
+                break
+            case 'pre':
+                if (page.value.counter === 0) return
+                page.value.counter--
+                console.log(page.value.counter)
+                break
+        }
+    }
+
+    ////////////filter Show Modal////////////
+    const isFilterShow = ref(false)
+
+    const filterShowHandler = () => {
+        isFilterShow.value = !isFilterShow.value
+        if (isFilterShow.value === false) {
+            const mediaQuery = window.matchMedia('(min-width:768px)')
+            if (mediaQuery) document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
+        }
+    }
+
+    //篩選data (暫時使用通知 子元件重置設定)
+    const resetTypeStr = () => {
+        resetKeyName.value = ''
+    }
+
+    //Reset Filter 單項目設置
+    const resetFilterSetHandler = (keyName) => {
+        resetKeyName.value = keyName
+    }
+
+    //提取query string資料, 賦予queryData
     const queryDataView = (data) => {
         //排除 初始數據做呈現
         const { city, dateValid, startDate, endDate, maxPrice, minPrice, type } = data
         const newValue = {
             dateValid: dateValid === 'false' ? null : dateValid,
             city: city === 'all' ? null : city,
-            startDate: startDate !== '0' ? parseInt(startDate) : null,
-            endDate: endDate !== '0' ? parseInt(endDate) : null,
+            startDate: startDate !== '0' && startDate !== undefined ? parseInt(startDate) : null,
+            endDate: endDate !== '0' && endDate !== undefined ? parseInt(endDate) : null,
             maxPrice: maxPrice === '100000' ? null : parseInt(maxPrice),
             minPrice: minPrice === '0' ? null : parseInt(minPrice),
             type: type === 'all' ? null : type
         }
 
         Object.keys(newValue).forEach((keyName) => {
-            if (newValue[keyName] === null || newValue[keyName] === undefined)
+            if (newValue[keyName] === null || newValue[keyName] === undefined) {
                 delete newValue[keyName]
+            }
 
             if (keyName === 'maxPrice' || keyName === 'minPrice') {
                 if (isNaN(newValue[keyName])) {
@@ -135,66 +269,153 @@
         queryData.value = { ...newValue }
     }
 
-    onMounted(() => {
-        queryDataView(route.query)
-        //篩選data
+    //關鍵字搜索
+    const searchKeyWordHandler = _.debounce((e) => {
+        searchKeyWord.value = e.target.value
+        //add q
+        router.replace({
+            name: 'SearchExhibition',
+            query: { ...route.query, keyWord: searchKeyWord.value }
+        })
+    }, 300)
+
+    //依據queryData篩選資料
+    //data,filter
+    const filterExhList = () => {
+        console.log('[filterExhList start]', queryData.value)
+        let data = [...store.exhibitionList]
+        const filter = queryData.value
+
+        if (Object.keys(filter).map((item) => item).length === 0) {
+            console.log('全部展示')
+            // exhViewData.value = store.exhibitionList
+        }
+
+        Object.entries(filter).forEach(([key, value]) => {
+            console.log(key, value)
+            //增加 filter 項目
+            //dateValid, city,startDate, endDate, maxPrice, minPrice, type
+            switch (key) {
+                case 'dateValid':
+                    if (value === false) return
+                    data = data.filter((item) => item.endDate > new Date().getTime())
+                    console.log('篩選中-1:dateValid', data)
+                    break
+                case 'city':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.location.country === value)
+                    console.log('篩選中-2:city', data)
+                    break
+                case 'startDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.startDate >= value)
+                    console.log('篩選中-3:startDate', data)
+                    break
+                case 'endDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.endDate <= value)
+                    break
+                case 'maxPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.maxPrice >= value)
+                    break
+                case 'minPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.minPice <= value)
+                    break
+                case 'type':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.type === value)
+            }
+        })
+
+        //queryData(不包含keyword), filter keyword
+
+        if (route.query.keyWord !== '' && route.query.keyWord) {
+            console.log(route.query.keyWord)
+            data = data.filter((item) => item.name.includes(route.query.keyWord))
+            console.log('search', data)
+        }
+
+        exhViewData.value = data
+        console.log('[filterExhlist] result:', exhViewData.value)
+    }
+
+    const resizeHandler = () => {
+        const mediaQuery = window.matchMedia('(max-width:768px)')
+        console.log(mediaQuery)
+        if (mediaQuery.matches === false) {
+            document.querySelector('body').style = null
+        }
+        if (mediaQuery.matches === true && isFilterShow) {
+            document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
+        }
+    }
+
+    onMounted(async () => {
+        if (store.exhibitionList.length === 0) {
+            await store.getAllExhibitionData() // 取得展覽全部資料
+        }
+        queryDataView(route.query) //初始化 query
+
+        //set query keyword
+        if (route.query.keyWord) {
+            document.querySelector('.search-keyword').value = route.query.keyWord
+            searchKeyWord.value = route.query.keyWord
+        }
+        //[Feature Page slice]
+        exhViewData.value = store?.exhibitionList.filter(
+            (item) => item.endDate > new Date().getTime()
+        )
+        // 展覽檢索
+        filterExhList()
+
+        //page
+
+        pageList.value = Array.from(
+            Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
+        ).slice(
+            page.value.counter * page.value.pageView,
+            (page.value.counter + 1) * page.value.pageView
+        )
+
+        watch(page.value, () => {
+            pageList.value = Array.from(
+                Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
+            ).slice(
+                page.value.counter * page.value.pageView,
+                (page.value.counter + 1) * page.value.pageView
+            )
+        })
+
+        //[remove filter side hidden]
+        window.addEventListener('resize', resizeHandler)
+    })
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', resizeHandler)
     })
 
     watch(route, () => {
-        console.log('嘿嘿 , 網址更新囉', route.query)
-        queryDataView(route.query)
-        //篩選data
+        queryDataView(route.query) //update query
+        // [Feature filter]
+        filterExhList()
     })
-
-    //exhibition Data
-    ////////////filter////////////
-    const isFilterShow = ref(false)
-    const filterShowHandler = () => {
-        isFilterShow.value = !isFilterShow.value
-    }
 </script>
 
 <style lang="scss" scoped>
-    //filter slider
-    .side {
+    .card-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
         overflow: hidden;
-        min-width: 288px;
-        transition: all 0.25s ease-in;
-        background-color: white;
-        @media screen and (max-width: 768px) {
-            position: absolute;
-            min-width: unset;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 9999;
-        }
     }
 
-    .main-content {
-        width: calc(100% - 288px);
-    }
-
-    .type-list {
-        li:last-child {
-            border-bottom: 0px !important;
-        }
-    }
-
-    .city-list {
-        max-height: 380px;
-        overflow-y: scroll;
-        li:last-child {
-            border-bottom: 0px !important;
-        }
-    }
-
-    .w-0 {
-        min-width: 0;
-    }
-
-    .border-top-start-1 {
-        border-top-left-radius: 0.5rem;
+    .image-box {
+        object-fit: cover;
+        height: 175px;
     }
 
     .border-bottom-end-3 {

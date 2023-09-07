@@ -225,6 +225,7 @@
                 </ul>
             </div>
         </div>
+        {{ resetKeyName }}
     </div>
 </template>
 <script setup>
@@ -232,22 +233,11 @@
     import { exhibitionStore } from '../stores/exhibitionList'
     import { useRoute, useRouter } from 'vue-router'
 
-    defineProps({
+    const props = defineProps({
         isFilterShow: Boolean,
-        filterShowHandler: Function
-        // filterSetData:Object,
+        filterShowHandler: Function,
+        resetKeyName: String
     })
-
-    const submit = (e) => {
-        e.preventDefault()
-    }
-
-    //exhibition Data
-    const store = ref(exhibitionStore())
-
-    //url query
-    const route = useRoute()
-    const router = useRouter()
 
     ////////////filter////////////
     //side bar show
@@ -283,6 +273,13 @@
         typeQuantity: 5
     })
 
+    //exhibition Data
+    const store = ref(exhibitionStore())
+
+    //url query
+    const route = useRoute()
+    const router = useRouter()
+
     //Filter setting Data
     const filterSetData = ref({
         dateValid: false,
@@ -294,6 +291,52 @@
         city: 'all'
     })
 
+    //建立對外監聽事件
+    const emit = defineEmits(['reset'])
+
+    watch(props, () => {
+        switch (props.resetKeyName) {
+            case 'dateValid':
+                filterSetData.value.dateValid = false
+                emit('reset', 'all')
+                break
+            case 'type':
+                filterSetData.value.type = 'all'
+                emit('reset', 'all')
+                break
+            case 'startDate':
+                console.log('startDate')
+                filterSetData.value.startDate = 0
+                emit('reset', 'all')
+                break
+            case 'endDate':
+                console.log('endDate')
+                filterSetData.value.endDate = 0
+                emit('reset', 'all')
+                break
+            case 'minPrice':
+                console.log('minPrice')
+                filterSetData.value.minPrice = 0
+                emit('reset', 'all')
+                break
+            case 'maxPrice':
+                console.log('maxPrice')
+                filterSetData.value.maxPrice = 100000
+                emit('reset', 'all')
+                break
+            case 'city':
+                console.log('city')
+                filterSetData.value.city = 'all'
+                emit('reset', 'all')
+                break
+        }
+    })
+
+    //filter data update emit
+    const submit = (e) => {
+        e.preventDefault()
+    }
+
     onMounted(async () => {
         if (store.value.exhibitionList.length === 0) {
             await store.value.getAllExhibitionData() // 取得展覽全部資料
@@ -302,7 +345,8 @@
         console.log('[BeforeMount]', store.value.exhibitionList)
         console.log('[BeforeMount]', route.query)
 
-        watch(filterSetData.value, () => {
+        watch(filterSetData.value, (newVal) => {
+            // emit('update', newVal) // 暫時不使用
             if (typeof filterSetData.value.startDate === 'object') {
                 filterSetData.value.startDate = new Date(filterSetData.value.startDate).getTime()
             }
@@ -311,7 +355,7 @@
             }
             router.replace({
                 name: 'SearchExhibition',
-                query: filterSetData.value
+                query: { ...route.query, ...filterSetData.value }
             })
         })
     })
@@ -372,22 +416,20 @@
 </script>
 <style lang="scss" scoped>
     .side {
-        overflow: hidden;
+        /* overflow: hidden; */
         min-width: 288px;
         transition: all 0.25s ease-in;
         background-color: white;
+        transform: translateX(0%);
         @media screen and (max-width: 768px) {
             position: absolute;
-            min-width: unset;
+            height: 100vh;
+            width: 100%;
             top: 0;
             right: 0;
             left: 0;
             z-index: 9999;
         }
-    }
-
-    .main-content {
-        width: calc(100% - 288px);
     }
 
     .type-list {
@@ -406,5 +448,6 @@
 
     .w-0 {
         min-width: 0;
+        transform: translateX(-100%);
     }
 </style>
