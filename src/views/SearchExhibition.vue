@@ -104,7 +104,13 @@
                         <div class="p-3">
                             <!-- exh title  -->
                             <div class="card-title fw-bold">
-                                <p>{{ item?.name }}</p>
+                                <!-- There -->
+                                <router-link
+                                    class="text-dark"
+                                    :to="`viewExhibition/${item?.id}`"
+                                >
+                                    <p>{{ item?.name }}</p>
+                                </router-link>
                             </div>
                             <!-- exh-date -->
                             <div class="d-flex gap-2 mb-1">
@@ -171,7 +177,7 @@
     // import gsap from 'gsap'
     import _ from 'lodash'
     import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-    import { useRoute, useRouter } from 'vue-router'
+    import { useRoute, useRouter, RouterLink } from 'vue-router'
     import { exhibitionStore } from '../stores/exhibitionList'
     import Filter from '../components/Filter.vue'
     // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
@@ -305,7 +311,7 @@
     }, 300)
 
     //依據queryData篩選資料
-    //data,filter
+    //[FIX] 票價篩選有誤
     const filterExhList = () => {
         console.log('[filterExhList start]', queryData.value)
         let data = [...store.exhibitionList]
@@ -340,10 +346,12 @@
                     if (value === 0) return
                     data = data.filter((item) => item.endDate <= value)
                     break
+                //[Fix] 篩選格式不對
                 case 'maxPrice':
                     if (value === 0) return
                     data = data.filter((item) => item.maxPrice >= value)
                     break
+                //[Fix] 篩選格式不對
                 case 'minPrice':
                     if (value === 0) return
                     data = data.filter((item) => item.minPice <= value)

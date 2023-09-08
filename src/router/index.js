@@ -31,7 +31,7 @@ const routes = [
                 component: () => import('../views/SearchExhibition.vue')
             },
             {
-                path: 'viewExhibition',
+                path: 'viewExhibition/:id',
                 name: 'ViewExhibition',
                 component: () => import('../views/ViewExhibition.vue')
             },
