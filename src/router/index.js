@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
+import NotFoundPage from '../views/NotFoundPage.vue'
 
 const routes = [
     //Default Layout
@@ -70,6 +71,12 @@ const routes = [
                 component: () => import('../views/Payment/PaymentView.vue')
             }
         ]
+    },
+    //Not Found page
+    {
+        path: '/:catch(.*)',
+        name: 'NotFound',
+        component: NotFoundPage
     }
 ]
 

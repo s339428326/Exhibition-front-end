@@ -93,13 +93,16 @@
                             {{ item?.location.country }}
                         </div>
                         <!-- header -->
-                        <div class="rounded">
+                        <router-link
+                            class="text-dark rounded"
+                            :to="`viewExhibition/${item?.id}`"
+                        >
                             <img
                                 class="image-box hover-scale"
                                 :src="item?.image"
                                 :alt="item.name"
                             />
-                        </div>
+                        </router-link>
                         <!-- exh content -->
                         <div class="p-3">
                             <!-- exh title  -->

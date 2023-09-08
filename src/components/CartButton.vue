@@ -90,7 +90,7 @@
                     <div>
                         <img
                             class=""
-                            :src="item.coverImage"
+                            :src="item.image"
                             :alt="item.name"
                             width="125"
                             height="125"
@@ -98,10 +98,12 @@
                     </div>
                     <div>
                         <p>{{ item.name }}</p>
-                        <small class="text-black-50"> {{ item.date }}</small>
-
+                        <small class="text-black-50">
+                            {{ new Date(item.startDate).toLocaleDateString() }} ~
+                            {{ new Date(item.endDate).toLocaleDateString() }}</small
+                        >
                         <div class="d-flex align-items-center gap-1">
-                            <span>{{ item.tickType.tickType }}</span>
+                            <span>{{ item.ticketType.ticketType }}</span>
                             <button
                                 class="btn border-0"
                                 @click="quantityHandler"

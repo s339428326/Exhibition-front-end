@@ -1,9 +1,10 @@
 <template>
     <main class="view-exhibition">
-        <h1>{{ route.params?.id }}</h1>
-        {{ data }}
+        <!-- <h1>{{ route.params?.id }}</h1>
+        {{ data?.tickGroup }} -->
         <section class="cover-banner mb-4">
             <img
+                :class="`${!data?.image && 'blinking'}`"
                 :src="data?.image"
                 alt="exh-banner-cover"
             />
@@ -42,7 +43,7 @@
                     </div>
                 </div>
                 <p class="mb-4">
-                    <!-- {{ data.introduce }} -->
+                    {{ data?.introduce }}
                 </p>
             </div>
             <div class="col col-md-4">
@@ -51,8 +52,8 @@
                     <div class="border rounded-3 p-2 fs-5 shadow-sm mb-2">
                         <ul>
                             <!-- fix: index => firebase id -->
-                            <!-- <li
-                                v-for="(ticket, index) in data.tickGroup"
+                            <li
+                                v-for="(ticket, index) in data?.tickGroup"
                                 :key="index"
                             >
                                 <div class="ticket-choose">
@@ -60,31 +61,36 @@
                                         class="d-none"
                                         type="radio"
                                         name="售票選擇"
-                                        :id="ticket.tickType"
-                                        :value="ticket.tickType"
+                                        :id="ticket?.ticketType"
+                                        :value="ticket?.ticketType"
                                         :data-tickgroupindex="index"
                                         :checked="index === 0 ? true : false"
-                                        @click="changeTickDate"
+                                        @click="
+                                            changeTickData({
+                                                ticketType: ticket?.ticketType,
+                                                price: ticket?.price
+                                            })
+                                        "
                                     />
                                     <label
                                         class="text-center w-100"
-                                        :for="ticket.tickType"
+                                        :for="ticket?.ticketType"
                                     >
-                                        <p>{{ ticket.tickType }} {{ ticket.price }}</p>
+                                        <p>{{ ticket?.ticketType }} {{ ticket?.price }}</p>
                                     </label>
                                 </div>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
-                    <!-- <button
+                    <button
                         @click="addCartItemHandler"
                         class="btn btn-primary w-100 mb-2 addCartBtn"
                         type="button"
-                        :data-name="data.name"
+                        :data-name="data?.name"
                         :disabled="cartBtnDisable"
                     >
                         {{ cartBtnName }}
-                    </button> -->
+                    </button>
                     <!-- <RouterLink
                         class="btn btn-primary w-100 mb-2"
                         to="/payment"
@@ -99,29 +105,32 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     //vue-router
-    import { useRoute, RouterLink } from 'vue-router'
+    import { useRoute, useRouter } from 'vue-router'
     //pinia
     import { useCartDataStore } from '../stores/cartData'
     import { exhibitionStore } from '../stores/exhibitionList'
+    import { getOneExhibition } from '../api/exhibition'
 
     //components
     // import LikeButton from '../components/LikeButton.vue'
 
     const route = useRoute()
+    const router = useRouter()
 
     const cart = useCartDataStore()
     const exhibition = exhibitionStore()
 
     const data = ref()
-    const ticketCurrentData = ref({})
+    const ticketCurrentData = ref({ ...data.value?.tickGroup?.[0] })
     const isHeartClick = ref(false)
 
     const cartBtnDisable = computed(() => {
+        console.log('[cart Data]', cart.cartData)
         //判斷該項目是否已在cart中
         const exhibitionExistsInCart = cart.cartData.find(
             (item) =>
-                item.name === data.value.name &&
-                item.tickType.tickType === data.value.tickType.tickType
+                item.name === data.value?.name &&
+                item?.ticketType?.ticketType === ticketCurrentData.value.ticketType
         )
         return exhibitionExistsInCart ? true : false
     })
@@ -133,16 +142,21 @@
         return '加入購物車'
     })
 
-    //[Feature] not found page
-    const notFoundPage = () => {
-        if (!route.params?.id) {
-            window.alert('不前沒有此展覽')
+    //[Fix]get One Data, FireBase Change to Express
+    const dataInit = async () => {
+        const res = await getOneExhibition(route.params?.id)
+        console.log(res)
+        if (!res.data) {
+            router.push('/notFound')
+            return
         }
+        data.value = res.data
+        ticketCurrentData.value = res.data.tickGroup[0]
     }
 
-    //[Fix]get One Data, FireBase Change to Express
-    const dataInit = () => {
-        data.value = exhibition.exhibitionList.find((item) => item.id === route.params?.id)
+    //更換目前得選擇票種
+    const changeTickData = (data) => {
+        ticketCurrentData.value = data
     }
 
     //新增購物車項目
@@ -150,19 +164,19 @@
         //push to localStorage cart data item
         const item = {
             name: data.value.name,
-            date: data.value.date,
-            coverImage: data.value.coverImage,
-            tickType: data.value.tickType,
-            price: data.value.tickType.price,
+            startDate: data.value.startDate,
+            endDate: data.value.endDate,
+            image: data.value.image,
+            ticketType: ticketCurrentData.value,
+            price: ticketCurrentData.value?.price,
             quantity: 1
         }
+        console.log('[buy]', item)
         //push to cart store cartData
         cart.addCartItem(item)
     }
 
     onMounted(async () => {
-        await exhibition.getAllExhibitionData()
-        notFoundPage()
         dataInit()
     })
 </script>
@@ -170,15 +184,16 @@
     //image init
     .view-exhibition {
         img {
-            width: 100%;
+            width: 100vw;
             object-fit: cover;
             vertical-align: middle;
+            object-position: top;
         }
     }
 
     .cover-banner {
         img {
-            max-height: 495px;
+            height: 495px;
         }
     }
 
@@ -192,5 +207,23 @@
                 color: white;
             }
         }
+    }
+
+    @keyframes blink {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .blinking {
+        animation: blink 1.75s infinite; /* 使用动画 */
     }
 </style>

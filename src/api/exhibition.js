@@ -13,3 +13,13 @@ export const getAllExhibition = async () => {
         console.error('[Error getAllExhibition]', error)
     }
 }
+
+export const getOneExhibition = async (id) => {
+    try {
+        const res = await axios.get(url(`/fairs/${id}.json`))
+        console.log('[getOneExhibition]', res)
+        return res
+    } catch (error) {
+        console.error('[Error getOneExhibition]', error)
+    }
+}

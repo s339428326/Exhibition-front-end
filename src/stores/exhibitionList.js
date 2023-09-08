@@ -19,7 +19,6 @@ export const exhibitionStore = defineStore('exhibition', {
             })
             console.log('[getAllExhibitionData]', dataArr)
             this.exhibitionList = dataArr
-        },
-        async getOneExhibitionData() {}
+        }
     }
 })
