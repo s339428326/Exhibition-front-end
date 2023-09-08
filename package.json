@@ -14,19 +14,24 @@
         "@jamescoyle/vue-icon": "^0.1.2",
         "@mdi/js": "^7.2.96",
         "@popperjs/core": "^2.11.8",
+        "@vee-validate/i18n": "^4.11.3",
+        "@vee-validate/rules": "^4.11.3",
+        "@vuepic/vue-datepicker": "^6.0.3",
         "axios": "^1.4.0",
-        "bootstrap": "^5.3.0",
+        "bootstrap": "^5.3.1",
         "bootstrap-vue-next": "^0.9.24",
         "d3": "^7.8.5",
-        "gh-pages": "^5.0.0",
-        "jquery": "^3.7.0",
+        "gh-pages": "^6.0.0",
+        "gsap": "^3.12.2",
+        "lodash": "^4.17.21",
         "pinia": "^2.1.4",
-        "swiper": "^10.1.0",
+        "swiper": "^10.2.0",
         "topojson": "^3.0.2",
+        "vee-validate": "^4.11.3",
+        "vite": "^4.4.9",
         "vue": "^3.3.4",
         "vue-material-design-icons": "^5.2.0",
-        "vue-router": "^4.2.2",
-        "vuejs3-datepicker": "^1.0.19"
+        "vue-router": "^4.2.2"
     },
     "devDependencies": {
         "@rushstack/eslint-patch": "^1.2.0",
@@ -35,7 +40,6 @@
         "eslint": "^8.39.0",
         "eslint-plugin-vue": "^9.11.0",
         "prettier": "^2.8.8",
-        "sass": "^1.63.6",
-        "vite": "^4.3.9"
+        "sass": "^1.63.6"
     }
 }

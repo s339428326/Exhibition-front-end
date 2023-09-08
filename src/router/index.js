@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
+//Fix GitHub Page SPA router
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
@@ -66,29 +67,15 @@ const routes = [
             {
                 path: 'confirm',
                 name: 'OrderConfirm',
-                component: () => import('../views/Cart/OrderConfirm.vue')
-            },
-            {
-                path: 'orderInfo',
-                name: 'OrderInfo',
-                component: () => import('../views/Cart/OrderInfo.vue')
-            },
-            {
-                path: 'paymentInfo',
-                name: 'PaymentInfo',
-                component: () => import('../views/Cart/PaymentInfo.vue')
-            },
-            {
-                path: 'orderSuccess',
-                name: 'OrderSuccess',
-                component: () => import('../views/Cart/OrderSuccess.vue')
+                component: () => import('../views/Payment/PaymentView.vue')
             }
         ]
     }
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    // history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes
 })
 

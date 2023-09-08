@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 img{
     max-width: 100%;
     height: auto;
@@ -57,3 +58,16 @@ img{
     } 
 }
 @media (max-width: 576px) {}
+=======
+//不要直接使用 標籤選擇器
+// $color: blue;
+// body{
+//     color: $color;
+//     background: $color;
+
+// }
+
+.item {
+    font-size: 56px;
+}
+>>>>>>> 4577b4b80c7f429f4165a3266ea84bc11116803d
