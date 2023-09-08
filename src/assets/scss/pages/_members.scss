@@ -23,6 +23,7 @@ img{
         background-color: #dee2e6;
         border-radius: 10px; 
     }
+
     h3{
         border-bottom:1px solid black;
     }
@@ -46,6 +47,24 @@ img{
         height: 150px;
         background-image: url("https://fakeimg.pl/150x150");
     }
+
+    //record 
+    .record {
+        .info-list{
+            .ticket{
+                font-weight: bold;
+            } //票期
+            .price{} //價格 
+            .expired{ 
+                color: $blue-member-text;
+            } //已過期 
+            .not-expired{
+                color: $red-member-text;
+            } //未過期 
+        }
+    }
+
+
 }
   
 @media (max-width: 1400px) {}
