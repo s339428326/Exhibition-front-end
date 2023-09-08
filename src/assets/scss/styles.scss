@@ -1,8 +1,5 @@
 @charset 'utf-8';
 
-//reset
-@import 'reset/_reset';
-
 //Vendor
 @import 'vendors/__vendors-dir';
 
@@ -19,4 +16,8 @@
 @import 'layouts/__layouts-dir';
 
 //Layout
-@import 'pages/_members.scss';
+@import 'layouts/_members.scss';
+
+.item{
+   color: red;
+}
