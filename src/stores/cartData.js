@@ -15,7 +15,7 @@ export const useCartDataStore = defineStore('cartData', {
         },
         //建立新item
         addCartItem(newItem) {
-            console.log('[ addCartItem]', newItem, localStorage.getItem('cart'))
+            console.log('[addCartItem]', newItem, localStorage.getItem('cart'))
 
             //確認是否有cart
             if (localStorage.getItem('cart')) {
