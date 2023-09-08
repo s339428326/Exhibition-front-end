@@ -40,13 +40,15 @@
                     :key="index"
                     @click="changeExhibitionView(index)"
                 >
-                    <img
-                        :class="`image-box rounded-4 mb-4 ${
-                            exhibitionShowIndex !== index && 'd-none'
-                        }  `"
-                        :src="`${item.image}`"
-                        :alt="item.name"
-                    />
+                    <router-link :to="`viewExhibition/${item?.id}`">
+                        <img
+                            :class="`image-box rounded-4 mb-4 ${
+                                exhibitionShowIndex !== index && 'd-none'
+                            }  `"
+                            :src="`${item.image}`"
+                            :alt="item.name"
+                    /></router-link>
+
                     <!-- time -->
                     <div
                         class="d-flex align-items-end gap-0 lh-1 border-bottom border-3 border-dark gap-3 mb-2"
@@ -70,9 +72,12 @@
                         <p class="fs-4 mb-2 fw-bold list-title">
                             {{ item.name }}
                         </p>
-                        <button class="font-quantum border-0 bg-transparent ms-auto fs-4">
+                        <router-link
+                            :to="`viewExhibition/${item?.id}`"
+                            class="font-quantum border-0 bg-transparent ms-auto fs-4 text-dark"
+                        >
                             more
-                        </button>
+                        </router-link>
                     </div>
                     <div class="fw-medium list-content">
                         {{ item.introduce }}

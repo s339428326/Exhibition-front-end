@@ -1,7 +1,7 @@
 <!-- html -->
 <template>
     <div :class="`side border-end ${isFilterShow ? 'w-0' : 'border-none'}`">
-        <div :class="`m-4 ${isFilterShow && 'd-none'}`">
+        <div :class="`menu m-4 ${isFilterShow && 'd-none'}`">
             <div class="w-100 mb-2 d-block d-md-none">
                 <button
                     class="btn border"
@@ -225,7 +225,6 @@
                 </ul>
             </div>
         </div>
-        {{ resetKeyName }}
     </div>
 </template>
 <script setup>
@@ -293,7 +292,6 @@
 
     //建立對外監聽事件
     const emit = defineEmits(['reset'])
-
     watch(props, () => {
         switch (props.resetKeyName) {
             case 'dateValid':
@@ -421,6 +419,7 @@
         transition: all 0.25s ease-in;
         background-color: white;
         transform: translateX(0%);
+
         @media screen and (max-width: 768px) {
             position: absolute;
             height: 100vh;
@@ -429,6 +428,12 @@
             right: 0;
             left: 0;
             z-index: 9999;
+        }
+
+        @media screen and (max-width: 414px) {
+            position: absolute;
+            max-height: 667px;
+            overflow-y: scroll;
         }
     }
 

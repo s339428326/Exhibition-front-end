@@ -60,15 +60,15 @@
                                 <div>
                                     <img
                                         class="img-box"
-                                        :src="item.coverImage"
-                                        :alt="item.name"
+                                        :src="item?.image"
+                                        :alt="item?.name"
                                     />
                                 </div>
                                 <!-- content -->
                                 <div class="d-flex flex-column">
-                                    <p class="fw-medium">{{ item.name }}</p>
-                                    <small>{{ item.date }}</small>
-                                    <small>{{ item.tickType.tickType }}</small>
+                                    <p class="fw-medium">{{ item?.name }}</p>
+                                    <small>{{ item?.date }}</small>
+                                    <small>{{ item?.ticketType.ticketType }}</small>
                                     <div class="d-flex gap-3 align-items-center">
                                         <!--  -->
                                         <button
@@ -80,7 +80,7 @@
                                         >
                                             -
                                         </button>
-                                        <p>{{ item.quantity }}</p>
+                                        <p>{{ item?.quantity }}</p>
                                         <!--  -->
                                         <button
                                             @click="quantityHandler"
@@ -92,7 +92,9 @@
                                             +
                                         </button>
                                     </div>
-                                    <p class="fs-6 fw-bold">NT$ {{ item.price * item.quantity }}</p>
+                                    <p class="fs-6 fw-bold">
+                                        NT$ {{ item?.price * item?.quantity }}
+                                    </p>
                                 </div>
                                 <!-- delButton -->
                                 <div></div>
@@ -316,19 +318,19 @@
                                 <div>
                                     <img
                                         class="img-box-2"
-                                        :src="item.coverImage"
-                                        :alt="item.name"
+                                        :src="item?.image"
+                                        :alt="item?.name"
                                     />
                                 </div>
                                 <!-- content -->
                                 <div class="d-flex flex-column">
-                                    <p class="fw-medium">{{ item.name }}</p>
-                                    <small>{{ item.date }}</small>
-                                    <small>{{ item.tickType.tickType }}</small>
+                                    <p class="fw-medium">{{ item?.name }}</p>
+                                    <small>{{ item?.date }}</small>
+                                    <small>{{ item?.ticketType.ticketType }}</small>
                                 </div>
-                                <p>數量：{{ item.quantity }}</p>
+                                <p>數量：{{ item?.quantity }}</p>
                                 <p class="fs-6 fw-bold ms-auto">
-                                    NT$ {{ item.price * item.quantity }}
+                                    NT$ {{ item?.price * item?.quantity }}
                                 </p>
                                 <!-- delButton -->
                                 <div></div>

@@ -89,11 +89,9 @@
                 >
                     <div>
                         <img
-                            class=""
+                            class="cart-item__image"
                             :src="item.image"
                             :alt="item.name"
-                            width="125"
-                            height="125"
                         />
                     </div>
                     <div>
@@ -151,7 +149,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .btn-cart {
         position: relative;
         p {
@@ -164,5 +162,12 @@
             background-color: red;
             color: #fff;
         }
+    }
+
+    .cart-item__image {
+        border-radius: 0.25rem;
+        width: 125px;
+        height: 125px;
+        object-fit: cover;
     }
 </style>
