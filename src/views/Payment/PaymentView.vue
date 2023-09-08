@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mb-5">
         <!-- Step Bar -->
         <section class="my-5">
             <ul class="d-flex justify-content-between p-4 border rounded-4 bg-gray shadow-sm">
@@ -48,7 +48,7 @@
                     page === 1 ? 'd-block' : 'd-none'
                 }`"
             >
-                <div class="border rounded-4 shadow-sm p-4 h-100">
+                <div class="border rounded-4 shadow-sm p-4 h-100 d-flex flex-column">
                     <h2 class="mb-4 fs-4">建立訂單</h2>
                     <ul class="d-flex flex-column gap-4">
                         <li
@@ -101,10 +101,10 @@
                             </div>
                         </li>
                     </ul>
-                    <div class="mt-4">
+                    <div class="flex-grow-1 d-flex">
                         <button
                             @click="pageHandler('add')"
-                            class="btn btn-dark w-100"
+                            class="btn btn-dark w-100 border mt-auto"
                             type="button"
                         >
                             下一步

@@ -12,14 +12,11 @@
         },
         computed: {
             total() {
-                return this.cartDataInstance.cartData.length > 1
-                    ? this.cartDataInstance.cartData.reduce(
-                          (pre, next) => pre.price * pre.quantity + next.price * next.quantity
-                      )
-                    : this.cartDataInstance.cartData.length === 1
-                    ? this.cartDataInstance.cartData[0].price *
-                      this.cartDataInstance.cartData[0].quantity
-                    : 0
+                let total = 0
+                this.cartDataInstance.cartData.forEach((item) => {
+                    total += item.price * item.quantity
+                })
+                return total
             }
         },
         methods: {
@@ -94,8 +91,8 @@
                             :alt="item.name"
                         />
                     </div>
-                    <div>
-                        <p>{{ item.name }}</p>
+                    <div class="cart-item__content">
+                        <p class="item-title">{{ item.name }}</p>
                         <small class="text-black-50">
                             {{ new Date(item.startDate).toLocaleDateString() }} ~
                             {{ new Date(item.endDate).toLocaleDateString() }}</small
@@ -150,6 +147,13 @@
 </template>
 
 <style lang="scss" scoped>
+    .item-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+
     .btn-cart {
         position: relative;
         p {
@@ -164,6 +168,9 @@
         }
     }
 
+    .cart-item__content {
+        max-width: 210px;
+    }
     .cart-item__image {
         border-radius: 0.25rem;
         width: 125px;

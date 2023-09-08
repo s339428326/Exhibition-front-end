@@ -10,7 +10,7 @@
 <template>
     <CartHeader />
     <router-view />
-    <AppFooter class="position-fixed bottom-0 start-0 end-0" />
+    <AppFooter />
 </template>
 
 <style scoped></style>
