@@ -8,6 +8,11 @@ img{
     box-sizing: border-box;
 }
 
+// 變數 member
+$blue-member-text: #007BE5;
+$red-member-text: #FF0000;
+
+
 /* 共通 Utilities */
 .container{
     max-width: 1124px;
@@ -62,16 +67,16 @@ h1{
 
     //record 
     .record-bg {
-        background-color: #fff;
+        background-color: #ffffff;
         border-radius: 4px;
         padding: 20px 20px;
-        
+
         .info-list{
             .ticket{
                 font-weight: bold;
             } //票期
 
-            .price{} //價格 
+            /*.price{}*/ //價格 
 
             .expired{ 
                 color: $blue-member-text;
@@ -86,12 +91,12 @@ h1{
 
 }
   
-@media (max-width: 1400px) {}
-@media (max-width: 768px) {
-    .member{
-        .wrap{
-            height: 100%;
-        }
-    } 
-}
-@media (max-width: 576px) {}
+// @media (max-width: 1400px) {}
+// @media (max-width: 768px) {
+//     .member{
+//         .wrap{
+//             height: 100%;
+//         }
+//     } 
+// }
+// @media (max-width: 576px) {}
