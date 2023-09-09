@@ -1,306 +1,441 @@
 <template>
-    <div class="container my-5">
-        <div class="row mb-3">
-            <div class="col-6 d-flex">
-                <b-form-input
-                    v-model="keyword"
-                    placeholder="請輸入關鍵字"
-                ></b-form-input>
-                <Magnify class="ms-2 fs-4 pointer" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <p class="d-inline-block">熱門類型：</p>
-                <ul class="d-inline-flex tagList">
-                    <li
-                        v-for="(tagItem, idx) in tagList"
-                        :key="idx"
-                        class="pointer"
+    <div class="d-flex">
+        <!-- filter side -->
+        <Filter
+            :is-filter-show="isFilterShow"
+            :filter-show-handler="filterShowHandler"
+            :resetKeyName="resetKeyName"
+            @reset="resetTypeStr"
+        />
+        <!-- main -->
+        <div class="container position-relative px-3">
+            <div class="mt-5 rounded-3">
+                <!-- 展覽搜索 -->
+                <div class="mb-2">
+                    <input
+                        @input="searchKeyWordHandler"
+                        class="search-keyword border rounded-1 px-2 py-1"
+                        type="search"
+                        placeholder="輸入展覽名稱"
+                    />
+                </div>
+                <div class="mb-2">
+                    <p :class="`fs-7 ${!searchKeyWord.length > 0 && 'd-none'}`">
+                        搜索關鍵字：{{ searchKeyWord }}
+                    </p>
+                    <p class="fs-7">總搜索筆數({{ exhViewData.length }})</p>
+                </div>
+
+                <!-- filter tag-->
+                <div class="d-flex gap-2 mb-4">
+                    <div
+                        class="d-flex gap-2 align-items-center fs-7 border bg-transparent p-1 rounded"
+                        v-for="(item, key, index) in queryData"
+                        :key="index"
                     >
-                        <span class="btn btn-primary rounded-pill px-3 py-1 me-1">{{
-                            tagItem
-                        }}</span>
+                        <!-- clear button -->
+                        <button
+                            class="p-0 border-0 bg-transparent"
+                            @click="resetFilterSetHandler(key)"
+                        >
+                            <CloseIcon :size="18" />
+                        </button>
+                        <!-- filter tag name -->
+                        <p class="">
+                            {{ `${key === 'dateValid' ? `顯示結束展覽` : ''}` }}
+                            {{
+                                `${
+                                    key === 'startDate'
+                                        ? `始於 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{
+                                `${
+                                    key === 'endDate'
+                                        ? `結束 ${new Date(item).toLocaleDateString()}`
+                                        : ''
+                                }`
+                            }}
+                            {{ `${key === 'type' ? `類別 ${item}` : ''}` }}
+                            {{ `${key === 'minPrice' ? `最小價格 ${item}` : ''}` }}
+                            {{ `${key === 'maxPrice' ? `最大價格 ${item}` : ''}` }}
+                            {{ `${key === 'city' ? `城市 ${item}` : ''}` }}
+                        </p>
+                    </div>
+                    <!-- {{ key }} {{ item }} -->
+                </div>
+            </div>
+            <!-- 篩選器 控制btn -->
+            <button
+                class="btn"
+                type="button"
+                @click="filterShowHandler"
+            >
+                <FilterMenu />
+                <span> 篩選器</span>
+            </button>
+            <!-- 展覽卡片 -->
+            <div class="row">
+                <div
+                    v-for="(item, index) in exhViewData.slice(
+                        page.limit * (page.currentPage - 1),
+                        page.limit * page.currentPage
+                    )"
+                    :key="index"
+                    class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
+                >
+                    <div class="border position-relative shadow rounded-3 overflow-hidden">
+                        <!-- city -->
+                        <div
+                            class="position-absolute bg-secondary text-white px-3 py-2 border-bottom-end-3"
+                        >
+                            {{ item?.location.country }}
+                        </div>
+                        <!-- header -->
+                        <div class="rounded">
+                            <img
+                                class="image-box hover-scale"
+                                :src="item?.image"
+                                :alt="item.name"
+                            />
+                        </div>
+                        <!-- exh content -->
+                        <div class="p-3">
+                            <!-- exh title  -->
+                            <div class="card-title fw-bold">
+                                <p>{{ item?.name }}</p>
+                            </div>
+                            <!-- exh-date -->
+                            <div class="d-flex gap-2 mb-1">
+                                <span>{{ new Date(item?.startDate).toLocaleDateString() }}</span>
+                                <span>~</span>
+                                <span>{{ new Date(item?.endDate).toLocaleDateString() }}</span>
+                            </div>
+                            <!-- exh type -->
+                            <ul class="d-flex">
+                                <li
+                                    class="border py-1 px-2 bg-success text-white rounded-pill fs-7"
+                                >
+                                    {{ item?.type }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 分頁元件 -->
+            <nav class="d-flex justify-content-center gap-1 mt-5 mb-5">
+                <button
+                    @click="pageCountHandler('pre')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronLeft />
+                    <span>返回</span>
+                </button>
+                <!--  -->
+                <ul class="pagination d-flex gap-1">
+                    <!-- page number -->
+                    <!-- <li class="border p-2 rounded">1</li> -->
+                    <li
+                        @click="pageHandler(item + 1)"
+                        v-for="(item, index) in pageList"
+                        :key="index"
+                        :class="`border p-2 rounded ${
+                            page.currentPage === item + 1 && ' bg-primary text-white'
+                        }`"
+                    >
+                        <button
+                            :class="`border-0 bg-transparent ${
+                                page.currentPage === item + 1 && '  text-white'
+                            }`"
+                        >
+                            {{ item + 1 }}
+                        </button>
                     </li>
                 </ul>
-            </div>
-        </div>
-        <div class="row mt-5 gx-5">
-            <div class="col-3 border border-2 py-3 rounded-3 shadow">
-                <div class="mb-3">
-                    <b-form-checkbox
-                        id="isShowEnded-checkbox"
-                        v-model="isShowEnded"
-                        name="isShowEnded-checkbox"
-                        value="true"
-                        unchecked-value="false"
-                    >
-                        顯示已結束展覽
-                    </b-form-checkbox>
-                </div>
-                <div class="mb-3">
-                    <RadioList
-                        label="類型"
-                        name="type-radios"
-                        :options="typeOptions"
-                        v-model="typeSelected"
-                        @update="updateType"
-                        className="typeList"
-                        btnName="顯示更多"
-                        @btnEvent="showMoreType"
-                    />
-                </div>
 
-                <div class="mb-3">
-                    <DatePicker
-                        label="開始時間"
-                        @update="updateStartTime"
-                        class="mb-3"
-                    />
-                    <DatePicker
-                        label="結束時間"
-                        @update="updateEndTime"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <InputRange
-                        label="價格"
-                        v-model="priceSelected"
-                        @update="updatePrice"
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <b-form-group
-                        label="地區"
-                        v-slot="{ filterInput }"
-                    >
-                        <b-form-input
-                            v-model="filterArea"
-                            placeholder="請輸入地區"
-                            :aria-describedby="filterInput"
-                            class="mb-2"
-                        ></b-form-input>
-                        <RadioList
-                            label=""
-                            name="area-radios"
-                            :options="areaOptions"
-                            v-model="areaSelected"
-                            @update="updateArea"
-                            className="areaList"
-                        />
-                    </b-form-group>
-                </div>
-            </div>
-            <div class="col-9">
-                <p class="mb-3">搜索結果項目：213</p>
-                <ul class="fairList row row-cols-sm-1 row row-cols-md-2 row row-cols-lg-3">
-                    <li
-                        v-for="(fairItem, idx) in fairList"
-                        :key="idx"
-                        class="my-2 hover-scale"
-                    >
-                        <CardFair
-                            :title="fairItem.title"
-                            :imgSrc="fairItem.imgSrc"
-                            :linkTo="fairItem.linkTo"
-                            :textContent="fairItem.textContent"
-                        />
-                    </li>
-                </ul>
-            </div>
+                <button
+                    @click="pageCountHandler('next')"
+                    class="p-1 border border-1 rounded bg-transparent"
+                >
+                    <ChevronRight />
+                    <span>更多</span>
+                </button>
+            </nav>
         </div>
     </div>
 </template>
 
 <script setup>
-    import CardFair from '@/components/card/CardFair.vue'
-    import RadioList from '@/components/inputRadio/RadioList.vue'
-    import InputRange from '@/components/inputRange/inputRange.vue'
-    import DatePicker from '@/components/datePicker/datePicker.vue'
+    // import gsap from 'gsap'
+    import _ from 'lodash'
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+    import { useRoute, useRouter } from 'vue-router'
+    import { exhibitionStore } from '../stores/exhibitionList'
+    import Filter from '../components/Filter.vue'
+    // import TwoRangeSlider from '../components/TwoRangeSlider.vue'
 
-    import { ref } from 'vue'
-    const keyword = ref(null)
-    const tagList = ref(['科技', '藝文', '影視'])
+    const store = exhibitionStore()
+    const route = useRoute()
+    const router = useRouter()
 
-    const isShowEnded = ref(null)
+    const searchKeyWord = ref('')
+    const queryData = ref()
+    const resetKeyName = ref('')
+    const exhViewData = ref([...store.exhibitionList])
 
-    // 類型清單
-    const typeOptions = ref([
-        {
-            name: '全部',
-            value: '全部'
-        },
-        {
-            name: '藝文',
-            value: '藝文'
-        },
-        {
-            name: '科技',
-            value: '科技'
-        },
-        {
-            name: '影視',
-            value: '影視'
-        },
-        {
-            name: '戲劇',
-            value: '戲劇'
-        }
-    ])
-    const anotherTypeOptions = ref([
-        {
-            name: '親子',
-            value: '親子'
-        },
-        {
-            name: '講座',
-            value: '講座'
-        }
-    ])
-    const typeSelected = ref(null)
-    const updateType = (newVal) => {
-        typeSelected.value = newVal
+    const page = ref({
+        nextBtnDisable: false,
+        counter: 0, // 記錄是第幾Round切換 page list
+        pageView: 3, //每次顯示 X 頁 btn 顯示於畫面
+        limit: 8, // 每頁有幾筆資料
+        currentPage: 1 //目前顯示資料的頁數
+    })
+    const pageList = ref([])
+
+    /////////////////page components////////////////////
+
+    //page change handler
+    const pageHandler = (currentPage) => {
+        page.value.currentPage = currentPage
     }
-    const showMoreType = () => {
-        anotherTypeOptions.value.forEach((item) => {
-            typeOptions.value.push(item)
+
+    const pageCountHandler = (key) => {
+        //算出 總數 除以 每頁顯示資料筆數, 是否有餘數
+        const roundMod = exhViewData.value.length % page.value.limit > 0 ? 1 : 0
+        //總數除以 每頁顯示資料筆數, 無條件捨去 + roundMod
+        const maxPage = Math.floor(exhViewData.value.length / page.value.limit) + roundMod
+        //兩相加得出 總共 page 切換可以換幾Round
+        const roundClickCounter = Math.ceil(maxPage / page.value.pageView)
+
+        switch (key) {
+            case 'next':
+                if (page.value.counter + 1 >= roundClickCounter) return
+                console.log(page.value.counter, roundClickCounter)
+                page.value.counter++
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
+                break
+            case 'pre':
+                if (page.value.counter === 0) return
+                page.value.counter--
+                page.value.currentPage = page.value.counter * page.value.pageView + 1
+                break
+        }
+    }
+
+    const pageListInit = () => {
+        pageList.value = Array.from(
+            Array(Math.ceil(exhViewData.value.length / page.value.limit)).keys()
+        ).slice(
+            page.value.counter * page.value.pageView,
+            (page.value.counter + 1) * page.value.pageView
+        )
+    }
+
+    ////////////filter Show Modal////////////
+    const isFilterShow = ref(false)
+
+    const filterShowHandler = () => {
+        isFilterShow.value = !isFilterShow.value
+        if (isFilterShow.value === false) {
+            const mediaQuery = window.matchMedia('(min-width:768px)')
+            console.log(mediaQuery.match)
+            if (mediaQuery.match) document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
+        }
+    }
+
+    //篩選data (暫時使用通知 子元件重置設定)
+    const resetTypeStr = () => {
+        resetKeyName.value = ''
+    }
+
+    //Reset Filter 單項目設置
+    const resetFilterSetHandler = (keyName) => {
+        resetKeyName.value = keyName
+    }
+
+    //提取query string資料, 賦予queryData
+    const queryDataView = (data) => {
+        //排除 初始數據做呈現
+        const { city, dateValid, startDate, endDate, maxPrice, minPrice, type } = data
+        const newValue = {
+            dateValid: dateValid === 'false' ? null : dateValid,
+            city: city === 'all' ? null : city,
+            startDate: startDate !== '0' && startDate !== undefined ? parseInt(startDate) : null,
+            endDate: endDate !== '0' && endDate !== undefined ? parseInt(endDate) : null,
+            maxPrice: maxPrice === '100000' ? null : parseInt(maxPrice),
+            minPrice: minPrice === '0' ? null : parseInt(minPrice),
+            type: type === 'all' ? null : type
+        }
+
+        Object.keys(newValue).forEach((keyName) => {
+            if (newValue[keyName] === null || newValue[keyName] === undefined) {
+                delete newValue[keyName]
+            }
+
+            if (keyName === 'maxPrice' || keyName === 'minPrice') {
+                if (isNaN(newValue[keyName])) {
+                    delete newValue[keyName]
+                }
+            }
         })
-    }
 
-    // 地區清單
-    const filterArea = ref(null)
-
-    const areaOptions = ref([
-        { name: '全部', value: '全部' },
-        { name: '台北', value: '台北' },
-        { name: '新北', value: '新北' },
-        { name: '基隆', value: '基隆' },
-        { name: '桃園', value: '桃園' },
-        { name: '新竹', value: '新竹' },
-        { name: '苗栗', value: '苗栗' },
-        { name: '台中', value: '台中' },
-        { name: '南投', value: '南投' },
-        { name: '彰化', value: '彰化' },
-        { name: '雲林', value: '雲林' },
-        { name: '嘉義', value: '嘉義' },
-        { name: '台南', value: '台南' },
-        { name: '高雄', value: '高雄' },
-        { name: '屏東', value: '屏東' },
-        { name: '台東', value: '台東' },
-        { name: '花蓮', value: '花蓮' },
-        { name: '宜蘭', value: '宜蘭' }
-    ])
-    const areaSelected = ref(null)
-    const updateArea = (newVal) => {
-        areaSelected.value = newVal
-    }
-
-    // 價格
-    const priceSelected = ref(null)
-    const updatePrice = (newVal) => {
-        priceSelected.value = newVal
-    }
-
-    // 時間
-    const startTime = ref(new Date())
-    const updateStartTime = (newVal) => {
-        startTime.value = newVal
-    }
-
-    const endTime = ref(new Date())
-    const updateEndTime = (newVal) => {
-        endTime.value = newVal
-    }
-
-    const fairList = ref([
-        {
-            title: 'A Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=22',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'B Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=23',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'C Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=24',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'D Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=25',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
-        },
-        {
-            title: 'E Show',
-            imgSrc: 'https://picsum.photos/600/300/?image=26',
-            linkTo: '/viewExhibition',
-            textContent: '花曲－陳瑞瓊膠彩畫'
+        //price 沒有通過篩選 刪除
+        if (newValue.maxPrice < newValue.minPrice || newValue.maxPrice > 100000) {
+            delete newValue['maxPrice']
+            delete newValue['minPrice']
         }
-    ])
+
+        //
+        pageListInit()
+        // console.log('queryDataView', newValue)
+        queryData.value = { ...newValue }
+    }
+
+    //關鍵字搜索
+    const searchKeyWordHandler = _.debounce((e) => {
+        searchKeyWord.value = e.target.value
+        //add q
+        router.replace({
+            name: 'SearchExhibition',
+            query: { ...route.query, keyWord: searchKeyWord.value }
+        })
+    }, 300)
+
+    //依據queryData篩選資料
+    //data,filter
+    const filterExhList = () => {
+        console.log('[filterExhList start]', queryData.value)
+        let data = [...store.exhibitionList]
+        const filter = queryData.value
+
+        if (Object.keys(filter).map((item) => item).length === 0) {
+            console.log('全部展示')
+            // exhViewData.value = store.exhibitionList
+        }
+
+        Object.entries(filter).forEach(([key, value]) => {
+            console.log(key, value)
+            //增加 filter 項目
+            //dateValid, city,startDate, endDate, maxPrice, minPrice, type
+            switch (key) {
+                case 'dateValid':
+                    if (value === false) return
+                    data = data.filter((item) => item.endDate > new Date().getTime())
+                    console.log('篩選中-1:dateValid', data)
+                    break
+                case 'city':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.location.country === value)
+                    console.log('篩選中-2:city', data)
+                    break
+                case 'startDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.startDate >= value)
+                    console.log('篩選中-3:startDate', data)
+                    break
+                case 'endDate':
+                    if (value === 0) return
+                    data = data.filter((item) => item.endDate <= value)
+                    break
+                case 'maxPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.maxPrice >= value)
+                    break
+                case 'minPrice':
+                    if (value === 0) return
+                    data = data.filter((item) => item.minPice <= value)
+                    break
+                case 'type':
+                    if (value === 'all') return
+                    data = data.filter((item) => item.type === value)
+            }
+        })
+
+        //queryData(不包含keyword), filter keyword
+
+        if (route.query.keyWord !== '' && route.query.keyWord) {
+            console.log(route.query.keyWord)
+            data = data.filter((item) => item.name.includes(route.query.keyWord))
+            console.log('search', data)
+        }
+
+        exhViewData.value = data
+        console.log('[filterExhlist] result:', exhViewData.value)
+    }
+
+    const resizeHandler = () => {
+        const mediaQuery = window.matchMedia('(max-width:768px)')
+        console.log(mediaQuery)
+        if (mediaQuery.matches === false) {
+            document.querySelector('body').style = null
+        }
+        if (mediaQuery.matches === true && isFilterShow) {
+            document.querySelector('body').style = 'overflow:hidden'
+        } else {
+            document.querySelector('body').style = null
+        }
+    }
+
+    onMounted(async () => {
+        if (store.exhibitionList.length === 0) {
+            await store.getAllExhibitionData() // 取得展覽全部資料
+        }
+        queryDataView(route.query) //初始化 query
+
+        //set query keyword
+        if (route.query.keyWord) {
+            document.querySelector('.search-keyword').value = route.query.keyWord
+            searchKeyWord.value = route.query.keyWord
+        }
+        //[Feature Page slice]
+        exhViewData.value = store?.exhibitionList.filter(
+            (item) => item.endDate > new Date().getTime()
+        )
+        // 展覽檢索
+        filterExhList()
+
+        //page
+        pageListInit()
+        watch(page.value, () => {
+            pageListInit()
+        })
+
+        //[remove filter side hidden]
+        window.addEventListener('resize', resizeHandler)
+    })
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', resizeHandler)
+    })
+
+    watch(route, () => {
+        queryDataView(route.query) //update query
+        // [Feature filter]
+        filterExhList()
+        page.value.counter = 0
+        page.value.currentPage = 1 // update query init page
+        pageListInit()
+    })
 </script>
 
 <style lang="scss" scoped>
-    // .fairList {
-    //     margin-left: -8px;
-    //     margin-right: -8px;
-    //     li {
-    //         width: calc((100% / 3) - 32px);
-    //         transition: 0.3s ease-in-out;
-
-    //         @include media-lg {
-    //             width: calc((100% / 2) - 16px);
-    //         }
-
-    //         @include media-sm {
-    //             width: 100%;
-    //         }
-
-    //         &:hover {
-    //             transform: scale(1.04);
-    //         }
-    //     }
-    // }
-
-    .hover-scale {
-        transition: 0.3s ease-in-out;
-        &:hover {
-            transform: scale(1.04);
-        }
+    .card-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
     }
 
-    :deep(.areaList) {
-        height: 210px;
-        overflow: auto;
+    .image-box {
+        object-fit: cover;
+        height: 175px;
     }
 
-    :deep(.typeList),
-    :deep(.areaList) {
-        .form-check {
-            border: 1px solid $gray-500;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            margin-bottom: 0;
-            padding-left: 36px;
-
-            &:first-of-type {
-                border-radius: 6px 6px 0 0;
-            }
-            &:last-of-type {
-                border-radius: 0 0 6px 6px;
-            }
-        }
-    }
-
-    .shadow {
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    .border-bottom-end-3 {
+        border-bottom-right-radius: 1.5rem;
     }
 </style>

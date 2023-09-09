@@ -3,7 +3,8 @@ import axios from 'axios'
 // baseURL是你API的主要Domain，之後發請求時只要填相對路徑就可以了
 const instance = axios.create({
     // baseURL待更改為firebase url
-    baseURL: 'https://cloud.culture.tw',
+    // baseURL: 'https://cloud.culture.tw',
+    baseURL: 'https://exhibition-976a8-default-rtdb.asia-southeast1.firebasedatabase.app/',
     headers: { 'Content-Type': 'application/json' },
     timeout: 20000
 })
