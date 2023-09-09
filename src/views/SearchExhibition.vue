@@ -240,7 +240,8 @@
         isFilterShow.value = !isFilterShow.value
         if (isFilterShow.value === false) {
             const mediaQuery = window.matchMedia('(min-width:768px)')
-            if (mediaQuery) document.querySelector('body').style = 'overflow:hidden'
+            console.log(mediaQuery.match)
+            if (mediaQuery.match) document.querySelector('body').style = 'overflow:hidden'
         } else {
             document.querySelector('body').style = null
         }
