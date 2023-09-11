@@ -3,31 +3,38 @@
         <div class="container">
             <D3Map />
         </div>
+
         <section class="container">
-            <div class="d-flex"></div>
+            <!-- section title -->
+            <h2
+                class="fs-3 font-quantum d-inline-block px-4 py-2 mb-3 border border-black shadow-sm font-pathway fw-bold"
+            >
+                排行 Top 10
+            </h2>
+            <RecommendExh class="mb-4" />
+            <Top10ExhCard :data="exhibition.exhibitionList" />
         </section>
-        <!-- Exhibition reviews  -->
-        <section class="bg-secondary pb-4 pb-lg-5 pt-4">
-            <div class="container">
-                <!-- section title -->
-                <h2 class="fs-2 font-quantum border d-inline-block px-4 py-2 border-4 mb-3">
-                    <span class="text-danger">Exhibition </span>
-                    <span class="text-light">reviews</span>
+
+        <!-- 探索 -->
+        <section class="container mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2
+                    class="fs-3 font-quantum d-inline-block px-4 py-2 mb-3 border border-black shadow-sm font-pathway fw-bold"
+                >
+                    探索
                 </h2>
-                <div class="row">
-                    <Swiper />
-                </div>
+                <p class="fw-bold">更多資訊</p>
             </div>
+            <TypeSwiper />
         </section>
-        <div class="bg-success">
-            <div class="container">
-                <h2 class="fs-1 font-quantum py-4">
-                    <span class="text-secondary">Recommend </span>
-                    <span class="text-light">reason</span>
-                </h2>
+
+        <div class="container">
+            <div class="row py-5">
+                <Swiper />
             </div>
         </div>
-        <section class="container mb-5">
+
+        <!-- <section class="container mb-5">
             <div class="row flex-row align-items-center">
                 <div class="col-12 col-lg-7">
                     <img
@@ -71,13 +78,11 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="container"></section>
+        </section> -->
     </main>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .mb-40 {
         margin-bottom: 40px;
     }
@@ -87,9 +92,18 @@
     import Swiper from '../components/Swiper.vue'
     // import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
+    import RecommendExh from '../components/HomePage/RecommendExh.vue'
+    import TypeSwiper from '../components/HomePage/TypeSwiper/TypeSwiper.vue'
+    import Banner3DMenu from '../components/HomePage/Banner3DMenu.vue'
+    import Top10ExhCard from '../components/Homepage/Top10ExhCard.vue'
 
-    onMounted(() => {
-        // const exhibitionStore = useExhibitionStore()
-        // exhibitionStore.getExhibitionData()
+    import { userDataStore } from '../stores/userData'
+    import { exhibitionStore } from '../stores/exhibitionList'
+
+    const user = userDataStore()
+    const exhibition = exhibitionStore()
+
+    onMounted(async () => {
+        await exhibition.getAllExhibitionData()
     })
 </script>

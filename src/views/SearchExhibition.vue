@@ -395,7 +395,7 @@
             document.querySelector('body').style = null
         }
 
-        if (mediaQuery.matches === true && isFilterShow.value === true) {
+        if (mediaQuery.matches === true && isFilterShow.value === false) {
             document.querySelector('body').style = 'overflow:hidden'
         } else {
             document.querySelector('body').style = null

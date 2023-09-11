@@ -34,62 +34,17 @@
             <svg id="map"></svg>
         </div>
         <div class="col-12 col-lg-6">
-            <ul class="d-flex flex-column gap-2">
-                <li
-                    v-for="(item, index) in exhibitionListView"
-                    :key="index"
-                    @click="changeExhibitionView(index)"
-                >
-                    <router-link :to="`viewExhibition/${item?.id}`">
-                        <img
-                            :class="`image-box rounded-4 mb-4 ${
-                                exhibitionShowIndex !== index && 'd-none'
-                            }  `"
-                            :src="`${item.image}`"
-                            :alt="item.name"
-                    /></router-link>
-
-                    <!-- time -->
-                    <div
-                        class="d-flex align-items-end gap-0 lh-1 border-bottom border-3 border-dark gap-3 mb-2"
-                    >
-                        <div class="font-quantum">
-                            <p class="fs-1">{{ new Date(item.startDate).getFullYear() }}</p>
-                            <div class="fs-3 d-flex align-items-center">
-                                <span>{{
-                                    `${new Date(item.startDate).getMonth()}.${new Date(
-                                        item.startDate
-                                    ).getDate()}`
-                                }}</span>
-                                <ChevronRight :size="32" />
-                                <span>{{
-                                    `${new Date(item.endDate).getMonth()}.${new Date(
-                                        item.endDate
-                                    ).getDate()}`
-                                }}</span>
-                            </div>
-                        </div>
-                        <p class="fs-4 mb-2 fw-bold list-title">
-                            {{ item.name }}
-                        </p>
-                        <router-link
-                            :to="`viewExhibition/${item?.id}`"
-                            class="font-quantum border-0 bg-transparent ms-auto fs-4 text-dark"
-                        >
-                            more
-                        </router-link>
-                    </div>
-                    <div class="fw-medium list-content">
-                        {{ item.introduce }}
-                    </div>
-                </li>
-            </ul>
+            <div
+                class="d-flex justify-content-center h-100 flex-column gap-5 flex-wrap overflow-hidden align-items-center"
+            >
+                <Banner3DMenu :data="exhibitionListView" />
+            </div>
         </div>
     </section>
 </template>
 
 <style lang="scss">
-    body {
+    .body {
         background: #fff;
     }
 
@@ -158,9 +113,9 @@
 
     //D3 使用樣式
     .county {
-        fill: #d9d9d9;
-        stroke: #f8f9fa;
-        stroke-width: 4px;
+        fill: white;
+        stroke: black;
+        stroke-width: 1px;
     }
 
     .county:hover {
@@ -178,7 +133,13 @@
     import jsonFile from '../assets/json/COUNTY_MOI_1090820.json'
     import { exhibitionStore } from '../stores/exhibitionList'
     import _ from 'lodash'
+
+    import Banner3DMenu from './HomePage/Banner3DMenu.vue'
+
     export default {
+        components: {
+            Banner3DMenu
+        },
         data() {
             //memo map list title
             return {
@@ -200,18 +161,12 @@
             window.removeEventListener('resize', this.handleResize)
         },
         methods: {
-            changeExhibitionView(index) {
-                const current = this.exhibitionListView[index]
-                this.exhibitionListView[index] = this.exhibitionListView[0]
-                this.exhibitionListView.splice(0, 1, current)
-            },
-
             getExhibitionView(country) {
                 //filter location
                 this.exhibitionListView = this.store.exhibitionList
                     .filter((item) => item.location.country === country)
                     .sort((a, b) => b.viewer - a.viewer)
-                    .splice(0, 3)
+                    .splice(0, 5)
             },
             //新增自適應 innerWidth for map
             handleResize() {
