@@ -31,7 +31,7 @@
             class-name="slider-btn btn btn-light rounded-circle border p-1 position-absolute top-50 start-0 z-3 translate-middle-y"
         >
             <ChevronLeft
-                size="28"
+                :size="28"
                 fillColor="#B7B7B7"
             />
         </PrevBtn>
@@ -39,7 +39,7 @@
             class-name="slider-btn btn btn-light rounded-circle border p-1 position-absolute top-50 end-0 z-3 translate-middle-y"
         >
             <ChevronRight
-                size="28"
+                :size="28"
                 fillColor="#B7B7B7"
             />
         </NextBtn>

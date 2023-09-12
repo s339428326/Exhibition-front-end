@@ -131,7 +131,7 @@
 
     .menu li:hover {
         background-color: orange;
-        transform: translateX(25%);
+        transform: translateX(-30%);
     }
 
     .w-fit-content {

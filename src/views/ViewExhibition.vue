@@ -224,6 +224,6 @@
     }
 
     .blinking {
-        animation: blink 1.75s infinite; /* 使用动画 */
+        animation: blink 1.75s infinite;
     }
 </style>

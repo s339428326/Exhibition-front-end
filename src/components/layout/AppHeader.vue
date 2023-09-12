@@ -1,5 +1,5 @@
 <template>
-    <header class="text-black bg-primary">
+    <header class="text-black bg-dark">
         <nav class="container py-3 d-flex justify-content-between align-items-center">
             <div class="d-flex gap-4 align-items-center">
                 <RouterLink
