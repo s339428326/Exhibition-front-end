@@ -1,0 +1,73 @@
+<<<<<<< HEAD
+img{
+    max-width: 100%;
+    height: auto;
+}
+  
+/* 全域 border box */
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+.container{
+    max-width: 1124px;
+    width: 100%;
+    margin: 0 auto;
+}
+  
+/* layout */
+.member{
+    h1{
+        text-indent: -999px;
+    }
+    .wrap{
+        height: 100vh;
+        background-color: #dee2e6;
+        border-radius: 10px; 
+    }
+    h3{
+        border-bottom:1px solid black;
+    }
+    ul.list{
+        .item{
+            font-size: 18px;
+            line-height: 2;
+            & a{
+                display: block;
+                text-decoration: none;
+                &:hover{
+                    color: red;
+                }
+            }
+        }
+       
+    }
+    .member-pic{
+        display: block;
+        width: 150px;
+        height: 150px;
+        background-image: url("https://fakeimg.pl/150x150");
+    }
+}
+  
+@media (max-width: 1400px) {}
+@media (max-width: 768px) {
+    .member{
+        .wrap{
+            height: 100%;
+        }
+    } 
+}
+@media (max-width: 576px) {}
+=======
+//不要直接使用 標籤選擇器
+// $color: blue;
+// body{
+//     color: $color;
+//     background: $color;
+
+// }
+
+.item {
+    font-size: 56px;
+}
+>>>>>>> 4577b4b80c7f429f4165a3266ea84bc11116803d

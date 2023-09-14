@@ -428,6 +428,7 @@
             right: 0;
             left: 0;
             z-index: 9999;
+            overflow: scroll;
         }
 
         @media screen and (max-width: 414px) {
