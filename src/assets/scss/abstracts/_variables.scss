@@ -1,5 +1,0 @@
-// 預先將bootstrap 的variables.scss引入，以利在每個.vue檔中使用自訂變數
-@import '/node_modules/bootstrap/scss/functions';
-@import '../vendors/bootstrap/variables';
-
-// 非bootstrap的自訂變數，可在下面新增

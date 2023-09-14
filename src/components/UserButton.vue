@@ -160,7 +160,7 @@
             <b-dropdown-item to="/user/orderSearch">訂單查詢</b-dropdown-item>
             <b-dropdown-item to="/user/editPassword">修改密碼</b-dropdown-item>
             <b-dropdown-item to="/user/favoriteList">收藏展覽</b-dropdown-item>
-            <b-dropdown-item @click="logout"> 登出 </b-dropdown-item>
+            <b-dropdown-item @click="logout()"> 登出 </b-dropdown-item>
         </b-dropdown>
     </div>
 
@@ -183,10 +183,14 @@
 
 <script setup>
     import { userDataStore } from '../stores/userData'
+    import { useRouter } from 'vue-router'
     import { ref, onBeforeMount } from 'vue'
     import { Modal } from 'bootstrap'
     import Field from '@/components/Form/Field.vue'
     import SubmitBtn from '@/components/Form/SubmitBtn.vue'
+
+    //vue router
+    const router = useRouter()
 
     //login state
     const isLogin = ref(false)
@@ -230,8 +234,9 @@
     const logout = () => {
         //clear login
         console.log('登出')
-        localStorage.removeItem('token')
         isLogin.value = false
+        store.logout()
+        router.push({ name: 'Home' })
     }
     //change from view
     const changeFromHandler = (e) => {

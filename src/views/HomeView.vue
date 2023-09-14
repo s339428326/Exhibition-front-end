@@ -1,11 +1,12 @@
 <template>
     <main>
+        <!-- Map banner -->
         <div class="container">
             <D3Map />
         </div>
 
+        <!--  排行 Top 10 -->
         <section class="container">
-            <!-- section title -->
             <h2
                 class="fs-3 font-quantum d-inline-block px-4 py-2 mb-3 border border-black shadow-sm font-pathway fw-bold"
             >
@@ -16,10 +17,7 @@
                 :data="exhibition.exhibitionList"
                 :index="recommendViewIndex"
             />
-            <Top10ExhCard
-                @change-view="recommendViewHandler"
-                :data="exhibition.exhibitionList"
-            />
+            <Top10ExhCard @change-view="recommendViewHandler" />
         </section>
 
         <!-- 探索 -->
@@ -34,26 +32,7 @@
             </div>
             <TypeSwiper />
         </section>
-
-        <!-- <section class="container">
-            <div class="row">
-                <div class="col-12 col-md-12 col-lg-12">
-                    <div class="border-start border-top border-end border-dark p-3">
-                        <p>臺中市后里區堤防路370號</p>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="border">
-                        <ul class="d-flex border border-danger">
-                            <li class="border border-info-subtle flex-grow-1">1</li>
-                            <li class="border border-info-subtle flex-grow-1">1</li>
-                            <li class="border border-info-subtle flex-grow-1">1</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
+        <!-- meme block -->
         <div class="container">
             <div class="row py-5">
                 <Swiper />
@@ -70,16 +49,14 @@
 <script setup>
     import { onMounted, ref } from 'vue'
     import Swiper from '../components/Swiper.vue'
-    // import { useExhibitionStore } from '../stores/exhibitionList'
     import D3Map from '../components/D3Map.vue'
     import RecommendExh from '../components/HomePage/RecommendExh.vue'
     import TypeSwiper from '../components/HomePage/TypeSwiper/TypeSwiper.vue'
     import Top10ExhCard from '../components/Homepage/Top10ExhCard.vue'
 
-    import { userDataStore } from '../stores/userData'
+    // import { userDataStore } from '../stores/userData'
     import { exhibitionStore } from '../stores/exhibitionList'
 
-    const user = userDataStore()
     const exhibition = exhibitionStore()
 
     const recommendViewIndex = ref(null)

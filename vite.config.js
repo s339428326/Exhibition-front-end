@@ -23,10 +23,10 @@ export default defineConfig({
         outDir: 'dist'
     },
     css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: '@import "@/assets/scss/abstracts/__abstracts-dir.scss";'
-            }
-        }
+        // preprocessorOptions: {
+        //     scss: {
+        //         additionalData: '@import "@/assets/scss/abstracts/__abstracts-dir.scss";'
+        //     }
+        // }
     }
 })

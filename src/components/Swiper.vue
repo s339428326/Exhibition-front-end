@@ -55,11 +55,11 @@
                     <time class="exhibition-title__time">2029.07.08 ~ 2035.08.07</time>
                 </div>
                 <div class="hex-a bg-black text-white d-inline-block px-2">
-                    <router-link
+                    <a
                         class="text-white"
-                        to="https://www.hexschool.com/courses/js-training.html"
+                        href="https://www.hexschool.com/courses/js-training.html"
                     >
-                        太無情了, 不要點你會怕!</router-link
+                        太無情了, 不要點你會怕!</a
                     >
                 </div>
             </div>
@@ -71,8 +71,8 @@
         --swiper-pagination-bullet-horizontal-gap: 0;
         --swiper-pagination-bullet-width: 1rem;
         --swiper-pagination-bullet-inactive-opacity: 1;
-        --swiper-pagination-color: #{$success};
-        --swiper-pagination-bullet-inactive-color: #{$success};
+        --swiper-pagination-color: #005f60;
+        --swiper-pagination-bullet-inactive-color: #005f60;
     }
 
     .-t-10 {
@@ -201,7 +201,7 @@
         z-index: 20;
         border: none;
         background: transparent;
-        color: $primary;
+        color: #1a4872;
     }
 
     .swiper-pagination {

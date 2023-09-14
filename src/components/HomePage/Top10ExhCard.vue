@@ -1,3 +1,79 @@
+<script setup>
+    import { ref, watch, onMounted } from 'vue'
+    import { storeToRefs } from 'pinia'
+    import { userDataStore } from '../../stores/userData'
+    import { exhibitionStore } from '../../stores/exhibitionList'
+    import { trackExhibition, getUserTrackData, deleteTrackExhibition } from '../../api/user'
+
+    const emit = defineEmits(['changeView'])
+
+    const user = userDataStore()
+    const exhibition = exhibitionStore()
+
+    const userRefs = storeToRefs(user)
+    const exhibitionRefs = storeToRefs(exhibition)
+
+    const list = ref([])
+    const currentItem = ref(0)
+    const trackList = ref([])
+
+    const itemHandler = (val) => {
+        currentItem.value = val
+    }
+
+    //新增 user track exh
+    const trackExhHandler = async (exhId) => {
+        console.log('click', user.userData?.localId, exhId)
+        if (!user.userData?.localId) {
+            return
+        }
+        //
+        if (trackList.value.includes(exhId)) {
+            const res = await deleteTrackExhibition(user.userData?.localId, exhId)
+            trackList.value = trackList.value.filter((item) => item !== exhId)
+            console.log('del track api', res)
+        } else {
+            const res = await trackExhibition(user.userData?.localId, exhId)
+            console.log('[add track api]', res)
+            trackList.value.push(exhId)
+        }
+    }
+
+    const getUserTracKData = async () => {
+        const res = await getUserTrackData(user.userData.localId)
+        if (!res?.data) return
+        console.log(
+            '[init track]',
+            Object.entries(res?.data).map(([key, val]) => {
+                if (val === true) return key
+            })
+        )
+        trackList.value = Object.entries(res?.data).map(([key, val]) => {
+            if (val === true) return key
+        })
+    }
+
+    onMounted(async () => {
+        getUserTracKData()
+    })
+
+    watch(currentItem, (newVal) => {
+        emit('changeView', newVal)
+    })
+
+    watch(exhibitionRefs.exhibitionList, () => {
+        list.value = exhibition.exhibitionList
+            .sort((pre, next) => next.viewer - pre.viewer)
+            .slice(0, 10)
+    })
+
+    watch(userRefs.userData, () => {
+        if (!user.userData?.localId) {
+            trackList.value = []
+        }
+        getUserTracKData()
+    })
+</script>
 <template>
     <ul class="row">
         <li
@@ -33,7 +109,20 @@
                             <p class="">點擊率 {{ item.viewer }}</p>
                         </div>
                         <div class="d-flex gap-2">
-                            <HeartOutlineIcon :size="24" />
+                            <button
+                                class="border-0 bg-transparent"
+                                :data-bs-toggle="`${!user.userData?.name && 'modal'}`"
+                                :data-bs-target="`${!user.userData?.name && '#loginModal'}`"
+                                @click="trackExhHandler(item.id)"
+                            >
+                                <div :class="`${trackList.includes(item.id) && 'd-none'}`">
+                                    <HeartOutlineIcon :size="24" />
+                                </div>
+                                <div :class="`${!trackList.includes(item.id) && 'd-none'}`">
+                                    <HeartIcon :size="24" />
+                                </div>
+                            </button>
+
                             <CartIcon :size="24" />
                         </div>
                     </div>
@@ -51,32 +140,8 @@
             </div>
         </li>
     </ul>
-    <!-- {{ list[currentItem] }} -->
 </template>
-<script setup>
-    import { ref, watch } from 'vue'
-    const props = defineProps({
-        data: Array
-    })
 
-    const emit = defineEmits(['changeView'])
-
-    const list = ref([])
-
-    const currentItem = ref(0)
-
-    const itemHandler = (val) => {
-        currentItem.value = val
-    }
-
-    watch(currentItem, (newVal) => {
-        emit('changeView', newVal)
-    })
-
-    watch(props, () => {
-        list.value = [...props.data].sort((pre, next) => next.viewer - pre.viewer).slice(0, 10)
-    })
-</script>
 <style lang="scss" scoped>
     //rank card
     .rank-card__imageBox {

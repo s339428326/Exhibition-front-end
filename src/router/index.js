@@ -1,9 +1,36 @@
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import NotFoundPage from '../views/NotFoundPage.vue'
+import Redirect from '../views/Redirect.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
-import NotFoundPage from '../views/NotFoundPage.vue'
+import { getUserAuthData } from '../api/auth'
+import { useRouter } from 'vue-router'
+
+const isAuth = async (from, to, next) => {
+    const rt = useRouter()
+    const token = localStorage.getItem('token')
+    if (!token) {
+        window.alert('憑證消失,請先登入！')
+        rt.push({ name: 'Home' })
+        return next()
+    }
+    try {
+        const res = await getUserAuthData(token)
+        console.log('[isAuth]', res)
+        if (res?.error) {
+            window.alert('已登入過久,請重新登入！')
+            rt.push({ name: 'Home' })
+            return next()
+        }
+        return next()
+    } catch (error) {
+        rt.replace('/')
+        console.log('isAuth 發生錯誤', error)
+        return error
+    }
+}
 
 const routes = [
     //Default Layout
@@ -18,14 +45,6 @@ const routes = [
                 name: 'Home',
                 component: HomeView
             },
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            // {
-            //     path: '/about',
-            //     name: 'About',
-            //     component: () => import('../views/AboutView.vue')
-            // },
             {
                 path: 'searchExhibition',
                 name: 'SearchExhibition',
@@ -39,21 +58,25 @@ const routes = [
             {
                 path: 'user/information',
                 name: 'Information',
+                beforeEnter: isAuth,
                 component: () => import('../views/user/UserInfo.vue')
             },
             {
                 path: 'user/orderSearch',
                 name: 'OrderSearch',
+                beforeEnter: isAuth,
                 component: () => import('../views/user/OrderSearch.vue')
             },
             {
                 path: 'user/editPassword',
                 name: 'EditPassword',
+                beforeEnter: isAuth,
                 component: () => import('../views/user/EditPassword.vue')
             },
             {
                 path: 'user/favoriteList',
                 name: 'FavoriteList',
+                beforeEnter: isAuth,
                 component: () => import('../views/user/FavoriteList.vue')
             }
         ]
@@ -63,6 +86,14 @@ const routes = [
         path: '/payment',
         name: 'Payment',
         component: PaymentLayout,
+        beforeEnter: (from, to, next) => {
+            const cartData = JSON.parse(localStorage.getItem('cart'))
+            if (!cartData?.length) {
+                console.log('block!!!')
+                return window.alert('目前購物車沒有物品')
+            }
+            isAuth(from, to, next)
+        },
         //add there payment page
         children: [
             {
@@ -77,6 +108,12 @@ const routes = [
         path: '/:catch(.*)',
         name: 'NotFound',
         component: NotFoundPage
+    },
+    //重新導向頁面
+    {
+        path: '/redirect',
+        name: 'Redirect',
+        component: Redirect
     }
 ]
 

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { createUser, getUserAuthData, login } from '../api/auth'
 import { getUserData, updateUserInfoData } from '../api/user'
+import { useRouter } from 'vue-router'
 
 export const userDataStore = defineStore('userData', {
     state: () => ({
@@ -95,6 +96,11 @@ export const userDataStore = defineStore('userData', {
                 }
             }
         },
+        //登出
+        async logout() {
+            localStorage.removeItem('token')
+            this.userData = {}
+        },
         //驗證token
         async confirmToken(token) {
             const res = await getUserAuthData(token)
@@ -104,7 +110,12 @@ export const userDataStore = defineStore('userData', {
             }
             //取得用戶資料
             const userInfoData = await getUserData(res?.data?.users[0]?.localId)
-            this.userData = { ...this.userData, ...userInfoData.data }
+
+            this.userData = {
+                ...this.userData,
+                ...userInfoData.data,
+                localId: res?.data?.users[0]?.localId
+            }
 
             return res?.data?.users[0]?.localId
         },
