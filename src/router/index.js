@@ -1,10 +1,12 @@
-//Fix GitHub Page SPA router
-import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import NotFoundPage from '../views/NotFoundPage.vue'
 import Redirect from '../views/Redirect.vue'
+import User from '../views/User/User.vue'
+
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
+//Fix GitHub Page SPA router
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { getUserAuthData } from '../api/auth'
 import { useRouter } from 'vue-router'
 
@@ -20,6 +22,7 @@ const isAuth = async (from, to, next) => {
         const res = await getUserAuthData(token)
         console.log('[isAuth]', res)
         if (res?.error) {
+            localStorage.remove('token')
             window.alert('已登入過久,請重新登入！')
             rt.push({ name: 'Home' })
             return next()
@@ -59,6 +62,7 @@ const routes = [
                 path: 'user/',
                 name: 'User',
                 redirect: '/user/information',
+                component: User,
                 children: [
                     {
                         path: 'information',

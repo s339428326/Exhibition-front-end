@@ -1,16 +1,5 @@
 <template>
-    <div class="container">
-        <div class="row d-flex justify-content-between">
-            <div class="col-3">
-                <UserNavList />
-            </div>
-            <div class="col-9">
-                <div class="p-3 my-4 bg-secondary bg-opacity-25 rounded-3">
-                    <h2 class="border-bottom border-dark pb-2">訂單查詢</h2>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h2 class="border-bottom mb-4 fs-4 pb-3 fw-medium">訂單查詢</h2>
 </template>
 
 <script setup>

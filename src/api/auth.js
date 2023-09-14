@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-//會員註冊 email / password
 const google_api_url = 'https://identitytoolkit.googleapis.com'
 const url = (str) => `${google_api_url}${str}?key=${import.meta.env?.VITE_firebaseApiKey}`
 
@@ -42,4 +41,46 @@ export const getUserAuthData = async (token) => {
     }
 }
 
+//email 驗證
+export const verifyEmail = async (token) => {
+    try {
+        const res = await axios.post(url('/v1/accounts:sendOobCode'), {
+            requestType: 'VERIFY_EMAIL',
+            idToken: token
+        })
+        console.log('[verifyEmail]', res)
+        return res
+    } catch (error) {
+        console.log('[verifyEmail Error]', error)
+        return error
+    }
+}
+
+//更新用戶密碼
+export const changePassword = async (token, password) => {
+    try {
+        const res = await axios.post(url('/v1/accounts:update'), {
+            idToken: token,
+            password,
+            returnSecureToken: true
+        })
+        console.log('[changePassword ]', res)
+        return res
+    } catch (error) {
+        console.error('[changePassword Error]', error)
+        return error
+    }
+}
+
 //密碼重置(信箱更改密碼)
+export const resetPasswordEmail = async (email) => {
+    try {
+        const res = await axios.post(url('/v1/accounts:sendOobCode'), {
+            requestType: 'PASSWORD_RESET',
+            email
+        })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -36,7 +36,8 @@
         "vite": "^4.4.9",
         "vue": "^3.3.4",
         "vue-material-design-icons": "^5.2.0",
-        "vue-router": "^4.2.2"
+        "vue-router": "^4.2.2",
+        "yup": "^1.2.0"
     },
     "devDependencies": {
         "@rushstack/eslint-patch": "^1.2.0",

@@ -6,13 +6,13 @@
                 <router-link to="/user/information"> 會員資料 </router-link>
             </li>
             <li class="">
+                <router-link to="/user/favoriteList"> 收藏展覽 </router-link>
+            </li>
+            <li class="">
                 <router-link to="/user/orderSearch"> 訂單查詢 </router-link>
             </li>
             <li class="">
                 <router-link to="/user/editPassword"> 修改密碼 </router-link>
-            </li>
-            <li class="">
-                <router-link to="/user/favoriteList"> 收藏展覽 </router-link>
             </li>
         </ul>
     </div>
