@@ -56,28 +56,35 @@ const routes = [
                 component: () => import('../views/ViewExhibition.vue')
             },
             {
-                path: 'user/information',
-                name: 'Information',
-                beforeEnter: isAuth,
-                component: () => import('../views/user/UserInfo.vue')
-            },
-            {
-                path: 'user/orderSearch',
-                name: 'OrderSearch',
-                beforeEnter: isAuth,
-                component: () => import('../views/user/OrderSearch.vue')
-            },
-            {
-                path: 'user/editPassword',
-                name: 'EditPassword',
-                beforeEnter: isAuth,
-                component: () => import('../views/user/EditPassword.vue')
-            },
-            {
-                path: 'user/favoriteList',
-                name: 'FavoriteList',
-                beforeEnter: isAuth,
-                component: () => import('../views/user/FavoriteList.vue')
+                path: 'user/',
+                name: 'User',
+                redirect: '/user/information',
+                children: [
+                    {
+                        path: 'information',
+                        name: 'Information',
+                        beforeEnter: isAuth,
+                        component: () => import('../views/user/UserInfo.vue')
+                    },
+                    {
+                        path: 'orderSearch',
+                        name: 'OrderSearch',
+                        beforeEnter: isAuth,
+                        component: () => import('../views/user/OrderSearch.vue')
+                    },
+                    {
+                        path: 'editPassword',
+                        name: 'EditPassword',
+                        beforeEnter: isAuth,
+                        component: () => import('../views/user/EditPassword.vue')
+                    },
+                    {
+                        path: 'favoriteList',
+                        name: 'FavoriteList',
+                        beforeEnter: isAuth,
+                        component: () => import('../views/user/FavoriteList.vue')
+                    }
+                ]
             }
         ]
     },
