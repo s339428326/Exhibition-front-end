@@ -2,7 +2,6 @@
     import { ref, onBeforeMount, computed, watch } from 'vue'
     import { storeToRefs } from 'pinia'
     import { userDataStore } from '../../stores/userData'
-    import { uploadImgur } from '../../api/imgur'
     import { updateUserInfoData } from '../../api/user'
 
     import AvatarUpload from '../../components/user/AvatarUpload.vue'
@@ -25,49 +24,6 @@
         console.log(data)
         userInfo.value = { ...userInfo.value, ...data }
     }
-
-    // const uploadBtnDisable = computed(() => user.userData?.picture === avatar.value)
-
-    // //user avatar
-    // const avatarHandler = (e) => {
-    //     const file = e.target.files[0]
-    //     const formData = new FormData()
-    //     const reader = new FileReader()
-    //     formData.append('image', file)
-
-    //     reader.addEventListener('load', () => {
-    //         avatar.value = reader.result
-    //         avatarData.value = formData
-    //     })
-    //     if (file) reader.readAsDataURL(file)
-    // }
-
-    // const uploadAvatar = async (data) => {
-    //     try {
-    //         const res = await uploadImgur(data)
-    //         const uploadFireBase = await updateUserInfoData(user.userData?.localId, {
-    //             picture: res.data.data.link
-    //         })
-    //         avatar.value = res.data.data.link
-    //         user.userData.picture = res.data.data.link
-    //         console.log('[upload imgur responses]', res.data.data.link)
-    //         console.log('[upload fireBase user data]', uploadFireBase)
-    //     } catch (error) {
-    //         console.log('[upload img responses Error]', error)
-    //     }
-    // }
-
-    // const init = () => {
-    //     avatar.value = user.userData?.picture
-    // }
-
-    // watch(userRefs.userData, () => {
-    //     avatar.value = user.userData?.picture
-    // })
-
-    // onBeforeMount(() => {
-    //     init()
-    // })
 </script>
 
 <template>
@@ -84,60 +40,18 @@
                                 <h2 class="border-bottom mb-4 fs-4 pb-3">會員資料</h2>
                                 <div class="col-md-4">
                                     <AvatarUpload />
-                                    <!-- component -->
-                                    <!-- <div class="border p-3 d-flex flex-column gap-4 rounded">
-                                        <p>會員頭像</p>
-                                        <div class="d-flex justify-content-center">
-                                            <label
-                                                class="avatar-label border"
-                                                for="avatar"
-                                            >
-                                                <img
-                                                    class="avatar-img"
-                                                    :src="avatar || user.userData?.picture"
-                                                    alt="avatar"
-                                                    width="200"
-                                                    height="200"
-                                                />
-                                                <div class="avatar-hover">點擊更改圖片</div>
-                                            </label>
-                                            <input
-                                                class="d-none"
-                                                @change="avatarHandler"
-                                                type="file"
-                                                name="avatar"
-                                                id="avatar"
-                                                accept="image/*"
-                                            />
-                                        </div>
-                                        <button
-                                            @click="uploadAvatar(avatarData)"
-                                            class="btn btn-dark"
-                                            :disabled="uploadBtnDisable"
-                                        >
-                                            上傳
-                                        </button>
-                                    </div> -->
+                                </div>
+                                <div class="col-md-8">
+                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                    Expedita, harum! Voluptate saepe nisi assumenda repellendus
+                                    eligendi inventore rem reiciendis maxime aliquid. Adipisci
+                                    dolor, dolorem reprehenderit dolores assumenda aspernatur
+                                    laudantium dicta?
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="">
-                            <div>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
-                                eligendi odit impedit quam, voluptas nesciunt inventore repellendus
-                                ipsam id ut officiis. Facere tempora doloremque, molestiae ratione
-                                praesentium repellat voluptas deserunt?
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <!-- <p>{{ uploadBtnDisable }}</p>
-                        <p>{{ user.userData?.picture }}</p>
-                        <p>userData {{ user.userData }}</p>
-                        <p>userInfo {{ userInfo }}</p>
-                        <p>avatar {{ avatar }}</p> -->
-                    </div>
                     <!-- email -->
                     <!-- username -->
                     <!-- user Avatar -->
