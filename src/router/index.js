@@ -45,12 +45,6 @@ const routes = [
                 name: 'Home',
                 component: HomeView
             },
-<<<<<<< HEAD
-=======
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
->>>>>>> 7986d7ced233f31ac7b4b53f0b3c55d9fb6440a8
             {
                 path: 'searchExhibition',
                 name: 'SearchExhibition',
