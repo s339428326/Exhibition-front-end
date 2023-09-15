@@ -39,6 +39,7 @@ import FilterMenu from 'vue-material-design-icons/FilterMenu.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import CloseCircleOutline from 'vue-material-design-icons/CloseCircleOutline.vue'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
+import menu from 'vue-material-design-icons/Menu.vue'
 
 //datepicker
 // import Datepicker from 'vuejs3-datepicker'
@@ -88,6 +89,7 @@ app.component('FilterMenu', FilterMenu)
 app.component('CheckCircleOutline', CheckCircleOutline)
 app.component('CloseCircleOutline', CloseCircleOutline)
 app.component('AlertCircleOutline', AlertCircleOutline)
+app.component('menuIcon', menu)
 
 // app.component('Datepicker', Datepicker)
 
