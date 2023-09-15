@@ -60,6 +60,14 @@
                         <router-link
                             class="d-block p-3 text-white"
                             @click="() => (isShow = !isShow)"
+                            to="/searchExhibition"
+                            >搜索頁</router-link
+                        >
+                    </li>
+                    <li class="border-bottom text-center">
+                        <router-link
+                            class="d-block p-3 text-white"
+                            @click="() => (isShow = !isShow)"
                             to="/user/information"
                             >會員資料</router-link
                         >
@@ -80,14 +88,7 @@
                             >收藏展覽</router-link
                         >
                     </li>
-                    <li class="border-bottom text-center">
-                        <router-link
-                            class="d-block p-3 text-white"
-                            @click="() => (isShow = !isShow)"
-                            to="/user/editPassword"
-                            >修改密碼</router-link
-                        >
-                    </li>
+
                     <li class="border-bottom text-center">
                         <div
                             v-if="!user.userData?.localId"
