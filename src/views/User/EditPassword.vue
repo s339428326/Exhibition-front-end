@@ -63,7 +63,7 @@
     })
 </script>
 <template>
-    <h2 class="border-bottom mb-4 fs-4 pb-3 fw-medium">修改密碼</h2>
+    <h1 class="border-bottom mb-4 fs-4 pb-3 fw-medium">修改密碼</h1>
     <div class="row">
         <div class="col-md-9">
             <div

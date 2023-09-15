@@ -136,7 +136,7 @@
                 {{ total }}
             </p>
             <router-link
-                class="btn btn-primary"
+                :class="`btn btn-primary  ${cartDataInstance.cartData.length === 0 && 'disabled'}`"
                 to="/payment/confirm"
                 @click="closeModelHandler"
             >

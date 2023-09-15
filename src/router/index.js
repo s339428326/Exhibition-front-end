@@ -8,36 +8,33 @@ import PaymentLayout from '../components/layout/PaymentLayout.vue'
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getUserAuthData } from '../api/auth'
-import { useRouter } from 'vue-router'
+
 import { useAlert } from '../stores/alertSlice'
+import { userDataStore } from '../stores/userData'
 
 const isAuth = async (from, to, next) => {
+    const user = userDataStore()
     const alertStore = useAlert()
-    const rt = useRouter()
+
     const token = localStorage.getItem('token')
     if (!token) {
-        window.alert('憑證消失,請先登入！')
-        rt.push({ name: 'Home' })
-        return next()
+        alertStore.callAlert({ title: '憑證消失,請先登入！', type: 'error' })
+        user.logout()
+        return next({ name: 'Home' })
     }
     try {
         const res = await getUserAuthData(token)
         console.log('[isAuth]', res)
         if (res?.error) {
             localStorage.remove('token')
-            window.alert('已登入過久,請重新登入！')
-            rt.push({ name: 'Home' })
-            return next()
+            alertStore.callAlert({ title: '已登入過久,請重新登入！', type: 'error' })
+            return next({ name: 'Home' })
         }
         return next()
     } catch (error) {
-        rt.push({ name: 'Home' })
-        localStorage.remove('token')
-        // alertStore.isActive = true
-        // setTimeout(() => {
-        //     alertStore.isActive = false
-        // }, 3000)
-        return error
+        alertStore.callAlert({ title: '憑證錯誤,請重新登入！', type: 'error' })
+        user.logout()
+        return next({ name: 'Home' })
     }
 }
 
@@ -104,12 +101,13 @@ const routes = [
         name: 'Payment',
         component: PaymentLayout,
         beforeEnter: (from, to, next) => {
+            const alertStore = useAlert()
             const cartData = JSON.parse(localStorage.getItem('cart'))
             if (!cartData?.length) {
-                console.log('block!!!')
-                return window.alert('目前購物車沒有物品')
+                return alertStore.callAlert({ title: '目前購物車內沒有商品', type: 'error' })
             }
             isAuth(from, to, next)
+            return next({ name: 'Home' })
         },
         //add there payment page
         children: [

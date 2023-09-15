@@ -17,18 +17,18 @@
                 type="button"
                 @click="alert.isActive = false"
             >
-                <CloseIcon size="12" />
+                <CloseIcon :size="12" />
             </button>
 
             <div class="d-flex align-items-center gap-3">
                 <div v-if="alert.type === 'check'">
-                    <CheckCircleOutline size="48" />
+                    <CheckCircleOutline :size="48" />
                 </div>
                 <div v-if="alert.type === 'error'">
-                    <CloseCircleOutline size="48" />
+                    <CloseCircleOutline :size="48" />
                 </div>
                 <div v-if="alert.type === 'alert'">
-                    <AlertCircleOutline size="48" />
+                    <AlertCircleOutline :size="48" />
                 </div>
                 <div class="">
                     <p

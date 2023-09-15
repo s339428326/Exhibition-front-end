@@ -70,7 +70,7 @@
 </script>
 
 <template>
-    <h2 class="border-bottom mb-4 fs-4 pb-3 fw-medium">會員資料</h2>
+    <h1 class="border-bottom mb-4 fs-4 pb-3 fw-medium">會員資料</h1>
     <div class="row">
         <div class="col-md-4">
             <AvatarUpload />
