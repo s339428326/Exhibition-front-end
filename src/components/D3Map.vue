@@ -185,14 +185,14 @@
                 let rwdScale = 11000 //rwd scale number
                 let centerX = 122
                 let centerY = 24.5
-                if (this.w > 992) {
+                if (this.w > 991) {
                     rwdScale = 11000 //pc
                     centerX = 122
                     centerY = 24.5
                 } else if (this.w <= 992 && this.w > 414) {
                     width = this.$refs.map.offsetWidth - 24
                     rwdScale = 9000 //pc
-                    centerX = 122.6
+                    centerX = 121.8
                     centerY = 24
                     height = height * 0.8
                 } else {

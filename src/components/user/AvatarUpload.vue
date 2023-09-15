@@ -4,8 +4,11 @@
     import { userDataStore } from '../../stores/userData'
     import { updateUserInfoData } from '../../api/user'
     import { uploadImgur } from '../../api/imgur'
+    import { useAlert } from '../../stores/alertSlice'
 
     const isUpload = ref(false)
+
+    const alertStore = useAlert()
 
     const user = userDataStore()
     const userRefs = storeToRefs(user)
@@ -40,12 +43,15 @@
             user.userData.picture = res.data.data.link
             console.log('[upload imgur responses]', res.data.data.link)
             console.log('[upload fireBase user data]', uploadFireBase)
-            if (uploadFireBase) window.alert(`圖片上傳成功`)
+            if (uploadFireBase) {
+                alertStore.callAlert({ title: '圖片上傳成功', type: 'check' })
+            }
             isUpload.value = false
             return res.data.data.link
         } catch (error) {
             console.log('[upload img responses Error]', error)
             isUpload.value = false
+            alertStore.callAlert({ title: '圖片上傳失敗', type: 'error' })
             return error
         }
     }

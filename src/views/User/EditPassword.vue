@@ -9,6 +9,7 @@
     import * as yup from 'yup'
 
     import { userDataStore } from '../../stores/userData'
+    import { useAlert } from '../../stores/alertSlice'
 
     const { errors, values, setValues, handleSubmit, defineInputBinds, setErrors } = useForm({
         initialValues: {
@@ -24,6 +25,7 @@
     const router = useRouter()
 
     const user = userDataStore()
+    const alertStore = useAlert()
 
     const currentPassword = ref('')
     const isReCheck = ref(false)
@@ -51,15 +53,13 @@
     const submit = handleSubmit(async (values) => {
         const res = await changePassword(localStorage.getItem('token'), values.password)
         if (res.data) {
-            // alert(JSON.stringify(values, null, 2))
             user.logout()
-            alert('密碼更改成功, 請重新登入！')
+            alertStore.callAlert({ title: '密碼更改成功, 請重新登入！' }, 3000)
             router.push({ name: 'Home' })
         } else {
+            console.error('伺服器錯誤, 請聯絡開發人員！')
             setErrors({ server: ['伺服器錯誤, 請聯絡開發人員！'] })
         }
-
-        // res.error
     })
 </script>
 <template>

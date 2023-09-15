@@ -1,3 +1,10 @@
+<script setup>
+    import { RouterLink } from 'vue-router'
+    import UserButton from '../UserButton.vue'
+    import CartButton from '../cartButton.vue'
+    import Alert from '../Alert/Alert.vue'
+</script>
+
 <template>
     <header class="position-sticky top-0 text-black bg-dark z-3">
         <nav class="container py-3 d-flex justify-content-between align-items-center">
@@ -32,14 +39,11 @@
                 </li>
             </ul>
         </nav>
+        <Teleport to="body">
+            <Alert />
+        </Teleport>
     </header>
 </template>
-
-<script setup>
-    import { RouterLink } from 'vue-router'
-    import UserButton from '../UserButton.vue'
-    import CartButton from '../cartButton.vue'
-</script>
 
 <style lang="scss" scoped>
     // Google font for Logo

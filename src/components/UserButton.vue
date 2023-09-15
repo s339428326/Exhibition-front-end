@@ -23,15 +23,16 @@
             no-caret
         >
             <template #button-content>
-                <div class="d-flex align-items-center btn-user overflow-hidden">
-                    <div>
+                <div class="d-flex align-items-center btn-user gap-2 flex-wrap">
+                    <div class="border rounded-circle avatar-container">
                         <img
                             class="avatar me-2"
                             :src="`${store.userData.picture}`"
                         />
                     </div>
-
-                    <span class="text-light fs-6">{{ store.userData.name }}</span>
+                    <div class="overflow-hidden user-name">
+                        <span class="text-light fs-6">{{ store.userData.name }}</span>
+                    </div>
                 </div>
             </template>
             <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
@@ -109,7 +110,7 @@
 
 <style lang="scss" scoped>
     .btn-user {
-        max-width: 120px;
+        max-width: 150px;
     }
 
     .avatar {
@@ -118,5 +119,14 @@
         width: 36px;
         height: 36px;
         vertical-align: middle;
+    }
+
+    .avatar-container {
+        width: 36px;
+        height: 36px;
+    }
+
+    .user-name {
+        max-width: 100px;
     }
 </style>

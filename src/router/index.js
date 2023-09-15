@@ -9,8 +9,10 @@ import PaymentLayout from '../components/layout/PaymentLayout.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getUserAuthData } from '../api/auth'
 import { useRouter } from 'vue-router'
+import { useAlert } from '../stores/alertSlice'
 
 const isAuth = async (from, to, next) => {
+    const alertStore = useAlert()
     const rt = useRouter()
     const token = localStorage.getItem('token')
     if (!token) {
@@ -29,8 +31,12 @@ const isAuth = async (from, to, next) => {
         }
         return next()
     } catch (error) {
-        rt.replace('/')
-        console.log('isAuth 發生錯誤', error)
+        rt.push({ name: 'Home' })
+        localStorage.remove('token')
+        // alertStore.isActive = true
+        // setTimeout(() => {
+        //     alertStore.isActive = false
+        // }, 3000)
         return error
     }
 }

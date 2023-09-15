@@ -8,6 +8,16 @@
 
     import AvatarUpload from '../../components/user/AvatarUpload.vue'
 
+    ////
+    import { useAlert } from '../../stores/alertSlice'
+    const alertStore = useAlert()
+
+    const alertHandler = () => {
+        alertStore.isActive = true
+    }
+
+    ////
+
     const user = userDataStore()
     const userRefs = storeToRefs(user)
 
@@ -36,9 +46,10 @@
             const { email, name } = res.data
             user.userData.email = email
             user.userData.name = name
-            alert('用戶資訊更改成功！')
+            alertStore.callAlert({ title: '用戶資訊更改成功', type: 'check' })
         } catch (error) {
-            alert(JSON.stringify(error, null, 2))
+            console.error('[infoSubmit Error]', error)
+            alertStore.callAlert({ title: '用戶資訊更改失敗', type: 'error' })
         }
 
         isLoading.value = false

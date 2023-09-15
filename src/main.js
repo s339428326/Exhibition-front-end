@@ -36,6 +36,9 @@ import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarHalfFull from 'vue-material-design-icons/StarHalfFull.vue'
 import FilterMenu from 'vue-material-design-icons/FilterMenu.vue'
+import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
+import CloseCircleOutline from 'vue-material-design-icons/CloseCircleOutline.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 //datepicker
 // import Datepicker from 'vuejs3-datepicker'
@@ -82,6 +85,9 @@ app.component('ChevronLeft', ChevronLeft)
 app.component('Star', Star)
 app.component('StarHalfFull', StarHalfFull)
 app.component('FilterMenu', FilterMenu)
+app.component('CheckCircleOutline', CheckCircleOutline)
+app.component('CloseCircleOutline', CloseCircleOutline)
+app.component('AlertCircleOutline', AlertCircleOutline)
 
 // app.component('Datepicker', Datepicker)
 
