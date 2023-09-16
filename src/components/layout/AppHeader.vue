@@ -7,7 +7,6 @@
     import { userDataStore } from '../../stores/userData'
 
     const user = userDataStore()
-
     const isShow = ref(false)
 </script>
 

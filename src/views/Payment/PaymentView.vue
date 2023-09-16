@@ -1,3 +1,80 @@
+<script>
+    import { useCartDataStore } from '@/stores/cartData'
+    export default {
+        data() {
+            return {
+                cartDataInstance: useCartDataStore(),
+                page: 1,
+                form: {
+                    email: '',
+                    name: '',
+                    tel: '',
+                    address: '',
+                    cardNumber: '',
+                    cardName: '',
+                    cvc: ''
+                }
+            }
+        },
+        created() {
+            this.cartDataInstance.initCartData()
+        },
+        methods: {
+            //form data
+            onSubmit(e) {
+                e.preventDefault()
+                alert(JSON.stringify(this.form, null, 2))
+                alert(JSON.stringify(this.cartDataInstance.cartData,null,2))
+            },
+            //page
+            pageHandler(cal) {
+                switch (cal) {
+                    case 'add':
+                        this.page += 1
+                        break
+                    case 'del':
+                        if (this.page === 1) return
+                        this.page -= 1
+                        break
+                }
+            },
+            // quantity
+            quantityHandler(e) {
+                const { index, cal } = e.target.dataset
+
+                if (this.cartDataInstance.cartData[index].quantity === 1 && cal === 'del') return
+
+                const newData = {
+                    ...this.cartDataInstance.cartData[index],
+                    tickType: { ...this.cartDataInstance.cartData[index].tickType },
+                    quantity:
+                        cal === 'add'
+                            ? this.cartDataInstance.cartData[index].quantity + 1
+                            : cal === 'del'
+                            ? this.cartDataInstance.cartData[index].quantity - 1
+                            : 1
+                }
+                this.cartDataInstance.updateCartItem(newData, index)
+            }
+        },
+        computed: {
+            total() {
+                return this.cartDataInstance.cartData.length > 1
+                    ? this.cartDataInstance.cartData.reduce(
+                          (pre, next) => pre.price * pre.quantity + next.price * next.quantity
+                      )
+                    : this.cartDataInstance.cartData.length === 1
+                    ? this.cartDataInstance.cartData[0].price *
+                      this.cartDataInstance.cartData[0].quantity
+                    : 0
+            },
+            nextBtnDisable() {
+                return this.page === 1
+            }
+        }
+    }
+</script>
+
 <template>
     <div class="container mb-5">
         <!-- Step Bar -->
@@ -138,12 +215,8 @@
                                 placeholder="請輸入收件人"
                                 required
                             ></b-form-input>
-                            <b-form-invalid-feedback :state="validationName">
-                                請輸入收件人
-                            </b-form-invalid-feedback>
-                            <b-form-valid-feedback :state="validationName">
-                                Looks Good.
-                            </b-form-valid-feedback>
+                            <b-form-invalid-feedback> 請輸入收件人 </b-form-invalid-feedback>
+                            <b-form-valid-feedback> Looks Good. </b-form-valid-feedback>
                         </b-form-group>
                         <!-- 電話 -->
                         <b-form-group
@@ -364,6 +437,7 @@
                         <button
                             type="button"
                             class="btn btn-dark w-100"
+                            @click="onSubmit"
                         >
                             完成訂單
                         </button>
@@ -419,89 +493,6 @@
         </div>
     </div>
 </template>
-
-<script>
-    import { useCartDataStore } from '@/stores/cartData'
-    export default {
-        data() {
-            return {
-                cartDataInstance: useCartDataStore(),
-                page: 1,
-                form: {
-                    email: '',
-                    name: '',
-                    tel: '',
-                    address: '',
-                    cardNumber: '',
-                    cardName: '',
-                    cvc: ''
-                }
-            }
-        },
-        created() {
-            this.cartDataInstance.initCartData()
-        },
-        methods: {
-            //form data
-            onSubmit(e) {
-                e.preventDefault()
-                alert(JSON.stringify(this.form))
-            },
-            //page
-            pageHandler(cal) {
-                switch (cal) {
-                    case 'add':
-                        this.page += 1
-                        break
-                    case 'del':
-                        if (this.page === 1) return
-                        this.page -= 1
-                        break
-                }
-            },
-            // quantity
-            quantityHandler(e) {
-                const { index, cal } = e.target.dataset
-
-                if (this.cartDataInstance.cartData[index].quantity === 1 && cal === 'del') return
-
-                const newData = {
-                    ...this.cartDataInstance.cartData[index],
-                    tickType: { ...this.cartDataInstance.cartData[index].tickType },
-                    quantity:
-                        cal === 'add'
-                            ? this.cartDataInstance.cartData[index].quantity + 1
-                            : cal === 'del'
-                            ? this.cartDataInstance.cartData[index].quantity - 1
-                            : 1
-                }
-                this.cartDataInstance.updateCartItem(newData, index)
-            }
-        },
-        computed: {
-            total() {
-                return this.cartDataInstance.cartData.length > 1
-                    ? this.cartDataInstance.cartData.reduce(
-                          (pre, next) => pre.price * pre.quantity + next.price * next.quantity
-                      )
-                    : this.cartDataInstance.cartData.length === 1
-                    ? this.cartDataInstance.cartData[0].price *
-                      this.cartDataInstance.cartData[0].quantity
-                    : 0
-            },
-            nextBtnDisable() {
-                return this.page === 1
-            }
-            //表單驗證
-            // validationName() {
-            //     if (this.name.length === 0) {
-            //         return true
-            //     }
-            //     return false
-            // }
-        }
-    }
-</script>
 
 <style lang="scss" scoped>
     .box {

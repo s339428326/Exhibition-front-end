@@ -18,21 +18,16 @@ const isAuth = async (from, to, next) => {
 
     const token = localStorage.getItem('token')
     if (!token) {
-        alertStore.callAlert({ title: '憑證消失,請先登入！', type: 'error' })
+        alertStore.callAlert({ title: '目前尚未登入！', type: 'error' })
         user.logout()
         return next({ name: 'Home' })
     }
     try {
         const res = await getUserAuthData(token)
         console.log('[isAuth]', res)
-        if (res?.error) {
-            localStorage.remove('token')
-            alertStore.callAlert({ title: '已登入過久,請重新登入！', type: 'error' })
-            return next({ name: 'Home' })
-        }
         return next()
     } catch (error) {
-        alertStore.callAlert({ title: '憑證錯誤,請重新登入！', type: 'error' })
+        alertStore.callAlert({ title: '已登入過久,請重新登入！', type: 'error' })
         user.logout()
         return next({ name: 'Home' })
     }
@@ -100,21 +95,23 @@ const routes = [
         path: '/payment',
         name: 'Payment',
         component: PaymentLayout,
-        beforeEnter: (from, to, next) => {
-            const alertStore = useAlert()
-            const cartData = JSON.parse(localStorage.getItem('cart'))
-            if (!cartData?.length) {
-                return alertStore.callAlert({ title: '目前購物車內沒有商品', type: 'error' })
-            }
-            isAuth(from, to, next)
-            return next({ name: 'Home' })
-        },
         //add there payment page
         children: [
             {
                 path: 'confirm',
                 name: 'OrderConfirm',
-                component: () => import('../views/Payment/PaymentView.vue')
+                component: () => import('../views/Payment/PaymentView.vue'),
+                beforeEnter: (from, to, next) => {
+                    const alertStore = useAlert()
+                    const cartData = JSON.parse(localStorage.getItem('cart'))
+                    if (!cartData?.length) {
+                        return alertStore.callAlert({
+                            title: '目前購物車內沒有商品',
+                            type: 'error'
+                        })
+                    }
+                    isAuth(from, to, next)
+                }
             }
         ]
     },

@@ -14,15 +14,39 @@
     import FullCalendar from '@fullcalendar/vue3'
     import dayGridPlugin from '@fullcalendar/daygrid'
     import interactionPlugin from '@fullcalendar/interaction'
+    import twLocale from '@fullcalendar/core/locales/zh-tw'
+    import listPlugin from '@fullcalendar/list'
+
+    const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
 
     const calendarOpt = reactive({
-        plugins: [dayGridPlugin, interactionPlugin],
-        header: {
-            left: 'prev,next today',
+        plugins: [dayGridPlugin, interactionPlugin, listPlugin],
+        locales: [twLocale],
+        locale: 'zh-tw',
+        headerToolbar: {
+            start: 'today prev,next',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            end: 'dayGridMonth,listMonth' //dayGridMonth,dayGridWeek
         },
-        initialView: 'dayGridMonth'
+        initialView: 'dayGridMonth',
+        events: [
+            // one day
+            // { title: 'event 1', date: '2023-09-08' },
+            //range day
+            {
+                title: '這是展覽1',
+                start: '2023-09-01',
+                end: '2023-09-07',
+                // url:''
+                backgroundColor: randomColor()
+            },
+            {
+                title: '這是展覽2',
+                start: '2023-09-01',
+                end: '2023-09-30',
+                backgroundColor: randomColor()
+            }
+        ]
     })
 </script>
 <template>

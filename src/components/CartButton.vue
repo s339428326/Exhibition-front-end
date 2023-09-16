@@ -1,10 +1,12 @@
 <script>
     import { useCartDataStore } from '../stores/cartData'
+    import { useRouter } from 'vue-router'
 
     export default {
         data() {
             return {
-                cartDataInstance: useCartDataStore()
+                cartDataInstance: useCartDataStore(),
+                router: useRouter()
             }
         },
         created() {
@@ -38,7 +40,7 @@
                 this.cartDataInstance.updateCartItem(newData, index)
             },
             closeModelHandler() {
-                window.document.querySelector('body').style = null
+                this.router.push({ name: 'OrderConfirm' })
             }
         }
     }
@@ -135,15 +137,15 @@
                     總價格：NT $
                     {{ total }}
                 </p>
-                <router-link
+                <button
                     :class="`btn btn-primary  ${
                         cartDataInstance.cartData.length === 0 && 'disabled'
                     }`"
-                    to="/payment/confirm"
+                    data-bs-dismiss="offcanvas"
                     @click="closeModelHandler"
                 >
                     前往結帳
-                </router-link>
+                </button>
             </div>
         </div>
     </Teleport>

@@ -1,3 +1,101 @@
+<script setup>
+    import { ref, computed, onMounted, watch } from 'vue'
+    //vue-router
+    import { useRoute, useRouter } from 'vue-router'
+    //pinia
+    import { storeToRefs } from 'pinia'
+    import { userDataStore } from '../stores/userData'
+    import { useCartDataStore } from '../stores/cartData'
+    import { exhibitionStore } from '../stores/exhibitionList'
+    import { getOneExhibition } from '../api/exhibition'
+    //api
+    import { getUserTrackData } from '../api/user'
+
+    //components
+    // import LikeButton from '../components/LikeButton.vue'
+
+    const route = useRoute()
+    const router = useRouter()
+
+    const user = userDataStore()
+    const cart = useCartDataStore()
+    const exhibition = exhibitionStore()
+
+    const userRefs = storeToRefs(user)
+
+    const data = ref()
+    const ticketCurrentData = ref({ ...data.value?.tickGroup?.[0] })
+    const isHeartClick = ref(false)
+    const trackList = ref([])
+
+    const cartBtnDisable = computed(() => {
+        console.log('[cart Data]', cart.cartData)
+        //判斷該項目是否已在cart中
+        const exhibitionExistsInCart = cart.cartData.find(
+            (item) =>
+                item.name === data.value?.name &&
+                item?.ticketType?.ticketType === ticketCurrentData.value.ticketType
+        )
+        return exhibitionExistsInCart ? true : false
+    })
+
+    const cartBtnName = computed(() => {
+        if (cartBtnDisable.value) {
+            return '已加入購物車'
+        }
+        return '加入購物車'
+    })
+
+    //[Fix]get One Data, FireBase Change to Express
+    const dataInit = async () => {
+        const res = await getOneExhibition(route.params?.id)
+        console.log(res)
+        if (!res.data) {
+            router.push('/notFound')
+            return
+        }
+        data.value = res.data
+        ticketCurrentData.value = res.data.tickGroup[0]
+    }
+
+    //更換目前得選擇票種
+    const changeTickData = (data) => {
+        ticketCurrentData.value = data
+    }
+
+    //新增購物車項目
+    const addCartItemHandler = () => {
+        //push to localStorage cart data item
+        const item = {
+            id: route.params?.id,
+            name: data.value.name,
+            startDate: data.value.startDate,
+            endDate: data.value.endDate,
+            image: data.value.image,
+            ticketType: ticketCurrentData.value,
+            price: ticketCurrentData.value?.price,
+            quantity: 1
+        }
+        console.log('[buy]', item)
+        //push to cart store cartData
+        cart.addCartItem(item)
+    }
+
+    //track list
+    const getUserTracKData = async () => {
+        const res = await getUserTrackData(user.userData.localId)
+        if (!res?.data) return
+        trackList.value = Object.entries(res?.data).map(([key, val]) => {
+            if (val === true) return key
+        })
+    }
+
+    onMounted(async () => {
+        dataInit()
+    })
+
+    watch(userRefs.userData, () => {})
+</script>
 <template>
     <main class="view-exhibition">
         <!-- <h1>{{ route.params?.id }}</h1>
@@ -102,84 +200,7 @@
         </section>
     </main>
 </template>
-<script setup>
-    import { ref, computed, onMounted } from 'vue'
-    //vue-router
-    import { useRoute, useRouter } from 'vue-router'
-    //pinia
-    import { useCartDataStore } from '../stores/cartData'
-    import { exhibitionStore } from '../stores/exhibitionList'
-    import { getOneExhibition } from '../api/exhibition'
 
-    //components
-    // import LikeButton from '../components/LikeButton.vue'
-
-    const route = useRoute()
-    const router = useRouter()
-
-    const cart = useCartDataStore()
-    const exhibition = exhibitionStore()
-
-    const data = ref()
-    const ticketCurrentData = ref({ ...data.value?.tickGroup?.[0] })
-    const isHeartClick = ref(false)
-
-    const cartBtnDisable = computed(() => {
-        console.log('[cart Data]', cart.cartData)
-        //判斷該項目是否已在cart中
-        const exhibitionExistsInCart = cart.cartData.find(
-            (item) =>
-                item.name === data.value?.name &&
-                item?.ticketType?.ticketType === ticketCurrentData.value.ticketType
-        )
-        return exhibitionExistsInCart ? true : false
-    })
-
-    const cartBtnName = computed(() => {
-        if (cartBtnDisable.value) {
-            return '已加入購物車'
-        }
-        return '加入購物車'
-    })
-
-    //[Fix]get One Data, FireBase Change to Express
-    const dataInit = async () => {
-        const res = await getOneExhibition(route.params?.id)
-        console.log(res)
-        if (!res.data) {
-            router.push('/notFound')
-            return
-        }
-        data.value = res.data
-        ticketCurrentData.value = res.data.tickGroup[0]
-    }
-
-    //更換目前得選擇票種
-    const changeTickData = (data) => {
-        ticketCurrentData.value = data
-    }
-
-    //新增購物車項目
-    const addCartItemHandler = () => {
-        //push to localStorage cart data item
-        const item = {
-            name: data.value.name,
-            startDate: data.value.startDate,
-            endDate: data.value.endDate,
-            image: data.value.image,
-            ticketType: ticketCurrentData.value,
-            price: ticketCurrentData.value?.price,
-            quantity: 1
-        }
-        console.log('[buy]', item)
-        //push to cart store cartData
-        cart.addCartItem(item)
-    }
-
-    onMounted(async () => {
-        dataInit()
-    })
-</script>
 <style lang="scss">
     //image init
     .view-exhibition {

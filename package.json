@@ -14,6 +14,7 @@
         "@fullcalendar/core": "^6.1.8",
         "@fullcalendar/daygrid": "^6.1.8",
         "@fullcalendar/interaction": "^6.1.8",
+        "@fullcalendar/list": "^6.1.8",
         "@fullcalendar/vue3": "^6.1.8",
         "@jamescoyle/vue-icon": "^0.1.2",
         "@mdi/js": "^7.2.96",

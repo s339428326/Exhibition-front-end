@@ -99,7 +99,13 @@
                                 />
                             </div>
                             <div class="p-2 d-flex flex-column justify-content-center">
-                                <h2 class="fw-bold text-hidden-1">{{ item?.name }}</h2>
+                                <h2 class="fw-bold text-hidden-1">
+                                    <router-link
+                                        class="text-dark"
+                                        :to="`/viewExhibition/${item?.id}`"
+                                        >{{ item?.name }}</router-link
+                                    >
+                                </h2>
                                 <time class="text-hidden-1 font-pathway text-info">
                                     {{ new Date(item?.startDate).toLocaleDateString() }} ~
                                     {{ new Date(item?.endDate).toLocaleDateString() }}

@@ -9,7 +9,7 @@
     <!-- Type check close alert -->
     <AlertFade>
         <div
-            class="position-fixed top-header end-header border border-dark px-3 py-3 z-3 bg-white"
+            class="position-fixed top-header end-header border border-dark px-3 py-3 z-alert bg-white"
             v-if="alert.isActive"
         >
             <button
@@ -59,5 +59,9 @@
 
     .end-header {
         right: 20px;
+    }
+
+    .z-alert {
+        z-index: 9999;
     }
 </style>

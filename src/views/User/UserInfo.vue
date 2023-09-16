@@ -7,16 +7,7 @@
     import * as yup from 'yup'
 
     import AvatarUpload from '../../components/user/AvatarUpload.vue'
-
-    ////
-    import { useAlert } from '../../stores/alertSlice'
-    const alertStore = useAlert()
-
-    const alertHandler = () => {
-        alertStore.isActive = true
-    }
-
-    ////
+    import Calendar from '../../components/Calendar/Calendar.vue'
 
     const user = userDataStore()
     const userRefs = storeToRefs(user)
@@ -124,6 +115,10 @@
                     </div>
                 </button>
             </VeeForm>
+        </div>
+        <div class="">
+            <h2 class="my-4 fs-5 fw-medium">個人展覽日期一覽</h2>
+            <Calendar />
         </div>
     </div>
 </template>
