@@ -45,6 +45,9 @@ export const useCartDataStore = defineStore('cartData', {
             console.log('delete', index)
             this.cartData.splice(index, 1)
             localStorage.setItem('cart', JSON.stringify(this.cartData))
+        },
+        clearCart() {
+            this.cartData = []
         }
     }
 })

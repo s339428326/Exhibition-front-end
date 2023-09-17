@@ -45,10 +45,11 @@
                         orderList: this.cartDataInstance.cartData
                     })
                     localStorage.removeItem('cart')
-                    this.cartDataInstance.cardDate = []
                 } catch (error) {
                     console.log(error)
                 }
+
+                this.cartDataInstance.cartData = []
 
                 // alert(JSON.stringify(this.form, null, 2))
                 // alert(JSON.stringify(this.cartDataInstance.cartData, null, 2))
