@@ -2,6 +2,7 @@
     import { ref, onBeforeMount, watch } from 'vue'
     import { storeToRefs } from 'pinia'
     import { userDataStore } from '../../stores/userData'
+    import { useAlert } from '../../stores/alertSlice'
     import { updateUserInfoData } from '../../api/user'
     import { useForm } from 'vee-validate'
     import * as yup from 'yup'
@@ -11,6 +12,8 @@
 
     const user = userDataStore()
     const userRefs = storeToRefs(user)
+
+    const alertStore = useAlert()
 
     const isLoading = ref(false)
 

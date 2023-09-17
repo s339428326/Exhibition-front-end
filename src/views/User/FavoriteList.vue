@@ -74,7 +74,7 @@
     <h1 class="border-bottom mb-4 fs-4 pb-3 fw-medium">收藏展覽</h1>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <div>
                 <input
                     v-model="keyWord"

@@ -10,6 +10,7 @@
     import { getOneExhibition } from '../api/exhibition'
     //api
     import { getUserTrackData } from '../api/user'
+    import { trackExhibition, deleteTrackExhibition } from '../api/user'
 
     //components
     // import LikeButton from '../components/LikeButton.vue'
@@ -83,23 +84,44 @@
 
     //track list
     const getUserTracKData = async () => {
-        const res = await getUserTrackData(user.userData.localId)
+        const res = await getUserTrackData(user.userData?.localId)
         if (!res?.data) return
-        trackList.value = Object.entries(res?.data).map(([key, val]) => {
-            if (val === true) return key
+        trackList.value = Object.keys(res?.data).filter((key) => {
+            if (res?.data[key] === true) return key
         })
+    }
+
+    const addTrackHandler = async (exhId) => {
+        try {
+            const res = await trackExhibition(user.userData?.localId, exhId)
+            console.log('[track exhibition]', res)
+            trackList.value.push(exhId)
+        } catch (error) {
+            console.log('[track exhibition Error]', error)
+        }
+    }
+
+    const removeTrackHandler = async (exhId) => {
+        try {
+            const res = await deleteTrackExhibition(user.userData?.localId, exhId)
+            console.log('[remove track]', res)
+            trackList.value = trackList.value.filter((item) => item !== exhId)
+        } catch (error) {
+            console.log('[remove track Error]', error)
+        }
     }
 
     onMounted(async () => {
         dataInit()
+        getUserTracKData()
     })
 
-    watch(userRefs.userData, () => {})
+    watch(userRefs.userData, () => {
+        getUserTracKData()
+    })
 </script>
 <template>
     <main class="view-exhibition">
-        <!-- <h1>{{ route.params?.id }}</h1>
-        {{ data?.tickGroup }} -->
         <section class="cover-banner mb-4">
             <img
                 :class="`${!data?.image && 'blinking'}`"
@@ -112,9 +134,11 @@
             <div class="col col-md-8">
                 <!-- 展覽Title-->
                 <div class="border-bottom pb-2 mb-4 d-flex flex-wrap justify-content-between">
-                    <div class="d-flex flex-column font-pathway">
+                    <div class="d-flex flex-column font-pathway max-w">
                         <!-- 展覽名稱 -->
-                        <h1 class="fs-2 fw-bold">{{ data?.name }}</h1>
+                        <h1 class="fs-2 fw-bold">
+                            {{ data?.name }}
+                        </h1>
                         <!-- 展覽時間 -->
                         <time
                             class="fs-4 fw-bold"
@@ -125,19 +149,24 @@
                             <span>{{ new Date(data?.endDate).toLocaleDateString() }}</span>
                         </time>
                     </div>
+
                     <div>
-                        <!-- <LikeButton
-                            :className="`btn d-flex p-2 gap-2 ${
-                                isHeartClick ? 'btn-primary' : 'btn-outline-primary'
-                            }`"
-                            :data="data"
-                            :isLike="isHeartClick"
-                            :handler="handleLike"
+                        <button
+                            class="btn border-0"
+                            type="button"
+                            @click="removeTrackHandler(route.params?.id)"
+                            v-if="trackList.find((item) => item === route.params?.id)"
                         >
-                            <template #content>
-                                <p>搜藏</p>
-                            </template>
-                        </LikeButton> -->
+                            <HeartIcon :size="36" />
+                        </button>
+                        <button
+                            type="button"
+                            @click="addTrackHandler(route.params?.id)"
+                            class="btn border-0"
+                            v-else
+                        >
+                            <HeartOutlineIcon :size="36" />
+                        </button>
                     </div>
                 </div>
                 <p class="mb-4">
@@ -210,6 +239,10 @@
             vertical-align: middle;
             object-position: top;
         }
+    }
+
+    .max-w {
+        max-width: 600px;
     }
 
     .cover-banner {

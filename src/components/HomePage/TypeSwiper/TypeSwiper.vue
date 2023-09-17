@@ -1,5 +1,4 @@
 <template>
-    <!-- @swiper="onSwiper" :slides-per-view="1" :space-between="24"" effect="fade" :slides-per-view="4"-->
     <swiper
         class="position-relative"
         :modules="[Pagination, FreeMode]"
@@ -15,7 +14,10 @@
             v-for="(item, index) in swiperData"
             :key="index"
         >
-            <div class="overflow-hidden position-relative">
+            <router-link
+                :to="`/searchExhibition?dateValid=false&type=${item?.title}&startDate=0&endDate=0&minPrice=0&maxPrice=100000&city=all`"
+                class="overflow-hidden position-relative d-flex"
+            >
                 <img
                     class="type-image"
                     :src="item.image"
@@ -24,7 +26,7 @@
                 <div class="bg-type">
                     <p>{{ item.title }}</p>
                 </div>
-            </div>
+            </router-link>
         </swiper-slide>
 
         <PrevBtn

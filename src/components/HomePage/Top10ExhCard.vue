@@ -44,12 +44,13 @@
         if (!res?.data) return
         console.log(
             '[init track]',
-            Object.entries(res?.data).map(([key, val]) => {
-                if (val === true) return key
+            res?.data,
+            Object.keys(res?.data).filter((key) => {
+                if (res?.data[key] === true) return key
             })
         )
-        trackList.value = Object.entries(res?.data).map(([key, val]) => {
-            if (val === true) return key
+        trackList.value = Object.keys(res?.data).filter((key) => {
+            if (res?.data[key] === true) return key
         })
     }
 

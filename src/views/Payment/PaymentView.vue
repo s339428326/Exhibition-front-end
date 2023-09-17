@@ -1,9 +1,13 @@
 <script>
     import { useCartDataStore } from '@/stores/cartData'
+    import { userDataStore } from '../../stores/userData'
+    import { createOrder } from '../../api/order'
+
     export default {
         data() {
             return {
                 cartDataInstance: useCartDataStore(),
+                user: userDataStore(),
                 page: 1,
                 form: {
                     email: '',
@@ -21,10 +25,33 @@
         },
         methods: {
             //form data
-            onSubmit(e) {
+            async onSubmit(e) {
                 e.preventDefault()
-                alert(JSON.stringify(this.form, null, 2))
-                alert(JSON.stringify(this.cartDataInstance.cartData,null,2))
+                //this.user.localId
+                //this.form.name
+                //this.form.tel
+                //this.form.address
+                let total = 0
+                this.cartDataInstance.cartData.forEach((item) => {
+                    total += item.ticketType.price * item?.quantity
+                })
+
+                try {
+                    const res = await createOrder({
+                        localId: this.user.userData?.localId,
+                        name: this.form.name,
+                        address: this.form.address,
+                        total,
+                        orderList: this.cartDataInstance.cartData
+                    })
+                    localStorage.removeItem('cart')
+                    this.cartDataInstance.cardDate = []
+                } catch (error) {
+                    console.log(error)
+                }
+
+                // alert(JSON.stringify(this.form, null, 2))
+                // alert(JSON.stringify(this.cartDataInstance.cartData, null, 2))
             },
             //page
             pageHandler(cal) {
@@ -59,14 +86,12 @@
         },
         computed: {
             total() {
-                return this.cartDataInstance.cartData.length > 1
-                    ? this.cartDataInstance.cartData.reduce(
-                          (pre, next) => pre.price * pre.quantity + next.price * next.quantity
-                      )
-                    : this.cartDataInstance.cartData.length === 1
-                    ? this.cartDataInstance.cartData[0].price *
-                      this.cartDataInstance.cartData[0].quantity
-                    : 0
+                let total = 0
+                this.cartDataInstance.cartData.forEach((item) => {
+                    total += item.ticketType.price * item?.quantity
+                })
+
+                return total
             },
             nextBtnDisable() {
                 return this.page === 1
@@ -434,13 +459,14 @@
                             上一步
                         </button>
                         <!-- change url -->
-                        <button
-                            type="button"
-                            class="btn btn-dark w-100"
+
+                        <router-link
+                            class="d-block btn btn-dark w-100"
+                            to="/user/orderSearch"
                             @click="onSubmit"
                         >
                             完成訂單
-                        </button>
+                        </router-link>
                     </div>
                 </div>
             </div>

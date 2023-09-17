@@ -28,7 +28,11 @@
                 >
                     探索
                 </h2>
-                <p class="fw-bold">更多資訊</p>
+                <router-link
+                    to="/searchExhibition"
+                    class="fw-bold text-dark"
+                    >更多資訊</router-link
+                >
             </div>
             <TypeSwiper />
         </section>
