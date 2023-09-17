@@ -1,13 +1,10 @@
 <script setup>
-    import { RouterView } from 'vue-router'
-    import AppHeader from './components/layout/AppHeader.vue'
-    import AppFooter from './components/layout/AppFooter.vue'
+    import HerokuStart from './components/Heroku/HerokuStart.vue'
 </script>
 
 <template>
-    <AppHeader />
-    <RouterView />
-    <AppFooter />
+    <router-view />
+    <HerokuStart />
 </template>
 
 <style scoped></style>

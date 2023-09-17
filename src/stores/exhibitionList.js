@@ -1,49 +1,24 @@
 import { defineStore } from 'pinia'
-import $axios from 'axios'
+import { getAllExhibition } from '../api/exhibition'
 
-export const useExhibitionStore = defineStore('exhibition', {
+export const exhibitionStore = defineStore('exhibition', {
     state: () => ({
-        rawExhibitionList: []
+        exhibitionList: []
     }),
-    getters: {
-        exhibitionList(state) {
-            if (state.rawExhibitionList.length > 0) {
-                const datas = state.rawExhibitionList
-                let newDatas = []
-
-                datas.forEach((data) => {
-                    let temp = {
-                        title: data.title,
-                        location: data.showInfo[0].location,
-                        price: data.showInfo[0].price,
-                        startDate: data.startDate,
-                        endDate: data.endDate
-                    }
-
-                    newDatas.push(temp)
-                })
-
-                return newDatas
-            } else {
-                return []
-            }
-        }
-    },
+    getters: {},
     actions: {
-        async getExhibitionData() {
-            try {
-                const promiseData = await $axios({
-                    method: 'get',
-                    baseURL: 'https://cloud.culture.tw',
-                    url: '/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=6',
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                this.rawExhibitionList = promiseData.data
-
-                return promiseData
-            } catch (error) {
-                console.log(error)
-            }
+        async getAllExhibitionData() {
+            const data = await getAllExhibition()
+            const dataArr = Object.entries(data.data).map(([key, value]) => {
+                //[BUG 後端時間補正]
+                if (value.startDate < 1000000000000) {
+                    value.startDate = value.startDate * 1000
+                    value.endDate = value.endDate * 1000
+                }
+                return { id: key, ...value }
+            })
+            console.log('[getAllExhibitionData]', dataArr)
+            this.exhibitionList = dataArr
         }
     }
 })

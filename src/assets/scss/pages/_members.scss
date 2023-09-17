@@ -1,0 +1,102 @@
+img{
+    max-width: 100%;
+    height: auto;
+}
+  
+/* 全域 border box */
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+
+// 變數 member
+$blue-member-text: #007BE5;
+$red-member-text: #FF0000;
+
+
+/* 共通 Utilities */
+.container{
+    max-width: 1124px;
+    width: 100%;
+    margin: 0 auto;
+}
+h1{
+    text-indent: -999px;
+}
+.title{
+    font-size: 20px;
+    line-height: 32px;
+    border-bottom:1px solid black;
+}/* h2 */
+.subtitle{
+    font-size: 18px;
+    line-height: 29px; //28.8px;
+}/* h3 */
+  
+
+
+/* layout */
+.member{
+    
+    .wrap{
+        height: 100vh;
+        background-color: #dee2e6;
+        border-radius: 10px; 
+    }
+
+    
+    ul.list{
+        .item{
+            font-size: 18px;
+            line-height: 2;
+            & a{
+                display: block;
+                text-decoration: none;
+                &:hover{
+                    color: red;
+                }
+            }
+        }
+       
+    }
+    .member-pic{
+        display: block;
+        width: 150px;
+        height: 150px;
+        background-image: url("https://fakeimg.pl/150x150");
+    }
+
+    //record 
+    .record-bg {
+        background-color: #ffffff;
+        border-radius: 4px;
+        padding: 20px 20px;
+
+        .info-list{
+            .ticket{
+                font-weight: bold;
+            } //票期
+
+            /*.price{}*/ //價格 
+
+            .expired{ 
+                color: $blue-member-text;
+            } //已過期 
+
+            .not-expired{
+                color: $red-member-text;
+            } //未過期 
+        }
+    }
+
+
+}
+  
+// @media (max-width: 1400px) {}
+// @media (max-width: 768px) {
+//     .member{
+//         .wrap{
+//             height: 100%;
+//         }
+//     } 
+// }
+// @media (max-width: 576px) {}
