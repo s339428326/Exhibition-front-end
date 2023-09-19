@@ -1,35 +1,12 @@
-# exhibition-app
+# 展覽檢索平台
 
-This template should help get you started developing with Vue 3 in Vite.
+# 啟動專案
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+    npm run dev
 ```
 
-### Compile and Hot-Reload for Development
+# 環境變數
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+請參考
+https://github.com/s339428326/Exhibition-front-end/blob/main/.env.example
