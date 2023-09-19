@@ -22,8 +22,8 @@ const isAuth = async (from, to, next) => {
         user.logout()
         return next({ name: 'Home' })
     }
+
     try {
-        console.log('[token]', token)
         const res = await authenticateAndGetUserData(token)
         console.log('[isAuth]', res)
         return next()
@@ -67,25 +67,25 @@ const routes = [
                         path: 'information',
                         name: 'Information',
                         beforeEnter: isAuth,
-                        component: () => import('../views/user/UserInfo.vue')
+                        component: () => import('../views/User/UserInfo.vue')
                     },
                     {
                         path: 'orderSearch',
                         name: 'OrderSearch',
                         beforeEnter: isAuth,
-                        component: () => import('../views/user/OrderSearch.vue')
+                        component: () => import('../views/User/OrderSearch.vue')
                     },
                     {
                         path: 'editPassword',
                         name: 'EditPassword',
                         beforeEnter: isAuth,
-                        component: () => import('../views/user/EditPassword.vue')
+                        component: () => import('../views/User/EditPassword.vue')
                     },
                     {
                         path: 'favoriteList',
                         name: 'FavoriteList',
                         beforeEnter: isAuth,
-                        component: () => import('../views/user/FavoriteList.vue')
+                        component: () => import('../views/User/FavoriteList.vue')
                     }
                 ]
             }
