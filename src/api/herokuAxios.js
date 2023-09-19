@@ -2,14 +2,14 @@ import axios from 'axios'
 
 //axios 攔截器
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:7301'
+    baseURL: import.meta.env.VITE_SERVER
 })
 
 //req
 instance.interceptors.request.use(
     (config) => {
         //發送請求前
-        config.headers.Authorization = localStorage.getItem('token')
+        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
         return config
     },
     (error) => {
