@@ -77,7 +77,7 @@
             >
                 <img
                     class="avatar-img"
-                    :src="avatar || user.userData?.picture"
+                    :src="avatar || user.userData?.avatar?.imageUrl"
                     alt="avatar"
                     width="200"
                     height="200"

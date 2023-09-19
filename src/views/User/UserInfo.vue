@@ -19,27 +19,30 @@
 
     const { errors, setValues, handleSubmit, defineInputBinds } = useForm({
         initialValues: {
-            name: '',
+            username: '',
             email: ''
         },
         validationSchema: yup.object({
-            name: yup.string('請輸入字串').required('喊稱不能為空').max(20, '最多請不要超過20字元'),
+            username: yup
+                .string('請輸入字串')
+                .required('喊稱不能為空')
+                .max(20, '最多請不要超過20字元'),
             email: yup.string('請輸入字串').email('請輸入正確Email').required('請勿空白')
         })
     })
 
     const email = defineInputBinds('email')
-    const name = defineInputBinds('name')
+    const username = defineInputBinds('username')
 
     //submit
     const infoSubmit = handleSubmit(async (values) => {
         isLoading.value = true
         // alert(JSON.stringify(values, null, 2))
         try {
-            const res = await updateUserInfoData(user.userData?.localId, values)
-            const { email, name } = res.data
+            const res = await updateUserInfoData(user.userData?.id, values)
+            const { email, username } = res.data.user
             user.userData.email = email
-            user.userData.name = name
+            user.userData.username = username
             alertStore.callAlert({ title: '用戶資訊更改成功', type: 'check' })
         } catch (error) {
             console.error('[infoSubmit Error]', error)
@@ -50,8 +53,8 @@
     })
 
     const initUserInfo = () => {
-        const { email, name } = userRefs.userData.value
-        setValues({ email, name })
+        const { email, username } = userRefs.userData.value
+        setValues({ email, username })
     }
 
     watch(userRefs.userData, () => {
@@ -76,19 +79,21 @@
             >
                 <div>
                     <label
-                        for="name"
+                        for="username"
                         class="form-label"
                         >暱稱</label
                     >
                     <!-- is-invalid -->
                     <input
-                        :class="`form-control ${errors.name && 'is-invalid'}`"
-                        v-bind="name"
+                        :class="`form-control ${errors.username && 'is-invalid'}`"
+                        v-bind="username"
                         type="text"
-                        name="name"
-                        id="name"
+                        name="username"
+                        id="username"
                     />
-                    <small class="text-danger error-text">{{ errors.name && errors.name }}</small>
+                    <small class="text-danger error-text">{{
+                        errors.username && errors.username
+                    }}</small>
                 </div>
                 <div class="d-flex flex-column">
                     <label

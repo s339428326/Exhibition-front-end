@@ -4,11 +4,12 @@
     "private": true,
     "scripts": {
         "dev": "vite",
+        "dev:heroku": "vite --mode production",
         "build": "vite build",
         "preview": "vite build && vite preview",
         "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
         "format": "prettier --write src/",
-        "deploy": "vite build && gh-pages -d dist"
+        "deploy": "vite build --mode production && gh-pages -d dist"
     },
     "dependencies": {
         "@fullcalendar/core": "^6.1.8",

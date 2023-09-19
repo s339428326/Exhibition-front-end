@@ -57,10 +57,9 @@
                 <div class="hex-a bg-black text-white d-inline-block px-2">
                     <a
                         class="text-white"
-                        href="https://www.hexschool.com/courses/js-training.html"
+                        href=""
                     >
-                        太無情了, 不要點你會怕!</a
-                    >
+                    </a>
                 </div>
             </div>
         </swiper-slide>
@@ -251,6 +250,7 @@
     import { Swiper, SwiperSlide } from 'swiper/vue'
     // Swiper modules
     import { EffectFade, Pagination } from 'swiper/modules'
+
     //custom swiper button
     // import NextBtn from './Swiper/NextBtn.vue'
     // import PrevBtn from './Swiper/PrevBtn.vue'

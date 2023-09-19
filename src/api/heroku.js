@@ -1,8 +1,8 @@
-import axios from 'axios'
+import heroku from './herokuAxios'
 
 export const startHeroku = async () => {
     try {
-        const res = await axios.get(`${import.meta.env?.VITE_heroku}/api/v1/start/`)
+        const res = await heroku.get(`/api/v1/start/`)
         return res
     } catch (error) {
         console.log('[heroku star Error]', error)
