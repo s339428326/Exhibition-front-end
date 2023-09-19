@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!store.userData?.localId">
+    <div v-if="!store.userData?.id">
         <button
             type="button"
             :class="`btn btn-secondary text-white d-flex align-items-center gap-2 ${
@@ -27,11 +27,11 @@
                     <div class="border rounded-circle avatar-container">
                         <img
                             class="avatar me-2"
-                            :src="`${store.userData.picture}`"
+                            :src="`${store.userData?.avatar?.imageUrl}`"
                         />
                     </div>
                     <div class="overflow-hidden user-name">
-                        <span class="text-light fs-6">{{ store.userData.name }}</span>
+                        <span class="text-light fs-6">{{ store.userData?.username }}</span>
                     </div>
                 </div>
             </template>
@@ -77,21 +77,14 @@
         isLoading.value = true
 
         const token = localStorage.getItem('token')
-        let userId = ''
-        if (token) {
-            userId = await store.confirmToken(token)
+        if (!token) {
+            isLoading.value = false
+            return
         } else {
-            isLoading.value = false
-            return
-        }
-        //如果失敗跳出運作
-        if (userId === false) {
-            isLoading.value = false
-            return
+            console.log(token)
+            await store.confirmToken(token)
         }
 
-        const userInfoData = await store.getUserInfoData(userId)
-        console.log('[userInfoData]', userInfoData)
         isLoading.value = false
     }
 

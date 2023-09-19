@@ -45,6 +45,7 @@
                 start: '2023-09-01',
                 end: '2023-09-30',
                 backgroundColor: randomColor()
+
             }
         ]
     })

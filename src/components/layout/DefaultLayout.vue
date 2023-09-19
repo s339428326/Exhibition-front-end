@@ -6,7 +6,9 @@
 
 <template>
     <AppHeader />
-    <router-view class="content" />
+    <main class="content">
+        <router-view />
+    </main>
     <AppFooter />
     <LoginModal />
 </template>

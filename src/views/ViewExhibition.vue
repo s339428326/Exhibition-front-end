@@ -50,13 +50,13 @@
     //[Fix]get One Data, FireBase Change to Express
     const dataInit = async () => {
         const res = await getOneExhibition(route.params?.id)
-        console.log(res)
+        console.log(res.data.data)
         if (!res.data) {
             router.push('/notFound')
             return
         }
-        data.value = res.data
-        ticketCurrentData.value = res.data.tickGroup[0]
+        data.value = res?.data?.data
+        ticketCurrentData.value = res.data?.data?.tickGroup[0]
     }
 
     //更換目前得選擇票種
