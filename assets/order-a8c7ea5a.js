@@ -1,0 +1,1 @@
+import{D as o}from"./index-991ba792.js";const t=async e=>{try{return o.post(`${{}.VITE_heroku}/api/v1/order/`,e).data}catch(r){console.log(r)}},c=async e=>{try{return o.get(`${{}.VITE_heroku}/api/v1/order/user/${e}`)}catch(r){console.log(r)}};export{t as c,c as g};
