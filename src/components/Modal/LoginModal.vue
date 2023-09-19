@@ -23,7 +23,6 @@
                     <p class="fw-bold text-center fs-4 text-dark">
                         {{ isRegisterClick ? '註冊' : '登入' }}
                     </p>
-
                     <!-- loginFrom -->
                     <VeeForm
                         v-slot="{ errors, meta }"
@@ -79,7 +78,7 @@
                         <Field
                             id="register-password"
                             labelName="密碼"
-                            name="密碼"
+                            name="password"
                             type="password"
                             placeholder="請輸入密碼"
                             rules="required|min:8"
@@ -91,7 +90,7 @@
                             name="確認密碼"
                             type="password"
                             placeholder="請輸入密碼"
-                            rules="required|min:8|confirmed:@密碼"
+                            rules="required|min:8|confirmed:@password"
                             :errors="errors"
                         />
                         <SubmitBtn
@@ -101,7 +100,6 @@
                         />
                         <p class="h-18 text-danger mb-2">{{ resRegisterErrorMessage }}</p>
                     </VeeForm>
-
                     <div class="d-flex gap-2">
                         <button
                             @click="changeFromHandler"
@@ -147,6 +145,7 @@
         isRegisterClick.value = !isRegisterClick.value
         console.log(isRegisterClick.value)
     }
+
     //登入 handler
     const loginSubmit = async (data) => {
         isLoading.value = true
@@ -169,24 +168,32 @@
         }
         isLoading.value = false
     }
+
     //註冊 handler
-    const registerSubmit = async (data) => {
+    const registerSubmit = async (data, _method) => {
         console.log('[registerSubmit ]', data)
         isLoading.value = true
+
         const res = await store.register({
+            username: data.email.split('@')[0],
             email: data.email,
-            password: data['密碼']
+            password: data.password,
+            confirmPassword: data['確認密碼']
         })
+
         //註冊成功
         if (res === true) {
             const modal = Modal.getInstance('#loginModal')
             modal.hide()
+        } else {
+            //註冊失敗
+            if (res?.message) {
+                resRegisterErrorMessage.value = res?.message
+            }
+            const { setErrors } = _method
+            setErrors(res)
         }
 
-        //註冊失敗
-        if (typeof res === 'string') {
-            resRegisterErrorMessage.value = res
-        }
         isLoading.value = false
     }
 </script>

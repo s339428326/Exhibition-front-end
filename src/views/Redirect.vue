@@ -13,7 +13,7 @@
             <p class="text-secondary">Fair</p>
         </router-link>
         <h1 class="fs-1 font-pathway">重新導向中...</h1>
-        <p>為了您帳戶得安全, 我將導向首頁若為導向首頁請點及下方連結感謝！</p>
+        <p>為了您帳戶得安全, 將導向首頁若未導向首頁請點及下方連結感謝！</p>
         <router-link
             to="/"
             class="fs-4"

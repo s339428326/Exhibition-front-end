@@ -6,9 +6,8 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    // base 的寫法：
     // base: '/Repository 的名稱/'
-    base: '/Exhibition-app/',
+    base: '/Exhibition-front-end/',
     plugins: [vue()],
     resolve: {
         alias: {
@@ -21,12 +20,5 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist'
-    },
-    css: {
-        // preprocessorOptions: {
-        //     scss: {
-        //         additionalData: '@import "@/assets/scss/abstracts/__abstracts-dir.scss";'
-        //     }
-        // }
     }
 })

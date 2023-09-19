@@ -7,7 +7,7 @@ import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { getUserAuthData } from '../api/auth'
+import { authenticateAndGetUserData } from '../api/auth'
 
 import { useAlert } from '../stores/alertSlice'
 import { userDataStore } from '../stores/userData'
@@ -23,7 +23,8 @@ const isAuth = async (from, to, next) => {
         return next({ name: 'Home' })
     }
     try {
-        const res = await getUserAuthData(token)
+        console.log('[token]', token)
+        const res = await authenticateAndGetUserData(token)
         console.log('[isAuth]', res)
         return next()
     } catch (error) {

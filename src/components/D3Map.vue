@@ -161,12 +161,13 @@
             window.removeEventListener('resize', this.handleResize)
         },
         methods: {
-            getExhibitionView(country) {
+            getExhibitionView(city) {
                 //filter location
                 this.exhibitionListView = this.store.exhibitionList
-                    .filter((item) => item.location.country === country)
+                    .filter((item) => item.location.address.includes(city))
                     .sort((a, b) => b.viewer - a.viewer)
                     .splice(0, 5)
+                console.log(this.exhibitionListView)
             },
             //新增自適應 innerWidth for map
             handleResize() {

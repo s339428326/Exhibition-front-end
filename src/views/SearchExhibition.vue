@@ -323,7 +323,7 @@
         console.log('[filterExhList start]', queryData.value)
         let data = [...store.exhibitionList]
         const filter = queryData.value
-        data = data.filter((item) => item.endDate > new Date().getTime())
+        data = data.filter((item) => new Date(item.endDate).getTime() > new Date().getTime())
 
         if (Object.keys(filter).map((item) => item).length === 0) {
             console.log('全部展示')
@@ -336,14 +336,14 @@
             //dateValid, city,startDate, endDate, maxPrice, minPrice, type
             switch (key) {
                 case 'dateValid':
-                    data = data.filter((item) => item.endDate > new Date().getTime())
+                    data = data.filter((item) => new Date(item.endDate) > new Date().getTime())
                     if (value === false) return
                     data = [...store.exhibitionList]
                     console.log('篩選中-1:dateValid', data)
                     break
                 case 'city':
                     if (value === 'all') return
-                    data = data.filter((item) => item.location.country === value)
+                    data = data.filter((item) => item.location.address.includes(value))
                     console.log('篩選中-2:city', data)
                     break
                 case 'startDate':

@@ -1,9 +1,11 @@
 <script setup>
     import { ref } from 'vue'
     import { RouterLink } from 'vue-router'
+
     import UserButton from '../UserButton.vue'
     import CartButton from '../cartButton.vue'
     import Alert from '../Alert/Alert.vue'
+
     import { userDataStore } from '../../stores/userData'
 
     const user = userDataStore()

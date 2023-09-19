@@ -1,25 +1,20 @@
-import axios from 'axios'
-
-const api_url = 'https://exhibition-app-1ab50-default-rtdb.asia-southeast1.firebasedatabase.app/'
-
-const url = (str) => `${api_url}${str}?key=${import.meta.env?.VITE_firebaseApiKey}`
+import heroku from './herokuAxios'
 
 export const getAllExhibition = async () => {
     try {
-        const res = await axios.get(url('/fairs.json?'))
-        console.log('[getAllExhibition]', res)
-        return res
+        const res = await heroku.get('/api/v1/exhibition/')
+        return res.data
     } catch (error) {
-        console.error('[Error getAllExhibition]', error)
+        return error
     }
 }
 
+//getOneExhibition
 export const getOneExhibition = async (id) => {
     try {
-        const res = await axios.get(url(`/fairs/${id}.json`))
-        console.log('[getOneExhibition]', res)
+        const res = await heroku.get(`/api/v1/exhibition/${id}`)
         return res
     } catch (error) {
-        console.error('[Error getOneExhibition]', error)
+        return error
     }
 }
