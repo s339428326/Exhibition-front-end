@@ -3,7 +3,7 @@
     import { RouterLink } from 'vue-router'
 
     import UserButton from '../UserButton.vue'
-    import CartButton from '../cartButton.vue'
+    import CartBtn from '../CartBtn.vue'
     import Alert from '../Alert/Alert.vue'
 
     import { userDataStore } from '../../stores/userData'
@@ -39,7 +39,7 @@
                     >
                 </li>
                 <li>
-                    <CartButton />
+                    <CartBtn />
                 </li>
                 <li class="nav-item">
                     <UserButton />
