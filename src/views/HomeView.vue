@@ -17,7 +17,7 @@
                 :data="exhibition.exhibitionList"
                 :index="recommendViewIndex"
             />
-            <Top10ExhCard @change-view="recommendViewHandler" />
+            <Top10Card @change-view="recommendViewHandler" />
         </section>
 
         <!-- 探索 -->
@@ -56,7 +56,7 @@
     import D3Map from '../components/D3Map.vue'
     import RecommendExh from '../components/HomePage/RecommendExh.vue'
     import TypeSwiper from '../components/HomePage/TypeSwiper/TypeSwiper.vue'
-    import Top10ExhCard from '../components/Homepage/Top10ExhCard.vue'
+    import Top10Card from '../components/HomePage/Top10Card.vue'
 
     // import { userDataStore } from '../stores/userData'
     import { exhibitionStore } from '../stores/exhibitionList'
