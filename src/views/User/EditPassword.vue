@@ -3,7 +3,7 @@
     import { useRouter } from 'vue-router'
 
     import { login } from '../../api/auth'
-    import { changePassword } from '../../api/auth'
+    // import { changePassword } from '../../api/auth'
 
     import { useForm } from 'vee-validate'
     import * as yup from 'yup'
@@ -50,17 +50,17 @@
 
     //step2 password vee-vail for confirm password
 
-    const submit = handleSubmit(async (values) => {
-        const res = await changePassword(localStorage.getItem('token'), values.password)
-        if (res.data) {
-            user.logout()
-            alertStore.callAlert({ title: '密碼更改成功, 請重新登入！' }, 3000)
-            router.push({ name: 'Home' })
-        } else {
-            console.error('伺服器錯誤, 請聯絡開發人員！')
-            setErrors({ server: ['伺服器錯誤, 請聯絡開發人員！'] })
-        }
-    })
+    // const submit = handleSubmit(async (values) => {
+    //     const res = await changePassword(localStorage.getItem('token'), values.password)
+    //     if (res.data) {
+    //         user.logout()
+    //         alertStore.callAlert({ title: '密碼更改成功, 請重新登入！' }, 3000)
+    //         router.push({ name: 'Home' })
+    //     } else {
+    //         console.error('伺服器錯誤, 請聯絡開發人員！')
+    //         setErrors({ server: ['伺服器錯誤, 請聯絡開發人員！'] })
+    //     }
+    // })
 </script>
 <template>
     <h1 class="border-bottom mb-4 fs-4 pb-3 fw-medium">修改密碼</h1>
