@@ -2,8 +2,18 @@
 
 # 啟動專案
 
+如果你需要使用 bun
+
 ```
-    npm run dev
+npm install -g bun
+```
+
+```
+ npm i
+```
+
+```
+ npm run dev
 ```
 
 # 環境變數

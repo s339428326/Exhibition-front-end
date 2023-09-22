@@ -94,7 +94,7 @@
                         <div
                             class="position-absolute bg-secondary text-white px-3 py-2 border-bottom-end-3"
                         >
-                            {{ item?.location.country }}
+                            {{ item?.location.address.split('').slice(0, 2).join('') }}
                         </div>
                         <!-- header -->
                         <router-link

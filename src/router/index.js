@@ -1,8 +1,8 @@
 import HomeView from '../views/HomeView.vue'
 import NotFoundPage from '../views/NotFoundPage.vue'
 import Redirect from '../views/Redirect.vue'
+import ResetPassword from '../views/ResetPassword.vue'
 import User from '../views/User/User.vue'
-
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
 //Fix GitHub Page SPA router
@@ -12,11 +12,13 @@ import { authenticateAndGetUserData } from '../api/auth'
 import { useAlert } from '../stores/alertSlice'
 import { userDataStore } from '../stores/userData'
 
+import Cookies from 'js-cookie'
+
 const isAuth = async (from, to, next) => {
     const user = userDataStore()
     const alertStore = useAlert()
 
-    const token = localStorage.getItem('token')
+    const token = Cookies.get('token')
     if (!token) {
         alertStore.callAlert({ title: '目前尚未登入！', type: 'error' })
         user.logout()
@@ -36,6 +38,11 @@ const isAuth = async (from, to, next) => {
 
 const routes = [
     //Default Layout
+    {
+        path: '/resetPassword/:token',
+        name: 'ResetPassword',
+        component: ResetPassword
+    },
     {
         path: '/',
         name: 'Public',

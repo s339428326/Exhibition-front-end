@@ -1,4 +1,3 @@
-//by Express
 import axios from 'axios'
 
 export const getOrder = async (orderId) => {

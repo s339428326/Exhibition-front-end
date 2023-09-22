@@ -1,6 +1,16 @@
 import heroku from './herokuAxios'
 
-//會員註冊 email / password
+// email 驗證是否被註冊
+// export const verifyEmail = async (token) => {
+//     try {
+
+//         return res
+//     } catch (error) {
+//         return error
+//     }
+// }
+
+// 會員註冊 email / password
 export const createUser = async (data) => {
     try {
         const res = await heroku.post('/api/v1/auth/singup', data)
@@ -10,7 +20,7 @@ export const createUser = async (data) => {
     }
 }
 
-//會員登入 email / password
+// 會員登入 email / password
 export const login = async (data) => {
     try {
         const res = await heroku.post('/api/v1/auth/login', data)
@@ -20,7 +30,7 @@ export const login = async (data) => {
     }
 }
 
-//認證token
+// 認證token
 export const authenticateAndGetUserData = async (token) => {
     try {
         const res = await heroku.get('/api/v1/auth', null, {
@@ -34,32 +44,32 @@ export const authenticateAndGetUserData = async (token) => {
     }
 }
 
-//email 驗證
-// export const verifyEmail = async (token) => {
-//     try {
+// 更新用戶密碼
+export const sendForgetEmail = async (email) => {
+    try {
+        const res = await heroku.post(`/api/v1/auth/forgetPassword`, email)
+        return res
+    } catch (error) {
+        return error.response?.data.message
+    }
+}
 
-//         return res
-//     } catch (error) {
-//         return error
-//     }
-// }
+// 驗證信箱url 夾帶token 是否正確
+export const resetPasswordEmail = async (resetToken) => {
+    try {
+        const res = await heroku.post(`api/v1/auth/resetPassword${resetToken}`)
+        return res
+    } catch (error) {
+        return error.response?.data.message
+    }
+}
 
-//更新用戶密碼
-// export const changePassword = async (token, password) => {
-//     try {
-
-//         return res
-//     } catch (error) {
-//         return error
-//     }
-// }
-
-//密碼重置(信箱更改密碼)
-// export const resetPasswordEmail = async (email) => {
-//     try {
-
-//         return res
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+// 驗證ResetToken 密碼正確性
+export const checkResetToken = async (resetToken) => {
+    try {
+        const res = await heroku.post(`api/v1/auth/checkResetToken/${resetToken}`)
+        return res
+    } catch (error) {
+        return error.response?.data.message
+    }
+}

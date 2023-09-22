@@ -42,7 +42,7 @@
         })
         if (res.data) {
             isReCheck.value = true
-            localStorage.setItem('token', res.data.idToken)
+            // localStorage.setItem('token', res.data.idToken)
         } else {
             isReCheck.value = false
         }

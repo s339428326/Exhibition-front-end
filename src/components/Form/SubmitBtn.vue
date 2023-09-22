@@ -3,7 +3,7 @@
     <button
         class="btn btn-primary w-100"
         type="submit"
-        :disabled="isLoading || !meta.valid"
+        :disabled="isLoading || !meta.valid || disable"
     >
         <template v-if="isLoading === true">
             <span
@@ -20,7 +20,8 @@
     defineProps({
         isLoading: Boolean,
         meta: Object,
-        name: String
+        name: String,
+        disable: Boolean
     })
 </script>
 <style lang="scss"></style>

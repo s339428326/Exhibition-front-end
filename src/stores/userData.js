@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { login, createUser, authenticateAndGetUserData } from '../api/auth'
 import { getUserData, updateUserInfoData } from '../api/user'
+import Cookies from 'js-cookie'
+
 // import { useRouter } from 'vue-router'
 
 export const userDataStore = defineStore('userData', {
@@ -18,7 +20,7 @@ export const userDataStore = defineStore('userData', {
 
             //成功
             if (res?.data) {
-                localStorage.setItem('token', res.token)
+                Cookies.set('token', res.token, { expires: 7 })
                 this.userData = { ...res.data?.user }
                 alert(JSON.stringify(this.userData, null, 2))
                 return true
@@ -30,20 +32,19 @@ export const userDataStore = defineStore('userData', {
         async login(data) {
             const res = await login(data)
             if (res?.data) {
-                localStorage.setItem('token', res.token)
+                Cookies.set('token', res.token, { expires: 7 })
                 this.userData = { ...res.data?.user }
                 return true
             }
         },
         //登出
         async logout() {
-            localStorage.removeItem('token')
+            Cookies.remove('token')
             this.userData = {}
         },
         //驗證token
         async confirmToken(token) {
             const res = await authenticateAndGetUserData(token)
-            console.log('[confirmToken]', res)
             if (res?.user) {
                 console.log(res)
                 this.userData = { ...res?.user }

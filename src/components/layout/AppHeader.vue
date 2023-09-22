@@ -89,10 +89,9 @@
                             >收藏展覽</router-link
                         >
                     </li>
-
                     <li class="border-bottom text-center">
                         <div
-                            v-if="!user.userData?.localId"
+                            v-if="!user.userData?.id"
                             class="d-flex justify-content-center p-3"
                         >
                             <UserButton />
@@ -112,7 +111,7 @@
                         </div>
                     </li>
                     <li class="text-center p-3">
-                        <CartButton />
+                        <CartBtn />
                     </li>
                 </ul>
             </div>

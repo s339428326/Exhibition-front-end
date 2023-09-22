@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 //axios 攔截器
 const instance = axios.create({
@@ -9,7 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config) => {
         //發送請求前
-        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+        config.headers.Authorization = `Bearer ${Cookies.get('token')}`
         return config
     },
     (error) => {

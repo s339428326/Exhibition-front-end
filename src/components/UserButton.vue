@@ -16,14 +16,15 @@
         v-else
         class="d-flex pointer"
     >
-        <b-dropdown
-            size="lg"
-            variant="link"
-            toggle-class="text-decoration-none"
-            no-caret
-        >
-            <template #button-content>
-                <div class="d-flex align-items-center btn-user gap-2 flex-wrap">
+        <div class="btn-group">
+            <button
+                class="btn border-0 d-flex align-items-center btn-user gap-2 flex-wrap"
+                type="button"
+                id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                <div class="d-flex align-items-center btn-user gap-2">
                     <div class="border rounded-circle avatar-container">
                         <img
                             class="avatar me-2"
@@ -34,13 +35,37 @@
                         <span class="text-light fs-6">{{ store.userData?.username }}</span>
                     </div>
                 </div>
-            </template>
-            <b-dropdown-item to="/user/information">會員資料</b-dropdown-item>
-            <b-dropdown-item to="/user/orderSearch">訂單查詢</b-dropdown-item>
-            <b-dropdown-item to="/user/editPassword">修改密碼</b-dropdown-item>
-            <b-dropdown-item to="/user/favoriteList">收藏展覽</b-dropdown-item>
-            <b-dropdown-item @click="logout()"> 登出 </b-dropdown-item>
-        </b-dropdown>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <router-link
+                    class="dropdown-item"
+                    to="/user/information"
+                    >會員資料</router-link
+                >
+                <router-link
+                    class="dropdown-item"
+                    to="/user/orderSearch"
+                    >訂單查詢</router-link
+                >
+                <router-link
+                    class="dropdown-item"
+                    to="/user/editPassword"
+                    >修改密碼</router-link
+                >
+                <router-link
+                    class="dropdown-item"
+                    to="/user/favoriteList"
+                    >收藏展覽</router-link
+                >
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    @click="logout"
+                >
+                    登出
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- 讀取狀態 -->
@@ -63,6 +88,7 @@
     import { userDataStore } from '../stores/userData'
     import { useRouter } from 'vue-router'
     import { ref, onBeforeMount } from 'vue'
+    import Cookies from 'js-cookie'
 
     //vue router
     const router = useRouter()
@@ -76,7 +102,8 @@
     const verifyToken = async () => {
         isLoading.value = true
 
-        const token = localStorage.getItem('token')
+        const token = Cookies.get('token')
+
         if (!token) {
             isLoading.value = false
             return
