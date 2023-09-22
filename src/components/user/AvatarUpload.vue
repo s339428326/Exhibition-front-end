@@ -69,18 +69,16 @@
     })
 </script>
 <template>
-    <div class="border p-3 d-flex flex-column gap-4 rounded">
-        <div class="d-flex justify-content-center">
+    <div class="border rounded p-3">
+        <div class="mb-4">
             <label
-                class="avatar-label border"
+                class="avatar-label d-flex justify-content-center"
                 for="avatar"
             >
                 <img
                     class="avatar-img"
                     :src="avatar || user.userData?.avatar?.imageUrl"
                     alt="avatar"
-                    width="200"
-                    height="200"
                 />
                 <div class="avatar-hover">點擊更改圖片</div>
             </label>
@@ -95,7 +93,7 @@
         </div>
         <button
             @click="uploadAvatar(avatarData)"
-            class="btn btn-dark"
+            class="btn btn-dark w-100"
             :disabled="uploadBtnDisable || isUpload"
         >
             <p v-if="isUpload === false">上傳</p>
@@ -115,8 +113,6 @@
         position: relative;
         overflow: hidden;
         border-radius: 50%;
-        width: 200px;
-        height: 200px;
         .avatar-hover {
             transition: 0.25s;
             position: absolute;

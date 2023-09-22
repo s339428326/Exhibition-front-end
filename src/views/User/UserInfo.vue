@@ -69,10 +69,10 @@
 <template>
     <h1 class="border-bottom mb-4 fs-4 pb-3 fw-medium">會員資料</h1>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-4">
             <AvatarUpload />
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6 col-lg-8">
             <VeeForm
                 class="d-flex flex-column gap-2 mb-4"
                 @submit="infoSubmit"
