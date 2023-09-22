@@ -55,9 +55,9 @@ export const sendForgetEmail = async (email) => {
 }
 
 // 驗證信箱url 夾帶token 是否正確
-export const resetPasswordEmail = async (resetToken) => {
+export const resetPasswordEmail = async (resetToken, data) => {
     try {
-        const res = await heroku.post(`api/v1/auth/resetPassword${resetToken}`)
+        const res = await heroku.post(`api/v1/auth/resetPassword/${resetToken}`, data)
         return res
     } catch (error) {
         return error.response?.data.message

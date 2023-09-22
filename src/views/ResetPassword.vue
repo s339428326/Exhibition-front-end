@@ -12,17 +12,24 @@
     const isLoading = ref(false)
 
     const changePasswordHandler = async (data) => {
-        alert(JSON.stringify(data, null, 2))
+        // alert(JSON.stringify(data, null, 2))
         try {
-            const res = await resetPasswordEmail(route.params?.token)
+            const res = await resetPasswordEmail(route.params?.token, data)
             if (typeof res === 'string') {
+                router.push({ name: 'Home' })
                 return callAlert({
                     title: '信件效期已過！, 請重新申請',
                     type: 'alert'
                 })
             }
+            callAlert({
+                title: '密碼更新成功',
+                type: 'check'
+            })
+            router.push({ name: 'Home' })
         } catch (error) {
             console.error(error)
+            router.push({ name: 'Home' })
             callAlert({
                 title: '請確認信件正確性！',
                 type: 'error'
@@ -89,19 +96,19 @@
 
                     <div class="form-floating mb-3">
                         <VeeField
-                            id="conformPassword"
-                            name="conformPassword"
-                            :class="`form-control ${errors['conformPassword'] && 'is-invalid'}`"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            :class="`form-control ${errors['confirmPassword'] && 'is-invalid'}`"
                             placeholder="***"
                             type="password"
                             rules="min:8|required|confirmed:@password"
                         />
-                        <label for="conformPassword">再次輸入密碼</label>
+                        <label for="confirmPassword">再次輸入密碼</label>
                         <small
-                            v-if="errors['conformPassword']"
+                            v-if="errors['confirmPassword']"
                             class="text-danger"
                             >{{
-                                errors['conformPassword'].replace('conformPassword', '再次輸入密碼')
+                                errors['confirmPassword'].replace('confirmPassword', '再次輸入密碼')
                             }}</small
                         >
                     </div>
