@@ -1,12 +1,7 @@
-<script>
+<script setup>
     import AppFooter from './AppFooter.vue'
     import CartHeader from './CartHeader.vue'
-
-    export default {
-        components: { AppFooter, CartHeader }
-    }
 </script>
-
 <template>
     <CartHeader />
     <router-view />

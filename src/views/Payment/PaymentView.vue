@@ -1,109 +1,141 @@
-<script>
+q
+<script setup>
+    import { ref, computed, onMounted } from 'vue'
+    import { useRouter } from 'vue-router'
     import { useCartDataStore } from '@/stores/cartData'
     import { userDataStore } from '../../stores/userData'
     import { createOrder } from '../../api/order'
+    import { useAlert } from '../../stores/alertSlice'
 
-    export default {
-        data() {
-            return {
-                cartDataInstance: useCartDataStore(),
-                user: userDataStore(),
-                page: 1,
-                form: {
-                    email: '',
-                    name: '',
-                    tel: '',
-                    address: '',
-                    cardNumber: '',
-                    cardName: '',
-                    cvc: ''
+    const router = useRouter()
+    const cart = useCartDataStore()
+
+    //隱藏隱密資訊
+    const hiddenString = (str, len) => {
+        if (typeof str !== 'string') return
+        return `${str.split('').splice(0, len).join('')}${'*'.repeat(str.length - len)}`
+    }
+
+    //controller page
+    let pageView = ref(1)
+    const userForm = ref(null)
+    const paymentForm = ref(null)
+    const orderData = ref({})
+
+    //
+    const user = userDataStore()
+    const { callAlert } = useAlert()
+
+    const createOrderHandler = async () => {
+        //將重複票卷, 成獨立資料
+        let newCartList = []
+        cart.cartData.forEach((item) => {
+            if (item?.quantity > 1) {
+                for (let i = 0; i < item?.quantity; i++) {
+                    newCartList.push(item)
                 }
+            } else {
+                newCartList.push(item)
             }
-        },
-        created() {
-            this.cartDataInstance.initCartData()
-        },
-        methods: {
-            //form data
-            async onSubmit(e) {
-                e.preventDefault()
-                //this.user.localId
-                //this.form.name
-                //this.form.tel
-                //this.form.address
-                let total = 0
-                this.cartDataInstance.cartData.forEach((item) => {
-                    total += item.ticketType.price * item?.quantity
-                })
-
-                try {
-                    const res = await createOrder({
-                        localId: this.user.userData?.localId,
-                        name: this.form.name,
-                        address: this.form.address,
-                        total,
-                        orderList: this.cartDataInstance.cartData
-                    })
-                    localStorage.removeItem('cart')
-                } catch (error) {
-                    console.log(error)
-                }
-
-                this.cartDataInstance.cartData = []
-
-                // alert(JSON.stringify(this.form, null, 2))
-                // alert(JSON.stringify(this.cartDataInstance.cartData, null, 2))
-            },
-            //page
-            pageHandler(cal) {
-                switch (cal) {
-                    case 'add':
-                        this.page += 1
-                        break
-                    case 'del':
-                        if (this.page === 1) return
-                        this.page -= 1
-                        break
-                }
-            },
-            // quantity
-            quantityHandler(e) {
-                const { index, cal } = e.target.dataset
-
-                if (this.cartDataInstance.cartData[index].quantity === 1 && cal === 'del') return
-
-                const newData = {
-                    ...this.cartDataInstance.cartData[index],
-                    tickType: { ...this.cartDataInstance.cartData[index].tickType },
-                    quantity:
-                        cal === 'add'
-                            ? this.cartDataInstance.cartData[index].quantity + 1
-                            : cal === 'del'
-                            ? this.cartDataInstance.cartData[index].quantity - 1
-                            : 1
-                }
-                this.cartDataInstance.updateCartItem(newData, index)
-            }
-        },
-        computed: {
-            total() {
-                let total = 0
-                this.cartDataInstance.cartData.forEach((item) => {
-                    total += item.ticketType.price * item?.quantity
-                })
-
-                return total
-            },
-            nextBtnDisable() {
-                return this.page === 1
-            }
+        })
+        try {
+            //建立訂單
+            await createOrder({
+                userId: user.userData?.id,
+                name: orderData.value.name,
+                phone: orderData.value.phone,
+                address: orderData.value.address,
+                total: total.value,
+                orderList: newCartList
+            })
+            callAlert({
+                title: '訂單建立成功',
+                type: 'check'
+            })
+            router.push({ name: 'ECPayment' })
+            // cart.clearCart()
+        } catch (error) {
+            callAlert({
+                title: '訂單建立失敗',
+                type: 'error'
+            })
+            console.error(error)
         }
     }
+
+    const pageHandler = (method) => {
+        if (pageView.value === 0) return
+
+        switch (method) {
+            case 'increase':
+                pageView.value += 1
+                break
+            case 'decrease':
+                pageView.value = pageView.value - 1
+                console.log(pageView.value, pageView.value - 1)
+                break
+        }
+    }
+
+    const paymentFormHandler = (data) => {
+        orderData.value = { ...orderData.value, ...data }
+        pageView.value += 1
+    }
+
+    const userFormHandler = (data) => {
+        orderData.value = { ...orderData.value, ...data }
+        pageView.value += 1
+    }
+
+    const total = computed(() => {
+        let result = 0
+        if (cart.cartData?.length) {
+            cart.cartData.forEach((item) => {
+                result += item.price * item.quantity
+            })
+        }
+        return result
+    })
+
+    const quantityHandler = (method, index) => {
+        switch (method) {
+            case 'increase':
+                cart.updateCartItem(
+                    { ...cart.cartData[index], quantity: cart.cartData[index]?.quantity + 1 },
+                    index
+                )
+                break
+            case 'decrease':
+                if (cart.cartData[index]?.quantity === 0) return
+                cart.updateCartItem(
+                    { ...cart.cartData[index], quantity: cart.cartData[index]?.quantity - 1 },
+                    index
+                )
+                break
+            case 'delete':
+                cart.deleteCartItem(index)
+                break
+        }
+    }
+
+    onMounted(() => {
+        if (!user.userData?.id) {
+            router.push({
+                name: 'Home'
+            })
+            callAlert({
+                title: '建立訂單請勿重新整理頁面',
+                type: 'error'
+            })
+        }
+        cart.initCartData()
+    })
 </script>
 
 <template>
-    <div class="container mb-5">
+    <main class="container mb-5">
         <!-- Step Bar -->
+
         <section class="my-5">
             <ul class="d-flex justify-content-between p-4 border rounded-4 bg-gray shadow-sm">
                 <li class="border-black p-2 after-line">
@@ -112,7 +144,7 @@
                     >
                         1
                     </p>
-                    <p class="text-center">建立訂單</p>
+                    <h1 class="text-center fs-6">建立訂單</h1>
                 </li>
                 <li class="flex-grow-1 border-bottom border-2 h-0 mt-4"></li>
                 <li class="border-black p-2">
@@ -144,337 +176,216 @@
             </ul>
         </section>
         <div class="row">
-            <!-- left side -->
-            <!-- Step 1 -->
-            <section
-                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1 ${
-                    page === 1 ? 'd-block' : 'd-none'
-                }`"
-            >
-                <div class="border rounded-4 shadow-sm p-4 h-100 d-flex flex-column">
-                    <h2 class="mb-4 fs-4">建立訂單</h2>
-                    <ul class="d-flex flex-column gap-4">
-                        <li
-                            v-for="(item, index) in cartDataInstance.cartData"
-                            :key="index"
-                        >
-                            <div class="d-flex gap-4">
-                                <!-- img -->
-                                <div>
-                                    <img
-                                        class="img-box"
-                                        :src="item?.image"
-                                        :alt="item?.name"
-                                    />
-                                </div>
-                                <!-- content -->
-                                <div class="d-flex flex-column">
-                                    <p class="fw-medium">{{ item?.name }}</p>
-                                    <small>{{ item?.date }}</small>
-                                    <small>{{ item?.ticketType.ticketType }}</small>
-                                    <div class="d-flex gap-3 align-items-center">
-                                        <!--  -->
-                                        <button
-                                            @click="quantityHandler"
-                                            :data-index="index"
-                                            :data-cal="'del'"
-                                            type="button"
-                                            class="btn border-0 btn-dark"
-                                        >
-                                            -
-                                        </button>
-                                        <p>{{ item?.quantity }}</p>
-                                        <!--  -->
-                                        <button
-                                            @click="quantityHandler"
-                                            :data-index="index"
-                                            :data-cal="'add'"
-                                            type="button"
-                                            class="btn border-0 btn-dark"
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <p class="fs-6 fw-bold">
-                                        NT$ {{ item?.price * item?.quantity }}
-                                    </p>
-                                </div>
-                                <!-- delButton -->
-                                <div></div>
+            <div class="col-lg-8">
+                <!-- page-1 -->
+                <ul
+                    v-if="pageView === 1"
+                    class="d-flex gap-3 flex-column mb-4"
+                >
+                    <!-- Exhibition card -->
+                    <li
+                        v-for="(item, index) in cart.cartData"
+                        :key="index"
+                        class="border rounded p-3"
+                    >
+                        <div class="d-flex flex-row flex-md-column gap-4">
+                            <div>
+                                <img
+                                    class="img-box"
+                                    :src="item?.image"
+                                />
                             </div>
-                        </li>
-                    </ul>
-                    <div class="flex-grow-1 d-flex">
+                            <div>
+                                <p class="fw-medium title-card">
+                                    {{ item?.name }}
+                                </p>
+                                <p>({{ item?.ticketType?.ticketType }})</p>
+                                <p class="text-info mb-2">
+                                    {{ new Date(item?.startDate).toLocaleDateString() }} ~
+                                    {{ new Date(item?.endDate).toLocaleDateString() }}
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="d-flex justify-content-end gap-2 align-items-center ms-md-4">
+                            <div :class="`d-flex gap-2 ${item.quantity === 0 && 'd-none'}`">
+                                <p class="">價格</p>
+                                <p class="text-info mb-2">NT$ {{ item?.price * item?.quantity }}</p>
+                            </div>
+                            <button
+                                @click="quantityHandler('delete', index)"
+                                :class="`btn text-danger ${item?.quantity !== 0 && 'd-none'}`"
+                                type="button"
+                            >
+                                <DeleteCircleIcon :size="32" />
+                                <span>刪除此項目</span>
+                            </button>
+                            <button
+                                type="button"
+                                @click="quantityHandler('decrease', index)"
+                                class="btn btn-dark"
+                            >
+                                -
+                            </button>
+                            <p>{{ item?.quantity }}</p>
+                            <button
+                                type="button"
+                                @click="quantityHandler('increase', index)"
+                                class="btn btn-dark"
+                            >
+                                +
+                            </button>
+                        </div>
+                    </li>
+                    <div class="d-flex gap-4">
+                        <!-- [Feature there] -->
                         <button
-                            @click="pageHandler('add')"
-                            class="btn btn-dark w-100 border mt-auto"
+                            @click="pageHandler('decrease')"
+                            class="btn btn-dark w-50"
+                            type="button"
+                            :disabled="pageView === 1"
+                        >
+                            上一步
+                        </button>
+                        <button
+                            :class="`btn btn-dark w-50 ${pageView !== 1 && 'd-none'}`"
+                            @click="pageHandler('increase')"
                             type="button"
                         >
                             下一步
                         </button>
                     </div>
-                </div>
-            </section>
-            <!-- Step 2 -->
-            <div
-                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1 ${
-                    page === 2 ? 'd-block' : 'd-none'
-                }`"
-            >
-                <div class="border p-3 rounded-4 shadow-sm">
-                    <b-form
-                        class="row"
-                        @submit="pageHandler('add')"
-                    >
-                        <h2 class="fs-4 mb-3 fw-medium">訂購資料</h2>
-                        <!-- 收件人 -->
-                        <b-form-group
-                            id="name"
-                            class="col-auto col-6 mb-2"
-                            label="收件人"
-                            label-for="name"
-                        >
-                            <b-form-input
-                                id="username"
-                                v-model="form.name"
-                                type="name"
-                                placeholder="請輸入收件人"
-                                required
-                            ></b-form-input>
-                            <b-form-invalid-feedback> 請輸入收件人 </b-form-invalid-feedback>
-                            <b-form-valid-feedback> Looks Good. </b-form-valid-feedback>
-                        </b-form-group>
-                        <!-- 電話 -->
-                        <b-form-group
-                            class="col-auto col-6"
-                            id="tel"
-                            label="電話"
-                            label-for="tel"
-                        >
-                            <b-form-input
-                                id="tel"
-                                v-model="form.tel"
-                                type="tel"
-                                placeholder="請輸入電話"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <!-- 地址-->
-                        <b-form-group
-                            class="col-12 mb-2"
-                            id="address"
-                            label="地址"
-                            label-for="address"
-                        >
-                            <b-form-input
+                </ul>
+                <!-- [Feature] Next call create Order to mongoDB, Call EC pay  -->
+                <!-- page-2 -->
+                <VeeForm
+                    v-slot="{ meta, errors }"
+                    id="userForm"
+                    :class="`row ${pageView === 2 ? 'd-flex' : 'd-none'}`"
+                    ref="userForm"
+                    @submit="userFormHandler"
+                >
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <VeeField
+                                id="name"
+                                name="name"
+                                :class="`form-control ${errors['name'] && 'is-invalid'}`"
+                                placeholder="***"
+                                type="text"
+                                rules="max:20|required"
+                            />
+                            <label for="name">訂票人名稱</label>
+                            <small
+                                v-if="errors['name']"
+                                class="text-danger"
+                                >{{ errors['name'].replace('name', '訂票人名稱') }}</small
+                            >
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <VeeField
+                                id="phone"
+                                name="phone"
+                                :class="`form-control ${errors['phone'] && 'is-invalid'}`"
+                                placeholder="***"
+                                type="text"
+                                rules="min:12|max:20|required"
+                            />
+                            <label for="phone">聯絡電話</label>
+                            <small
+                                v-if="errors['phone']"
+                                class="text-danger"
+                                >{{ errors['phone'].replace('phone', '聯絡電話') }}</small
+                            >
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <VeeField
                                 id="address"
-                                v-model="form.address"
+                                name="address"
+                                :class="`form-control ${errors['address'] && 'is-invalid'}`"
+                                placeholder="***"
                                 type="text"
-                                placeholder="請輸入地址"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <!-- 信箱 -->
-                        <b-form-group
-                            class="col-12"
-                            id="email"
-                            label="信箱"
-                            label-for="email"
-                        >
-                            <b-form-input
-                                id="email"
-                                v-model="form.email"
-                                type="email"
-                                placeholder="請輸入信箱"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <div class="mt-4 d-flex gap-4">
-                            <button
-                                @click="pageHandler('del')"
-                                class="btn btn-dark w-100"
-                                type="button"
+                                rules="min:12|max:20|required"
+                            />
+                            <label for="address">地址(實體票寄送地址)</label>
+                            <small
+                                v-if="errors['address']"
+                                class="text-danger"
+                                >{{ errors['address'].replace('address', '地址') }}</small
                             >
-                                上一步
-                            </button>
-                            <button
-                                class="btn btn-dark w-100"
-                                type="submit"
-                            >
-                                下一步
-                            </button>
                         </div>
-                    </b-form>
-                </div>
-            </div>
-            <!-- Step 3 -->
-            <div
-                :class="`col-auto col-md-8 mb-4 mb-md-0  flex-grow-1  ${
-                    page === 3 ? 'd-block' : 'd-none'
-                }`"
-            >
-                <div class="border p-3 rounded-4 shadow-sm">
-                    <b-form
-                        class="row"
-                        @submit="pageHandler('add')"
-                    >
-                        <h2 class="fs-4 mb-3 fw-medium">付款資料</h2>
-                        <!-- 持卡人姓名 -->
-                        <b-form-group
-                            id="cardName"
-                            class="col-12 mb-2"
-                            label="持卡人姓名"
-                            label-for="cardName"
-                        >
-                            <b-form-input
-                                id="card"
-                                v-model="form.cardName"
-                                type="card"
-                                placeholder="請輸入持卡人姓名"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <!-- 信用卡  -->
-                        <b-form-group
-                            id="cardNumber"
-                            class="col-12 mb-2"
-                            label="信用卡"
-                            label-for="cardNumber"
-                        >
-                            <b-form-input
-                                id="cardNumber"
-                                v-model="form.cardNumber"
-                                type="text"
-                                placeholder="xxxx-xxxx-xxxx-xxxx"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <!-- 有效期限 -->
-                        <b-form-group
-                            id="cardDate"
-                            class="col-auto col-md-6"
-                            label="有效期限"
-                            label-for="cardDate"
-                        >
-                            <b-form-input
-                                id="cardDate"
-                                v-model="form.cardDate"
-                                type="text"
-                                placeholder="MM/YY"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <!-- CVC  -->
-                        <b-form-group
-                            id="cvc"
-                            class="col-auto col-md-2"
-                            label="CVC"
-                            label-for="cvc"
-                        >
-                            <b-form-input
-                                id="cvc"
-                                v-model="form.cvc"
-                                type="cvc"
-                                placeholder="xxx"
-                                required
-                            ></b-form-input>
-                        </b-form-group>
-                        <div class="mt-4 d-flex gap-4">
-                            <button
-                                @click="pageHandler('del')"
-                                class="btn btn-dark w-100"
-                                type="button"
-                            >
-                                上一步
-                            </button>
-                            <button
-                                class="btn btn-dark w-100"
-                                type="submit"
-                            >
-                                下一步
-                            </button>
-                        </div>
-                    </b-form>
-                </div>
-            </div>
-            <!-- Step 4 -->
-            <div
-                :class="`col-auto col-md-8 flex-grow-1 order-1 order-md-0 ${
-                    page === 4 ? 'd-block' : 'd-none'
-                }`"
-            >
-                <div class="border p-4 rounded-4">
-                    <h2 class="fs-4 fw-medium mb-3">完成訂單</h2>
-
-                    <h3 class="pb-2 mb-4 border-bottom">購買明細</h3>
-                    <ul class="d-flex flex-column gap-4 mb-4">
-                        <li
-                            v-for="(item, index) in cartDataInstance.cartData"
-                            :key="index"
-                        >
-                            <div class="d-flex gap-4 align-items-center">
-                                <!-- img -->
-                                <div>
-                                    <img
-                                        class="img-box-2"
-                                        :src="item?.image"
-                                        :alt="item?.name"
-                                    />
-                                </div>
-                                <!-- content -->
-                                <div class="d-flex flex-column">
-                                    <p class="fw-medium">{{ item?.name }}</p>
-                                    <small>{{ item?.date }}</small>
-                                    <small>{{ item?.ticketType.ticketType }}</small>
-                                </div>
-                                <p>數量：{{ item?.quantity }}</p>
-                                <p class="fs-6 fw-bold ms-auto">
-                                    NT$ {{ item?.price * item?.quantity }}
-                                </p>
-                                <!-- delButton -->
-                                <div></div>
-                            </div>
-                        </li>
-                    </ul>
-                    <h3 class="pb-2 mb-3 border-bottom">訂購資訊</h3>
-                    <ul class="d-flex flex-column gap-1">
-                        <li>收件者： {{ form.name }}</li>
-                        <li>信箱： {{ form.email }}</li>
-                        <li>電話： {{ form.tel }}</li>
-                        <li>地址： {{ form.address }}</li>
-                        <li>
-                            信用卡：{{
-                                form.cardNumber
-                                    .split('')
-                                    .map((item, index) => (index < 4 ? item : '*'))
-                                    .join('')
-                            }}
-                        </li>
-                    </ul>
-                    <div class="mt-4 d-flex gap-4">
+                    </div>
+                    <div class="d-flex gap-4">
                         <button
-                            @click="pageHandler('del')"
-                            class="btn btn-dark w-100"
+                            @click="pageHandler('decrease')"
+                            class="btn btn-dark w-50"
                             type="button"
                         >
                             上一步
                         </button>
-                        <!-- change url -->
-
-                        <router-link
-                            class="d-block btn btn-dark w-100"
-                            to="/user/orderSearch"
-                            @click="onSubmit"
+                        <button
+                            :class="`btn btn-dark w-50`"
+                            @click="createOrderHandler"
+                            type="button"
                         >
-                            完成訂單
-                        </router-link>
+                            下一步
+                        </button>
                     </div>
+                </VeeForm>
+                <!-- page-3 -->
+                <VeeForm
+                    v-slot="{ meta, errors }"
+                    id="paymentForm"
+                    :class="`row ${pageView === 3 ? 'd-flex' : 'd-none'}`"
+                    ref="paymentForm"
+                    @submit="paymentFormHandler"
+                >
+                    <p>正在開啟第三方支付...</p>
+                </VeeForm>
+                <!-- page-finish -->
+                <div :class="`${pageView === 4 ? 'd-block' : 'd-none'}`">
+                    <div class="border rounded p-3 mb-4">
+                        <p class="border-bottom pb-2 fs-5 fw-medium mb-2">訂購資料</p>
+                        <ul class="d-flex flex-column gap-2">
+                            <li
+                                class="d-flex justify-content-between align-items-center"
+                                v-for="(item, index) in cart?.cartData"
+                                :key="index"
+                            >
+                                <div class="d-flex flex-column">
+                                    <p>{{ item?.name }}</p>
+                                    <p>{{ item?.ticketType?.ticketType }}</p>
+                                </div>
+                                <p>x {{ item?.quantity }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="border rounded p-3 mb-4">
+                        <p class="border-bottom pb-2 fs-5 fw-medium">聯絡人資訊</p>
+                        <ul class="d-flex gap-2 flex-column my-2">
+                            <li>訂購人：{{ hiddenString(orderData?.name, 2) }}</li>
+                            <li>地址：{{ hiddenString(orderData?.address, 2) }}</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <!-- 這裡要新增訂購成功更改isPay -->
+                    <button
+                        @click="createOrderHandler"
+                        class="btn btn-dark w-100"
+                        type="button"
+                    >
+                        訂購成功
+                    </button>
                 </div>
             </div>
             <!-- right side -->
-            <section class="col-4 flex-grow-1">
+            <section class="col-lg-4">
                 <div
-                    class="border rounded-4 shadow-sm p-4 d-flex flex-column justify-content-between"
+                    class="border rounded-4 shadow-sm p-4 d-flex flex-column justify-content-between order-result"
                 >
                     <h2 class="fs-4 mb-3">訂單摘要</h2>
                     <ul class="d-flex flex-column gap-2 mb-4">
@@ -518,7 +429,7 @@
                 </div>
             </section>
         </div>
-    </div>
+    </main>
 </template>
 
 <style lang="scss" scoped>
@@ -526,20 +437,31 @@
         width: 32px;
         height: 32px;
     }
+
     .h-0 {
         height: 0;
     }
+
     .img-box {
         object-fit: cover;
         border-radius: 0.25rem;
-        width: 125px;
-        height: 125px;
+        width: 100%;
+        height: 128px;
+        object-position: top;
+        @media screen and (max-width: 991px) {
+            width: 64px;
+            height: 64px;
+        }
     }
 
-    .img-box-2 {
-        object-fit: cover;
-        border-radius: 0.25rem;
-        width: 75px;
-        height: 75px;
+    .title-card {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 60%;
+        @media screen and (max-width: 768px) {
+            max-width: unset;
+            white-space: unset;
+        }
     }
 </style>

@@ -73,3 +73,25 @@ export const checkResetToken = async (resetToken) => {
         return error.response?.data.message
     }
 }
+
+//寄更換email 信件
+export const changeEmail = async (email) => {
+    try {
+        const res = await heroku.post(`api/v1/auth/changeEmail`, email)
+        return res
+    } catch (error) {
+        console.error(error)
+        return error.response?.data.message
+    }
+}
+
+//確認更換email
+export const resetEmail = async (token, email) => {
+    try {
+        const res = await heroku.post(`api/v1/auth/resetEmail/${token}`, email)
+        return res
+    } catch (error) {
+        console.error(error)
+        return error.response?.data.message
+    }
+}

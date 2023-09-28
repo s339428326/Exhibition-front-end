@@ -4,7 +4,6 @@ import App from './App.vue'
 import router from './router'
 
 import 'bootstrap'
-import '@/assets/scss/vendors/bootstrap/_bootstrap.scss'
 import '@/assets/scss/styles.scss'
 
 import veeValidate from './plugins/vee-validate'

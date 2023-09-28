@@ -452,7 +452,7 @@ $body-emphasis-color: $black !default;
 // Style anchor elements.
 
 $link-color: $primary !default;
-$link-decoration: underline !default;
+$link-decoration: none !default;
 $link-shade-percentage: 20% !default;
 $link-hover-color: shift-color($link-color, $link-shade-percentage) !default;
 $link-hover-decoration: null !default;
@@ -636,6 +636,7 @@ $h3-font-size: $font-size-base * 1.75 !default;
 $h4-font-size: $font-size-base * 1.5 !default;
 $h5-font-size: $font-size-base * 1.25 !default;
 $h6-font-size: $font-size-base !default;
+$h7-font-size: $font-size-base * 0.75 !default;
 // scss-docs-end font-variables
 
 // scss-docs-start font-sizes
@@ -645,7 +646,8 @@ $font-sizes: (
     3: $h3-font-size,
     4: $h4-font-size,
     5: $h5-font-size,
-    6: $h6-font-size
+    6: $h6-font-size,
+    7: $h7-font-size
 ) !default;
 // scss-docs-end font-sizes
 
@@ -711,7 +713,7 @@ $legend-font-weight: null !default;
 
 $dt-font-weight: $font-weight-bold !default;
 
-$list-inline-padding: 0.5rem !default;
+$list-inline-padding: 0rem !default;
 
 $mark-padding: 0.1875em !default;
 $mark-bg: $yellow-100 !default;

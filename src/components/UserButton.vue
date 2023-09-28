@@ -24,16 +24,14 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
             >
-                <div class="d-flex align-items-center btn-user gap-2">
-                    <div class="border rounded-circle avatar-container">
-                        <img
-                            class="avatar me-2"
-                            :src="`${store.userData?.avatar?.imageUrl}`"
-                        />
-                    </div>
-                    <div class="overflow-hidden user-name">
-                        <span class="text-light fs-6">{{ store.userData?.username }}</span>
-                    </div>
+                <div class="btn-user">
+                    <img
+                        class="avatar me-2"
+                        :src="`${store.userData?.avatar?.imageUrl}`"
+                    />
+                    <span class="overflow-hidden user-name text-light fs-6">{{
+                        store.userData?.username
+                    }}</span>
                 </div>
             </button>
             <div class="dropdown-menu dropdown-menu-end">
@@ -108,7 +106,6 @@
             isLoading.value = false
             return
         } else {
-            console.log(token)
             await store.confirmToken(token)
         }
 
@@ -130,7 +127,8 @@
 
 <style lang="scss" scoped>
     .btn-user {
-        max-width: 150px;
+        max-width: 400px;
+        overflow: hidden;
     }
 
     .avatar {
@@ -144,9 +142,5 @@
     .avatar-container {
         width: 36px;
         height: 36px;
-    }
-
-    .user-name {
-        max-width: 100px;
     }
 </style>

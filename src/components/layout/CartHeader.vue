@@ -1,11 +1,16 @@
 <template>
-    <header class="bg-light text-black">
+    <header class="bg-dark">
         <nav class="container py-4 d-flex justify-content-between align-items-center">
-            <div class="d-flex">
-                <h1 class="fs-4 fw-bold mb-0">Logo</h1>
-                <h2 class="fs-4 fw-bold mb-0 ms-3 px-3 border-start border-dark border-2">
-                    購物車
-                </h2>
+            <div class="d-flex gap-4 align-items-center">
+                <div class="fs-4 text-light font-quantum l-h-1">
+                    <div>
+                        <span class="fw-normal text-secondary fs-4">A</span>
+                        <span class="fw-normal fs-4">rt</span>
+                    </div>
+
+                    <span class="fw-normal fs-4"> Search </span>
+                    <p class="text-secondary">Fair</p>
+                </div>
             </div>
         </nav>
     </header>

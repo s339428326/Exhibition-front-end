@@ -72,15 +72,17 @@
     <div class="border rounded p-3">
         <div class="mb-4">
             <label
-                class="avatar-label d-flex justify-content-center"
+                class="d-flex justify-content-center"
                 for="avatar"
             >
-                <img
-                    class="avatar-img"
-                    :src="avatar || user.userData?.avatar?.imageUrl"
-                    alt="avatar"
-                />
-                <div class="avatar-hover">點擊更改圖片</div>
+                <div class="avatar-label">
+                    <img
+                        class="avatar-img"
+                        :src="avatar || user.userData?.avatar?.imageUrl"
+                        alt="avatar"
+                    />
+                    <div class="avatar-hover">點擊更改圖片</div>
+                </div>
             </label>
             <input
                 class="d-none"

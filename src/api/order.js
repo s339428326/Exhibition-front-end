@@ -1,8 +1,8 @@
-import axios from 'axios'
+import heroku from './herokuAxios'
 
 export const getOrder = async (orderId) => {
     try {
-        const res = axios.get(`${import.meta.env.VITE_heroku}/api/v1/order/${orderId}`)
+        const res = heroku.get(`/api/v1/order/${orderId}`)
         return res.data
     } catch (error) {
         console.log(error)
@@ -11,7 +11,7 @@ export const getOrder = async (orderId) => {
 
 export const createOrder = async (data) => {
     try {
-        const res = axios.post(`${import.meta.env.VITE_heroku}/api/v1/order/`, data)
+        const res = heroku.post(`/api/v1/order/`, data)
         return res.data
     } catch (error) {
         console.log(error)
@@ -20,16 +20,16 @@ export const createOrder = async (data) => {
 
 export const getOrders = async () => {
     try {
-        const res = axios.get(`${import.meta.env.VITE_heroku}/api/v1/order/`)
+        const res = heroku.get(`/api/v1/order/`)
         return res.data
     } catch (error) {
         console.log(error)
     }
 }
 
-export const getUserOrder = async (localId) => {
+export const getUserOrder = async (userId) => {
     try {
-        const res = axios.get(`${import.meta.env.VITE_heroku}/api/v1/order/user/${localId}`)
+        const res = heroku.get(`/api/v1/order/user/${userId}`)
         return res
     } catch (error) {
         console.log(error)

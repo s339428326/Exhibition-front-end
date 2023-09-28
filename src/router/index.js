@@ -3,11 +3,14 @@ import NotFoundPage from '../views/NotFoundPage.vue'
 import Redirect from '../views/Redirect.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import User from '../views/User/User.vue'
+import ChangeEmail from '../views/ChangeEmail.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
+import ECPayment from '../views/ECPayment.vue'
+
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { authenticateAndGetUserData } from '../api/auth'
+import { authenticateAndGetUserData, changeEmail } from '../api/auth'
 
 import { useAlert } from '../stores/alertSlice'
 import { userDataStore } from '../stores/userData'
@@ -38,6 +41,11 @@ const isAuth = async (from, to, next) => {
 
 const routes = [
     //Default Layout
+    {
+        path: '/changeEmail/:token',
+        name: 'ChangeEmail',
+        component: ChangeEmail
+    },
     {
         path: '/resetPassword/:token',
         name: 'ResetPassword',
@@ -122,6 +130,12 @@ const routes = [
                 }
             }
         ]
+    },
+    //Ec payment
+    {
+        path: '/ec-payment',
+        name: 'ECPayment',
+        component: ECPayment
     },
     //Not Found page
     {
