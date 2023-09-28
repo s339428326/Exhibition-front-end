@@ -1,0 +1,1 @@
+import{T as s}from"./index-cfc24485.js";const t=async e=>{try{return s.post("/api/v1/order/",e).data}catch(r){console.log(r)}},c=async e=>{try{return s.get(`/api/v1/order/user/${e}`)}catch(r){console.log(r)}};export{t as c,c as g};
