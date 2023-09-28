@@ -35,7 +35,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Set up Bun
-              uses: oven-sh/setup-bun@v1
+              uses: actions/setup-node@v1
             - name: Install dependencies
               run: npm install
             - name: Build
