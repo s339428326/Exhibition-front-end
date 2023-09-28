@@ -2,7 +2,7 @@ import { createPinia } from 'pinia'
 
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
 
-import AllRules from '@vee-validate/rules'
+import AllRules from '@vee-validate/rules/dist/vee-validate-rules'
 //VeeValidate  多國語系
 import { localize, setLocale } from '@vee-validate/i18n'
 // 引入中文繁體檔案
