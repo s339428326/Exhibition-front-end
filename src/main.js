@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 
 import 'bootstrap'
-import '@/assets/scss/styles.scss'
+import '~/assets/scss/styles.scss'
 
 import veeValidate from './plugins/vee-validate'
 import datePicker from './plugins/datePicker'

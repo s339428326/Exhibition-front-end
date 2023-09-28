@@ -7,8 +7,8 @@
 
     import { Modal } from 'bootstrap'
 
-    import Field from '@/components/Form/Field.vue'
-    import SubmitBtn from '@/components/Form/SubmitBtn.vue'
+    import Field from '~/components/Form/Field.vue'
+    import SubmitBtn from '~/components/Form/SubmitBtn.vue'
 
     const store = userDataStore()
     const { callAlert } = useAlert()

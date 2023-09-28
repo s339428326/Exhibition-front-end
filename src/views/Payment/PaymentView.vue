@@ -2,7 +2,7 @@ q
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import { useRouter } from 'vue-router'
-    import { useCartDataStore } from '@/stores/cartData'
+    import { useCartDataStore } from '~/stores/cartData'
     import { userDataStore } from '../../stores/userData'
     import { createOrder } from '../../api/order'
     import { useAlert } from '../../stores/alertSlice'

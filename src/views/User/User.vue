@@ -11,6 +11,6 @@
     </div>
 </template>
 <script setup>
-    import UserNavList from '@/components/user/UserNavList.vue'
+    import UserNavList from '~/components/user/UserNavList.vue'
 </script>
 <style lang="scss" scoped></style>
