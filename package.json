@@ -21,7 +21,7 @@
     "@mdi/js": "^7.2.96",
     "@popperjs/core": "^2.11.8",
     "@vee-validate/i18n": "^4.11.3",
-    "@vee-validate/rules": "^4.11.3",
+    "@vee-validate/rules": "^4.11.6",
     "@vuepic/vue-datepicker": "^6.0.3",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
