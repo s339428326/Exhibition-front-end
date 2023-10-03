@@ -1,4 +1,3 @@
-q
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import { useRouter } from 'vue-router'
@@ -38,29 +37,32 @@ q
                 newCartList.push(item)
             }
         })
-        try {
-            //建立訂單
-            await createOrder({
-                userId: user.userData?.id,
-                name: orderData.value.name,
-                phone: orderData.value.phone,
-                address: orderData.value.address,
-                total: total.value,
-                orderList: newCartList
-            })
-            callAlert({
-                title: '訂單建立成功',
-                type: 'check'
-            })
-            router.push({ name: 'ECPayment' })
-            // cart.clearCart()
-        } catch (error) {
-            callAlert({
-                title: '訂單建立失敗',
-                type: 'error'
-            })
-            console.error(error)
-        }
+
+        console.log(userForm)
+
+        // try {
+        //     //建立訂單
+        //     await createOrder({
+        //         userId: user.userData?.id,
+        //         name: orderData.value.name,
+        //         phone: orderData.value.phone,
+        //         address: orderData.value.address,
+        //         total: total.value,
+        //         orderList: newCartList
+        //     })
+        //     callAlert({
+        //         title: '訂單建立成功',
+        //         type: 'check'
+        //     })
+        //     router.push({ name: 'ECPayment' })
+        //     // cart.clearCart()
+        // } catch (error) {
+        //     callAlert({
+        //         title: '訂單建立失敗',
+        //         type: 'error'
+        //     })
+        //     console.error(error)
+        // }
     }
 
     const pageHandler = (method) => {
@@ -331,6 +333,7 @@ q
                             :class="`btn btn-dark w-50`"
                             @click="createOrderHandler"
                             type="button"
+                            :disabled="!meta.valid"
                         >
                             下一步
                         </button>
