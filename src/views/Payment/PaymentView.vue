@@ -136,22 +136,24 @@
             // Loading state = true
             pageView.value = 3
             const order = await getOrder(Cookies.get('orderId'))
-            Cookies.remove('orderId')
-            console.log(order)
-            // if (orderData.isPay) {
-            //     pageView = 4
-            //     orderData.value = order
-            //     // Loading state = false
-            // } else {
-            //     // Loading state = false
-            //     router.push({
-            //         name: 'Home'
-            //     })
-            //     callAlert({
-            //         title: '綠界付款失敗, 請通知後台人員',
-            //         type: 'error'
-            //     })
-            // }
+            // Cookies.remove('orderId')
+            console.log('order front end check View', order)
+            if (orderData.isPay) {
+                pageView = 4
+                orderData.value = order
+                // Loading state = false
+            } else {
+                // Loading state = false
+                router.push({
+                    name: 'Home'
+                })
+                callAlert({
+                    title: '綠界付款失敗, 請通知後台人員',
+                    type: 'error'
+                })
+            }
+        } else {
+            console.log('找不到 orderId')
         }
     }
 
@@ -161,15 +163,15 @@
             title: '提醒:此頁面User info 未取得',
             type: 'error'
         })
-        if (!user.userData?.id) {
-            router.push({
-                name: 'Home'
-            })
-            callAlert({
-                title: '建立訂單請勿重新整理頁面',
-                type: 'error'
-            })
-        }
+        // if (!user.userData?.id) {
+        //     router.push({
+        //         name: 'Home'
+        //     })
+        //     callAlert({
+        //         title: '建立訂單請勿重新整理頁面',
+        //         type: 'error'
+        //     })
+        // }
         cart.initCartData()
         checkOrderIdIsPay()
     })

@@ -26,7 +26,7 @@
             </div>
             <div class="flex-grow-1">
                 <p class="border-bottom p-2 bg-dark text-white text-center">訂單狀態</p>
-                <p class="p-2 text-center">購買完成</p>
+                <p class="p-2 text-center">{{ order?.isPay ? '已付款' : '未付款' }}</p>
             </div>
             <div class="flex-grow-1">
                 <p class="border-bottom p-2 bg-dark text-white text-center">總金額</p>
