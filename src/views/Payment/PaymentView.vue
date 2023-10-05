@@ -7,8 +7,12 @@
     import { getOrder } from '../../api/order'
     import { useAlert } from '../../stores/alertSlice'
 
+    //vue-router
     const router = useRouter()
+    //pinia
     const cart = useCartDataStore()
+    const user = userDataStore()
+    const { callAlert } = useAlert()
 
     //隱藏隱密資訊
     const hiddenString = (str, len) => {
@@ -21,10 +25,6 @@
     const userForm = ref(null)
     const paymentForm = ref(null)
     const orderData = ref({})
-
-    //
-    const user = userDataStore()
-    const { callAlert } = useAlert()
 
     const paymentHandler = async () => {
         //將重複票卷, 成獨立資料
@@ -131,29 +131,32 @@
 
     //確認是否有訂單重綠界回來
     const checkOrderIdIsPay = async () => {
-        if (Cookies.get('orderId')) {
+        const orderId = Cookies.get('orderId')
+        if (orderId) {
             //[Feature] Loading state
             // Loading state = true
             pageView.value = 3
             const order = await getOrder(Cookies.get('orderId'))
             // Cookies.remove('orderId')
             console.log('order front end check View', order)
-            if (orderData.isPay) {
+            if (order?.data.isPay) {
                 pageView = 4
-                orderData.value = order
-                // Loading state = false
+                orderData.value = order.data
+                Cookies.remove('orderId')
             } else {
                 // Loading state = false
                 router.push({
                     name: 'Home'
                 })
+                console.log('check point [orderId check]', order, order?.data.isPay)
+                Cookies.remove('orderId')
                 callAlert({
                     title: '綠界付款失敗, 請通知後台人員',
                     type: 'error'
                 })
             }
         } else {
-            console.log('找不到 orderId')
+            console.log('[dev]: 目前沒有orderId')
         }
     }
 
@@ -419,13 +422,13 @@
                         </ul>
                     </div>
                     <!-- 這裡要新增訂購成功更改isPay -->
-                    <button
-                        @click="createOrderHandler"
+                    <router-link
+                        to="/"
                         class="btn btn-dark w-100"
                         type="button"
                     >
                         訂購成功
-                    </button>
+                    </router-link>
                 </div>
             </div>
             <!-- right side -->

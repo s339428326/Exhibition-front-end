@@ -7,7 +7,7 @@
 
     const getPaymentHtml = async () => {
         const res = await createOrder(history.state.data)
-        Cookies.set('orderId', res.order.id, { expires: 1 })
+        Cookies.set('orderId', res?.order.id, { expires: 1 })
         html.value = res.html
     }
 
