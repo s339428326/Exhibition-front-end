@@ -1,9 +1,10 @@
 <script setup>
+    import Cookies from 'js-cookie'
     import { ref, computed, onMounted } from 'vue'
     import { useRouter } from 'vue-router'
     import { useCartDataStore } from '~/stores/cartData'
     import { userDataStore } from '../../stores/userData'
-    import { createOrder } from '../../api/order'
+    import { getOrder } from '../../api/order'
     import { useAlert } from '../../stores/alertSlice'
 
     const router = useRouter()
@@ -25,7 +26,7 @@
     const user = userDataStore()
     const { callAlert } = useAlert()
 
-    const createOrderHandler = async () => {
+    const paymentHandler = async () => {
         //將重複票卷, 成獨立資料
         let newCartList = []
         cart.cartData.forEach((item) => {
@@ -38,31 +39,39 @@
             }
         })
 
-        console.log(userForm)
+        try {
+            //建立訂單//引導到Ec payment form page
+            const { name, phone, address } = userForm.value.getValues()
 
-        // try {
-        //     //建立訂單
-        //     await createOrder({
-        //         userId: user.userData?.id,
-        //         name: orderData.value.name,
-        //         phone: orderData.value.phone,
-        //         address: orderData.value.address,
-        //         total: total.value,
-        //         orderList: newCartList
-        //     })
-        //     callAlert({
-        //         title: '訂單建立成功',
-        //         type: 'check'
-        //     })
-        //     router.push({ name: 'ECPayment' })
-        //     // cart.clearCart()
-        // } catch (error) {
-        //     callAlert({
-        //         title: '訂單建立失敗',
-        //         type: 'error'
-        //     })
-        //     console.error(error)
-        // }
+            router.push({
+                name: 'ECPayment',
+                state: {
+                    data: {
+                        userId: user.userData?.id,
+                        name,
+                        phone,
+                        address,
+                        total: total.value,
+                        orderList: JSON.parse(JSON.stringify(cart.cartData)),
+                        TradeDesc: '此為測試性商品, 非授權販售感謝！',
+                        TotalAmount: total.value.toString(),
+                        ItemName: cart.cartData
+                            .map(
+                                (item) =>
+                                    `${item.name}${item.ticketType.ticketType}x${item.quantity} 單價:${item.price}`
+                            )
+                            .join('#')
+                    }
+                }
+            })
+            // cart.clearCart() //clear form
+        } catch (error) {
+            callAlert({
+                title: '訂單建立失敗',
+                type: 'error'
+            })
+            console.error(error)
+        }
     }
 
     const pageHandler = (method) => {
@@ -120,7 +129,38 @@
         }
     }
 
+    //確認是否有訂單重綠界回來
+    const checkOrderIdIsPay = async () => {
+        if (Cookies.get('orderId')) {
+            //[Feature] Loading state
+            // Loading state = true
+            pageView.value = 3
+            const order = await getOrder(Cookies.get('orderId'))
+            Cookies.remove('orderId')
+            console.log(order)
+            // if (orderData.isPay) {
+            //     pageView = 4
+            //     orderData.value = order
+            //     // Loading state = false
+            // } else {
+            //     // Loading state = false
+            //     router.push({
+            //         name: 'Home'
+            //     })
+            //     callAlert({
+            //         title: '綠界付款失敗, 請通知後台人員',
+            //         type: 'error'
+            //     })
+            // }
+        }
+    }
+
+    //[Feature] init userData
     onMounted(() => {
+        callAlert({
+            title: '提醒:此頁面User info 未取得',
+            type: 'error'
+        })
         if (!user.userData?.id) {
             router.push({
                 name: 'Home'
@@ -131,6 +171,7 @@
             })
         }
         cart.initCartData()
+        checkOrderIdIsPay()
     })
 </script>
 
@@ -331,7 +372,7 @@
                         </button>
                         <button
                             :class="`btn btn-dark w-50`"
-                            @click="createOrderHandler"
+                            @click="paymentHandler"
                             type="button"
                             :disabled="!meta.valid"
                         >
@@ -347,7 +388,7 @@
                     ref="paymentForm"
                     @submit="paymentFormHandler"
                 >
-                    <p>正在開啟第三方支付...</p>
+                    <p>第三方支付訂單確認中...</p>
                 </VeeForm>
                 <!-- page-finish -->
                 <div :class="`${pageView === 4 ? 'd-block' : 'd-none'}`">

@@ -1,17 +1,20 @@
 <script setup>
     import { onMounted, ref, onUpdated } from 'vue'
-    import { createPaymentOrder } from '../api/ec'
+    import { createOrder } from '../api/order'
+    import Cookies from 'js-cookie'
 
     const html = ref()
 
     const getPaymentHtml = async () => {
-        const res = await createPaymentOrder()
-        html.value = res.data.html
+        const res = await createOrder(history.state.data)
+        Cookies.set('orderId', res.order.id, { expires: 1 })
+        html.value = res.html
     }
 
     onMounted(async () => {
         await getPaymentHtml()
     })
+
     onUpdated(() => {
         document.getElementById('_form_aiochk').submit()
     })
