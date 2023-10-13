@@ -90,13 +90,11 @@
         if (userData === true) {
             const modal = Modal.getInstance('#loginModal')
             modal.hide()
+        } else {
+            loginRef.value.resetForm()
+            resLoginErrorMessage.value = '登入失敗, 請重新嘗試！'
         }
 
-        //登入失敗
-        if (typeof userData === 'string') {
-            loginRef.value.resetForm()
-            resLoginErrorMessage.value = userData
-        }
         isLoading.value = false
     }
 

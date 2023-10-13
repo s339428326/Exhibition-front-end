@@ -1,8 +1,8 @@
-import heroku from './herokuAxios'
+import axios from './axiosInstance'
 
 export const getOrder = async (orderId) => {
     try {
-        const res = await heroku.get(`/api/v1/order/${orderId}`)
+        const res = await axios.get(`/api/v1/order/${orderId}`)
         return res.data
     } catch (error) {
         console.log(error)
@@ -11,7 +11,7 @@ export const getOrder = async (orderId) => {
 
 export const createOrder = async (data) => {
     try {
-        const res = await heroku.post(`/api/v1/order/`, data)
+        const res = await axios.post(`/api/v1/order/`, data)
         return res.data
     } catch (error) {
         console.log(error)
@@ -20,7 +20,7 @@ export const createOrder = async (data) => {
 
 export const getOrders = async () => {
     try {
-        const res = await heroku.get(`/api/v1/order/`)
+        const res = await axios.get(`/api/v1/order/`)
         return res.data
     } catch (error) {
         console.log(error)
@@ -29,7 +29,7 @@ export const getOrders = async () => {
 
 export const getUserOrder = async (userId) => {
     try {
-        const res = await heroku.get(`/api/v1/order/user/${userId}`)
+        const res = await axios.get(`/api/v1/order/user/${userId}`)
         return res
     } catch (error) {
         console.log(error)

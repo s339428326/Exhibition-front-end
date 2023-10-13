@@ -1,8 +1,8 @@
-import heroku from './herokuAxios'
+import axios from './axiosInstance'
 
 export const getAllExhibition = async () => {
     try {
-        const res = await heroku.get('/api/v1/exhibition/')
+        const res = await axios.get('/api/v1/exhibition/')
         return res.data
     } catch (error) {
         return error
@@ -12,7 +12,7 @@ export const getAllExhibition = async () => {
 //getOneExhibition
 export const getOneExhibition = async (id) => {
     try {
-        const res = await heroku.get(`/api/v1/exhibition/${id}`)
+        const res = await axios.get(`/api/v1/exhibition/${id}`)
         return res
     } catch (error) {
         return error

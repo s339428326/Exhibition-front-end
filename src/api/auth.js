@@ -1,4 +1,4 @@
-import heroku from './herokuAxios'
+import axios from './axiosInstance'
 
 // email 驗證是否被註冊
 // export const verifyEmail = async (token) => {
@@ -13,7 +13,7 @@ import heroku from './herokuAxios'
 // 會員註冊 email / password
 export const createUser = async (data) => {
     try {
-        const res = await heroku.post('/api/v1/auth/singup', data)
+        const res = await axios.post('/api/v1/auth/singup', data)
         return res.data
     } catch (error) {
         return error.response.data.errors
@@ -23,7 +23,7 @@ export const createUser = async (data) => {
 // 會員登入 email / password
 export const login = async (data) => {
     try {
-        const res = await heroku.post('/api/v1/auth/login', data)
+        const res = await axios.post('/api/v1/auth/login', data)
         return res.data
     } catch (error) {
         return error.response.data.message
@@ -33,7 +33,7 @@ export const login = async (data) => {
 // 認證token
 export const authenticateAndGetUserData = async (token) => {
     try {
-        const res = await heroku.get('/api/v1/auth', null, {
+        const res = await axios.get('/api/v1/auth', null, {
             headers: {
                 Authorization: token
             }
@@ -47,7 +47,7 @@ export const authenticateAndGetUserData = async (token) => {
 // 更新用戶密碼
 export const sendForgetEmail = async (email) => {
     try {
-        const res = await heroku.post(`/api/v1/auth/forgetPassword`, email)
+        const res = await axios.post(`/api/v1/auth/forgetPassword`, email)
         return res
     } catch (error) {
         return error.response?.data.message
@@ -57,7 +57,7 @@ export const sendForgetEmail = async (email) => {
 // 驗證信箱url 夾帶token 是否正確
 export const resetPasswordEmail = async (resetToken, data) => {
     try {
-        const res = await heroku.post(`api/v1/auth/resetPassword/${resetToken}`, data)
+        const res = await axios.post(`api/v1/auth/resetPassword/${resetToken}`, data)
         return res
     } catch (error) {
         return error.response?.data.message
@@ -67,7 +67,7 @@ export const resetPasswordEmail = async (resetToken, data) => {
 // 驗證ResetToken 密碼正確性
 export const checkResetToken = async (resetToken) => {
     try {
-        const res = await heroku.post(`api/v1/auth/checkResetToken/${resetToken}`)
+        const res = await axios.post(`api/v1/auth/checkResetToken/${resetToken}`)
         return res
     } catch (error) {
         return error.response?.data.message
@@ -77,7 +77,7 @@ export const checkResetToken = async (resetToken) => {
 //寄更換email 信件
 export const changeEmail = async (email) => {
     try {
-        const res = await heroku.post(`api/v1/auth/changeEmail`, email)
+        const res = await axios.post(`api/v1/auth/changeEmail`, email)
         return res
     } catch (error) {
         console.error(error)
@@ -88,7 +88,7 @@ export const changeEmail = async (email) => {
 //確認更換email
 export const resetEmail = async (token, email) => {
     try {
-        const res = await heroku.post(`api/v1/auth/resetEmail/${token}`, email)
+        const res = await axios.post(`api/v1/auth/resetEmail/${token}`, email)
         return res
     } catch (error) {
         console.error(error)

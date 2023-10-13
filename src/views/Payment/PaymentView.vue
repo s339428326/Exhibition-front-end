@@ -27,18 +27,6 @@
     const orderData = ref({})
 
     const paymentHandler = async () => {
-        //將重複票卷, 成獨立資料
-        let newCartList = []
-        cart.cartData.forEach((item) => {
-            if (item?.quantity > 1) {
-                for (let i = 0; i < item?.quantity; i++) {
-                    newCartList.push(item)
-                }
-            } else {
-                newCartList.push(item)
-            }
-        })
-
         try {
             //建立訂單//引導到Ec payment form page
             const { name, phone, address } = userForm.value.getValues()

@@ -1,9 +1,9 @@
-import heroku from './herokuAxios'
+import axios from './axiosInstance'
 
 //取得用戶個人資料
 export const getUserData = async (userId) => {
     try {
-        const res = await heroku.get(`/api/v1/${userId}`)
+        const res = await axios.get(`/api/v1/${userId}`)
         return res.data
     } catch (error) {
         return error.response.data.message
@@ -13,7 +13,7 @@ export const getUserData = async (userId) => {
 //更新用戶資料
 export const updateUserInfoData = async (userId, data) => {
     try {
-        const res = await heroku.patch(`/api/v1/user/${userId}`, data)
+        const res = await axios.patch(`/api/v1/user/${userId}`, data)
         return res
     } catch (error) {
         return error.response.data.message

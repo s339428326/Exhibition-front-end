@@ -1,4 +1,4 @@
-import heroku from './herokuAxios'
+import axios from './axiosInstance'
 
 /**
  *

@@ -17,12 +17,10 @@ export const userDataStore = defineStore('userData', {
             const res = await createUser({
                 ...data
             })
-
             //成功
             if (res?.data) {
                 Cookies.set('token', res.token, { expires: 7 })
                 this.userData = { ...res.data?.user }
-                alert(JSON.stringify(this.userData, null, 2))
                 return true
             } else {
                 return res
@@ -31,10 +29,12 @@ export const userDataStore = defineStore('userData', {
         //登入
         async login(data) {
             const res = await login(data)
-            if (res?.data) {
+            if (res?.data?.user?.role === 'user') {
                 Cookies.set('token', res.token, { expires: 7 })
                 this.userData = { ...res.data?.user }
                 return true
+            } else {
+                return false
             }
         },
         //登出
@@ -45,7 +45,7 @@ export const userDataStore = defineStore('userData', {
         //驗證token
         async confirmToken(token) {
             const res = await authenticateAndGetUserData(token)
-            if (res?.user) {
+            if (res?.user.role === 'user') {
                 this.userData = { ...res?.user }
                 console.log('[登入]', this.userData)
                 return true

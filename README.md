@@ -2,8 +2,6 @@
 
 # 啟動專案
 
-如果你需要使用 bun
-
 ```
 npm install -g bun
 ```

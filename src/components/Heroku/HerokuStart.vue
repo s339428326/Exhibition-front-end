@@ -6,10 +6,10 @@
     const alertStore = useAlert()
 
     const callHeroku = async () => {
-        alertStore.callAlert({ title: '請稍等！, 喚醒Heroku中！', type: 'alert' })
+        alertStore.callAlert({ title: '請稍等！, 喚醒後端服務！', type: 'alert' })
         try {
             const res = await startHeroku()
-            alertStore.callAlert({ title: 'Heroku App 已啟用', type: 'check' })
+            alertStore.callAlert({ title: '成功連結後端', type: 'check' })
             return res
         } catch (error) {
             console.error(error)

@@ -4,9 +4,13 @@ import Redirect from '../views/Redirect.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import User from '../views/User/User.vue'
 import ChangeEmail from '../views/ChangeEmail.vue'
+import ECPayment from '../views/ECPayment.vue'
+import AdminMain from '../views/Admin/AdminMain.vue'
+
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
-import ECPayment from '../views/ECPayment.vue'
+import AdminDataBoard from '../views/Admin/AdminMain.vue'
+import TicketChecker from '../views/Admin/TicketChecker.vue'
 
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -148,6 +152,36 @@ const routes = [
         path: '/redirect',
         name: 'Redirect',
         component: Redirect
+    },
+    ,
+    {
+        path: '/admin',
+        name: 'Admin',
+        redirect: '/admin/login',
+        children: [
+            {
+                path: 'login',
+                name: 'AdminLogin',
+                component: () => import('../views/Admin/AdminLogin.vue')
+            },
+            {
+                path: 'main',
+                name: 'AdminMain',
+                component: AdminMain,
+                children: [
+                    {
+                        path: 'databoard',
+                        name: 'DataBoard',
+                        component: AdminDataBoard
+                    },
+                    {
+                        path: 'ticketchecker',
+                        name: 'TickerChecker',
+                        component: TicketChecker
+                    }
+                ]
+            }
+        ]
     }
 ]
 
