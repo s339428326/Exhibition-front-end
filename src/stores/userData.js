@@ -29,6 +29,7 @@ export const userDataStore = defineStore('userData', {
         //登入
         async login(data) {
             const res = await login(data)
+            console.log('store', res)
             if (res?.data?.user?.role === 'user') {
                 Cookies.set('token', res.token, { expires: 7 })
                 this.userData = { ...res.data?.user }

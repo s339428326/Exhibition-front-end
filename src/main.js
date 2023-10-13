@@ -9,9 +9,11 @@ import '~/assets/scss/styles.scss'
 import veeValidate from './plugins/vee-validate'
 import datePicker from './plugins/datePicker'
 import vueMaterialDesignIcons from './plugins/vue-material-design-icons'
+import VueQrcodeReader from 'vue-qrcode-reader'
 
 //datepicker
 // import Datepicker from 'vuejs3-datepicker'
+
 const app = createApp(App)
 
 app.use(router)
@@ -19,6 +21,7 @@ app.use(veeValidate)
 app.use(datePicker)
 app.use(createPinia())
 app.use(vueMaterialDesignIcons)
+app.use(VueQrcodeReader)
 
 app.mount('#app')
 
