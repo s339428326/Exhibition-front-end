@@ -1,5 +1,4 @@
 <script setup>
-    // import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
     const onDetect = (data) => {
         console.log(data)
     }
@@ -15,10 +14,6 @@
             accept="*"
             capture="environment"
         />
-    </div>
-    <div>
-        <p>這是vue qrcode reader</p>
-        <qrcode-stream @detect="onDetect">123</qrcode-stream>
     </div>
 </template>
 <style lang="scss"></style>

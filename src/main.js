@@ -9,7 +9,7 @@ import '~/assets/scss/styles.scss'
 import veeValidate from './plugins/vee-validate'
 import datePicker from './plugins/datePicker'
 import vueMaterialDesignIcons from './plugins/vue-material-design-icons'
-import VueQrcodeReader from 'vue-qrcode-reader'
+import { VueQrcodeReader } from 'vue-qrcode-reader'
 
 //datepicker
 // import Datepicker from 'vuejs3-datepicker'

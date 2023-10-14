@@ -182,6 +182,11 @@ const routes = [
                 ]
             }
         ]
+    },
+    {
+        path: '/test',
+        name: 'Test',
+        component: () => import('../views/TestQR.vue')
     }
 ]
 

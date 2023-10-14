@@ -3,7 +3,6 @@
     import { adminLogin } from '../../api/admin'
     import { useRouter } from 'vue-router'
     import { userDataStore } from '../../stores/userData'
-    import LoginModal from '../../components/Modal/LoginModal.vue'
 
     const router = useRouter()
     const user = userDataStore()
@@ -34,12 +33,20 @@
         })
         isLoading.value = false
     }
+    //////////////
 
-    // onMounted(() => {
-    //     console.log(loginFormRef)
-    // })
+    const scannedData = ref('')
+
+    const onDecode = (result) => {
+        scannedData.value = result
+    }
 </script>
 <template>
+    <p>have</p>
+    <div>
+        <qrcode-stream @decode="onDecode"></qrcode-stream>
+        <div v-if="scannedData">Scanned Data: {{ scannedData }}</div>
+    </div>
     <main class="container vh-100 d-flex justify-content-center align-items-center">
         <div class="w-form p-3">
             <div
@@ -112,7 +119,6 @@
             </VeeForm>
         </div>
     </main>
-    <LoginModal />
 </template>
 <style lang="scss" scoped>
     .w-fit-content {
