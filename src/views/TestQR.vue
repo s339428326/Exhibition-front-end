@@ -3,8 +3,8 @@
     //////////////
 
     const scannedData = ref('')
-
     const onDecode = (result) => {
+        alert(result)
         scannedData.value = result
     }
 </script>
@@ -13,6 +13,6 @@
     <div>
         <h1>Test</h1>
         <qrcode-stream @decode="onDecode"></qrcode-stream>
-        <div v-if="scannedData">Scanned Data: {{ scannedData }}</div>
+        <div>Scanned Data: {{ scannedData }}</div>
     </div>
 </template>
