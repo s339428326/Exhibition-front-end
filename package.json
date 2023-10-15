@@ -39,6 +39,7 @@
         "topojson": "^3.0.2",
         "vee-validate": "^4.11.3",
         "vite": "^4.4.11",
+        "vite-plugin-mkcert": "^1.16.0",
         "vue": "^3.3.4",
         "vue-material-design-icons": "^5.2.0",
         "vue-qrcode-reader": "^5.3.8",
