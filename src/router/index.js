@@ -89,6 +89,12 @@ const routes = [
                         component: () => import('../views/User/UserInfo.vue')
                     },
                     {
+                        path: 'ticket',
+                        name: 'Ticket',
+                        beforeEnter: isAuth,
+                        component: () => import('../views/User/UserTickets.vue')
+                    },
+                    {
                         path: 'orderSearch',
                         name: 'OrderSearch',
                         beforeEnter: isAuth,

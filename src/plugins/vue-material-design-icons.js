@@ -17,6 +17,8 @@ import menu from 'vue-material-design-icons/Menu.vue'
 import PlaylistPlus from 'vue-material-design-icons/PlaylistPlus.vue'
 import Eye from 'vue-material-design-icons/Eye.vue'
 import EyeOff from 'vue-material-design-icons/EyeOff.vue'
+import MenuUp from 'vue-material-design-icons/MenuUp.vue'
+import MenuDown from 'vue-material-design-icons/MenuDown.vue'
 
 export default {
     install(app) {
@@ -39,5 +41,7 @@ export default {
         app.component('PlaylistPlus', PlaylistPlus)
         app.component('Eye', Eye)
         app.component('EyeOff', EyeOff)
+        app.component('MenuDown', MenuDown)
+        app.component('MenuUp', MenuUp)
     }
 }

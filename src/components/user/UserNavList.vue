@@ -1,9 +1,12 @@
 <template>
-    <div class="shadow border border-dark">
-        <h2 class="border-bottom border-dark pb-2 fs-5 fw-medium p-2">會員</h2>
+    <div class="border rounded p-3">
+        <h2 class="border-bottom pb-2 fs-5 fw-medium p-2">會員</h2>
         <ul class="d-flex flex-column gap-3 p-2">
             <li class="">
                 <router-link to="/user/information"> 會員資料 </router-link>
+            </li>
+            <li class="">
+                <router-link to="/user/ticket"> 個人展覽票卷 </router-link>
             </li>
             <li class="">
                 <router-link to="/user/favoriteList"> 收藏展覽 </router-link>
@@ -11,6 +14,7 @@
             <li class="">
                 <router-link to="/user/orderSearch"> 訂單查詢 </router-link>
             </li>
+            <li class="">個人行事曆(未開放)</li>
             <li class="">
                 <router-link to="/user/editPassword"> 修改密碼 </router-link>
             </li>
