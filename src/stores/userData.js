@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { login, createUser, authenticateAndGetUserData } from '../api/auth'
 import { getUserData, updateUserInfoData } from '../api/user'
+
 import Cookies from 'js-cookie'
 
 // import { useRouter } from 'vue-router'
@@ -11,6 +12,12 @@ export const userDataStore = defineStore('userData', {
     }),
     getters: {},
     actions: {
+        async initUserData() {
+            const res = await authenticateAndGetUserData()
+            if (!res) return false
+            this.userData = { ...this.userData, ...res?.user }
+            return true
+        },
         //註冊
         async register(data) {
             //Step.1 註冊用戶
@@ -54,8 +61,6 @@ export const userDataStore = defineStore('userData', {
                 console.log('[登入失敗]', this.userData)
                 return false
             }
-        },
-        //用戶資料
-        async getUserInfoData(userId) {}
+        }
     }
 })

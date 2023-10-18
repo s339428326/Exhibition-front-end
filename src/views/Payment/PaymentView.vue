@@ -26,6 +26,9 @@
     const paymentForm = ref(null)
     const orderData = ref({})
 
+    //確認綠界回傳建立訂單成功
+    const isPay = ref(false)
+
     const paymentHandler = async () => {
         try {
             //建立訂單//引導到Ec payment form page
@@ -125,17 +128,17 @@
             // Loading state = true
             pageView.value = 3
             const order = await getOrder(Cookies.get('orderId'))
-            // Cookies.remove('orderId')
-            console.log('order front end check View', order)
+            console.log('[checkOrderIdIsPay order]', order)
+
             if (order?.data.isPay) {
+                isPay.value = true
                 pageView = 4
                 orderData.value = order.data
                 Cookies.remove('orderId')
             } else {
                 // Loading state = false
-                router.push({
-                    name: 'Home'
-                })
+                isPay.value = false
+                pageView = 3
                 console.log('check point [orderId check]', order, order?.data.isPay)
                 Cookies.remove('orderId')
                 callAlert({
@@ -381,7 +384,20 @@
                     ref="paymentForm"
                     @submit="paymentFormHandler"
                 >
-                    <p>第三方支付訂單確認中...</p>
+                    <h1 class="fs-4">建立訂單結果</h1>
+                    <p :class="`${!isPay && 'text-danger'}`">
+                        綠界建立訂單{{ isPay ? '成功' : '失敗' }}
+                    </p>
+                    <ol class="mb-5">
+                        <li>此為專案連接綠界測試服務</li>
+                        <li>若出現失敗請自行點擊下一頁, 系統將默認成功</li>
+                    </ol>
+                    <button
+                        class="btn btn-dark w-100"
+                        @click="pageHandler('increase')"
+                    >
+                        下一步
+                    </button>
                 </VeeForm>
                 <!-- page-finish -->
                 <div :class="`${pageView === 4 ? 'd-block' : 'd-none'}`">
