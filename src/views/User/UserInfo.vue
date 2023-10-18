@@ -12,7 +12,6 @@
     import * as yup from 'yup'
 
     import AvatarUpload from '../../components/user/AvatarUpload.vue'
-    import ExhibitionQR from '../../components/user/ExhibitionQR.vue'
     // import Calendar from '../../components/Calendar/Calendar.vue'
 
     //pinia store
@@ -148,10 +147,8 @@
             </div>
         </div>
         <div class="">
-            <h2 class="my-4 fs-5 fw-medium">個人展覽虛擬票卷</h2>
-            <h1>這裡需要展示以購買展覽, 並點擊後自動跳出QRcode 去證明票卷</h1>
-            <p>測試性元件</p>
-            <ExhibitionQR />
+            <h2>是否過期快速查看(等待開發)</h2>
+            <p>標籤：已購買 ,快過期展覽</p>
         </div>
     </div>
 </template>
