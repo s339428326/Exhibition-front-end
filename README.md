@@ -30,14 +30,11 @@ QRcode 掃碼進場(目前使用手機端代表進場機器)
 
 
 # 啟動專案
-```
-npm install -g bun
-```
+此專案開發使用 node 18 
 
 ```
  npm i
 ```
-
 
 使用本地後端連線
 ```
@@ -49,9 +46,9 @@ npm install -g bun
 npm run dev:server
 ```
 
-後端API 可以參考(https://github.com/s339428326/Exhibition-server)
+後端API Repo 
+可以參考(https://github.com/s339428326/Exhibition-server)
 
 # 環境變數
-
 請參考
 https://github.com/s339428326/Exhibition-front-end/blob/main/.env.example
