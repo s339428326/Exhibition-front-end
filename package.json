@@ -34,7 +34,6 @@
         "lodash": "^4.17.21",
         "pinia": "^2.1.4",
         "qrcode": "^1.5.3",
-        "qrcode.vue": "^3.4.1",
         "swiper": "^10.2.0",
         "topojson": "^3.0.2",
         "vee-validate": "^4.11.3",
