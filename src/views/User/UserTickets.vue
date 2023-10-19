@@ -5,7 +5,6 @@
     import { userTicketList } from '../../api/ticket'
 
     import Select from '../../components/Form/Select.vue'
-    import BsModal from '../../components/Modal/BsModal.vue'
     import ExhibitionQR from '../../components/QRcode/ExhibitionQR.vue'
 
     const user = userDataStore()
