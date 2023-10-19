@@ -33,20 +33,8 @@
         })
         isLoading.value = false
     }
-    //////////////
-
-    const scannedData = ref('')
-
-    const onDecode = (result) => {
-        scannedData.value = result
-    }
 </script>
 <template>
-    <p>have</p>
-    <div>
-        <qrcode-stream @decode="onDecode"></qrcode-stream>
-        <div v-if="scannedData">Scanned Data: {{ scannedData }}</div>
-    </div>
     <main class="container vh-100 d-flex justify-content-center align-items-center">
         <div class="w-form p-3">
             <div

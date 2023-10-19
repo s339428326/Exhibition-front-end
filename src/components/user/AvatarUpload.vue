@@ -34,16 +34,20 @@
 
     const uploadAvatar = async (data) => {
         try {
+            //loading start
             isUpload.value = true
+            //response imgur server
             const res = await uploadImgur(data)
-            const uploadFireBase = await updateUserInfoData(user.userData?.localId, {
-                picture: res.data.data.link
-            })
+            //get link to avatar ref
             avatar.value = res.data.data.link
-            user.userData.picture = res.data.data.link
+            // update user pinia avatar
+            user.userData.avatar.imageUrl = res.data.data.link
+            // [Dev]
             console.log('[upload imgur responses]', res.data.data.link)
-            console.log('[upload fireBase user data]', uploadFireBase)
-            if (uploadFireBase) {
+            //hotfix
+            const updateData = { avatar: { imageUrl: avatar.value, deleteHash: '' } }
+            const updateAvatar = await updateUserInfoData(user.userData.id, updateData)
+            if (updateAvatar) {
                 alertStore.callAlert({ title: '圖片上傳成功', type: 'check' })
             }
             isUpload.value = false
