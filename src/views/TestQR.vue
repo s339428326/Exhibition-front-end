@@ -7,12 +7,10 @@
     const camera = ref(false)
 
     const scannedData = ref('')
-
     //記入該名檢票員掃描票卷(工作人員工作記錄非主要功能)
     const ticketCheckerData = ref([])
 
     //
-
     const onDetect = (detected) => {
         scannedData.value = detected[0]?.rawValue
         if (scannedData) alert(JSON.stringify(detected, null, 2))
