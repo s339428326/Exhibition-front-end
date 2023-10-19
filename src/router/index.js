@@ -10,11 +10,12 @@ import AdminMain from '../views/Admin/AdminMain.vue'
 import DefaultLayout from '../components/layout/DefaultLayout.vue'
 import PaymentLayout from '../components/layout/PaymentLayout.vue'
 import AdminDataBoard from '../views/Admin/AdminMain.vue'
+
 import TicketChecker from '../views/Admin/TicketChecker.vue'
 
 //Fix GitHub Page SPA router
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { authenticateAndGetUserData, changeEmail } from '../api/auth'
+import { authenticateAndGetUserData } from '../api/auth'
 
 import { useAlert } from '../stores/alertSlice'
 import { userDataStore } from '../stores/userData'
