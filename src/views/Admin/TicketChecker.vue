@@ -1,8 +1,4 @@
-<script setup>
-    const onDetect = (data) => {
-        console.log(data)
-    }
-</script>
+<script setup></script>
 <template>
     <div>Ticket checker</div>
     <div>
