@@ -167,6 +167,7 @@
 
         /*  */
         .img-box {
+            max-height: 350px;
             object-fit: cover;
             border: 1px solid black;
         }
