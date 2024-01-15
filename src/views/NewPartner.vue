@@ -1,7 +1,7 @@
 <script setup>
     import { ref } from 'vue'
-    import Field from '~/components/Form/Field.vue'
-    import SubmitBtn from '~/components/Form/SubmitBtn.vue'
+    // import Field from '~/components/Form/Field.vue'
+    // import SubmitBtn from '~/components/Form/SubmitBtn.vue'
     const partnerRef = ref()
     //[Form]
     const partnerHandler = (data) => console.log(data)
