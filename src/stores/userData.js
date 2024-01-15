@@ -53,7 +53,7 @@ export const userDataStore = defineStore('userData', {
         //驗證token
         async confirmToken(token) {
             const res = await authenticateAndGetUserData(token)
-            if (res?.user.role === 'user') {
+            if (res?.user?.role === 'user') {
                 this.userData = { ...res?.user }
                 console.log('[登入]', this.userData)
                 return true
