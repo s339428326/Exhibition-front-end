@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-//axios 攔截器
+//axios 攔截器1
 const instance = axios.create({
     baseURL: import.meta.env.VITE_SERVER
 })
