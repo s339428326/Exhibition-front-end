@@ -66,7 +66,6 @@
     const recommendViewIndex = ref(null)
 
     const recommendViewHandler = (val) => {
-        console.log(val)
         recommendViewIndex.value = val
     }
 

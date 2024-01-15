@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onBeforeMount } from 'vue'
+    import { ref, onBeforeMount, watch } from 'vue'
     import QRCode from 'qrcode'
 
     const props = defineProps({
@@ -13,9 +13,13 @@
             const res = await QRCode.toDataURL(text)
             qrCode.value = res
         } catch (err) {
-            console.error(err)
+            console.error('[Qrcode Error]', err)
         }
     }
+
+    watch(props, () => {
+        generateQR(props.content)
+    })
 
     onBeforeMount(() => {
         generateQR(props.content)

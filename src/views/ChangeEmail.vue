@@ -11,12 +11,19 @@
     const route = useRoute()
     const router = useRouter()
     const isLoading = ref(false)
+    const emailErrorMsg = ref('')
 
     const changeEmailHandler = async (data) => {
         try {
             //[change]
             const res = await resetEmail(route.params?.token, data)
+            console.log('Email Error', res)
+
             if (typeof res === 'string') {
+                if (res?.startsWith('E11000')) {
+                    emailErrorMsg.value = '目前輸入信箱已被綁定, 請重新確認！'
+                    return
+                }
                 router.push({ name: 'Home' })
                 return callAlert({
                     title: '信件效期已過！, 請重新申請',
@@ -27,6 +34,7 @@
                 title: '信箱更新成功',
                 type: 'check'
             })
+
             router.push({ name: 'Home' })
         } catch (error) {
             console.error(error)
@@ -95,6 +103,7 @@
                         >
                     </div>
                 </div>
+                <p class="fs-7 text-danger">{{ emailErrorMsg }}</p>
                 <button
                     :meta="meta"
                     type="submit"

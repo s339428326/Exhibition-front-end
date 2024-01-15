@@ -8,13 +8,14 @@
     import ExhibitionQR from '../../components/QRcode/ExhibitionQR.vue'
 
     const user = userDataStore()
-    const ticketList = ref([]) //keep data
+    const ticketList = ref([]) //keep data to pinia
     const keyWord = ref('')
 
     const changeTicketView = ref(false)
     const exhibitionListData = ref([])
 
-    const modalTitle = ref('')
+    //Qrcode modal ref
+    const qrcodeData = ref({})
 
     //format API data  Array to  Object
     /**
@@ -28,7 +29,7 @@
                 if (!data) {
                     throw Error('please check, Ticket class constructor dependency parameters ')
                 }
-                this._id = data?.id
+                this._id = data?._id
                 this.name = data?.name
                 this.isAvailable = data?.isAvailable
                 this.startDate = data?.startDate
@@ -71,6 +72,10 @@
         exhibitionListData.value = arr
     }
 
+    const showQrcodeHandler = (item) => {
+        qrcodeData.value = { ...item }
+    }
+
     const init = async () => {
         await user.initUserData()
         const tickets = await userTicketList(user.userData?.id)
@@ -109,7 +114,7 @@
             <!-- ticketList -->
             <ul class="row">
                 <li
-                    class="col-4"
+                    class="col col-md-6 col-lg-4 mb-4"
                     v-for="([key, value], index) in Object.entries(ticketList).filter(
                         ([key, _value]) => key.match(keyWord)
                     )"
@@ -141,7 +146,6 @@
                     </div>
                 </li>
             </ul>
-            <!-- checkExhibition ticket list -->
         </div>
     </div>
     <div v-else>
@@ -159,8 +163,6 @@
                 v-for="(item, index) in exhibitionListData"
                 :key="index"
             >
-                <!-- <p>{{ item }}</p> -->
-                <!-- <p>{{ item?._id }}</p> -->
                 <div>
                     <div class="d-flex align-items-center gap-2">
                         <p>{{ item?.name }}({{ item.ticketType }})</p>
@@ -180,6 +182,7 @@
                 <div>
                     <!-- Qrcode Btn -->
                     <button
+                        @click="showQrcodeHandler(item)"
                         type="button"
                         class="btn btn-dark h-100"
                         data-bs-toggle="modal"
@@ -190,7 +193,6 @@
                 </div>
 
                 <!-- <p>{{ item?.isAvailable }}</p> -->
-                <!-- <ExhibitionQR :content="`VITE_SERVER${item?.qrcode}`" /> -->
             </li>
             <!-- Qrcode Modal -->
             <Teleport to="body">
@@ -201,13 +203,29 @@
                     aria-labelledby="qrcodeModal"
                     aria-hidden="true"
                 >
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1
                                     class="modal-title fs-5"
                                     id="qrcodeModal"
-                                ></h1>
+                                >
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p class="text-ellipsis-1">
+                                            {{ qrcodeData?.name }}
+                                        </p>
+
+                                        <div
+                                            :class="`fs-7 p-1 rounded-pill text-white ${
+                                                qrcodeData?.isAvailable
+                                                    ? 'bg-secondary '
+                                                    : 'bg-danger'
+                                            }`"
+                                        >
+                                            {{ qrcodeData?.isAvailable ? '未使用' : '已使用' }}
+                                        </div>
+                                    </div>
+                                </h1>
                                 <button
                                     type="button"
                                     class="btn-close"
@@ -216,7 +234,18 @@
                                 ></button>
                             </div>
                             <div class="modal-body">
-                                <slot name="bsModalBody"></slot>
+                                <p class="text-center">{{ qrcodeData.ticketType }}</p>
+                                <div
+                                    class="d-flex justify-content-center"
+                                    v-if="qrcodeData"
+                                >
+                                    <ExhibitionQR
+                                        :content="`${qrcodeData?._id} ${qrcodeData?.qrcode}`"
+                                    />
+                                </div>
+                                <p class="text-danger fs-7 fw-medium text-center">
+                                    Qrcode等同於票卷, 請勿外洩
+                                </p>
                             </div>
                         </div>
                     </div>

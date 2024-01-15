@@ -35,7 +35,7 @@
                             <li>
                                 <router-link
                                     class="footer-link"
-                                    to="#"
+                                    to="/newPartner"
                                     >成為合作夥伴</router-link
                                 >
                             </li>
