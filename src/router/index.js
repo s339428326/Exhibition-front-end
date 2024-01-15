@@ -43,9 +43,9 @@ const isAuth = async (from, to, next) => {
         return next({ name: 'Home' })
     }
 }
-
+//Default Layout
+// eslint-disable-next-line no-sparse-arrays
 const routes = [
-    //Default Layout
     {
         path: '/changeEmail/:token',
         name: 'ChangeEmail',
@@ -114,6 +114,12 @@ const routes = [
                         component: () => import('../views/User/FavoriteList.vue')
                     }
                 ]
+            },
+            // 合作夥伴
+            {
+                path: 'newPartner',
+                name: 'NewPartner',
+                component: () => import('../views/NewPartner.vue')
             }
         ]
     },

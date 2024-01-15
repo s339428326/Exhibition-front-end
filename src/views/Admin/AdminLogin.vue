@@ -14,7 +14,7 @@
     //
     const adminLoginForm = async () => {
         isLoading.value = true
-        const loginFormValues = adminLoginRef._value.getValues()
+        const loginFormValues = adminLoginRef.value._value.getValues()
         const res = await adminLogin({
             email: loginFormValues['admin-email'],
             password: loginFormValues['admin-password']
