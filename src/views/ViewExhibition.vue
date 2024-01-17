@@ -234,7 +234,7 @@
     //image init
     .view-exhibition {
         img {
-            width: 100vw;
+            width: 100%;
             object-fit: cover;
             vertical-align: middle;
             object-position: top;

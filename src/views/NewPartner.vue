@@ -1,10 +1,34 @@
 <script setup>
     import { ref } from 'vue'
-    // import Field from '~/components/Form/Field.vue'
-    // import SubmitBtn from '~/components/Form/SubmitBtn.vue'
+    import { newPartner } from '../api/partner'
+    import { useAlert } from '../stores/alertSlice'
+    import { useRouter } from 'vue-router'
     const partnerRef = ref()
-    //[Form]
-    const partnerHandler = (data) => console.log(data)
+    const sendBtnLoad = ref(false)
+    const router = useRouter()
+
+    const { callAlert } = useAlert()
+
+    //[Form]    // await newPartner(postData)
+    const partnerHandler = async (data) => {
+        const { name, address, email, comment } = data
+        const postData = {
+            company: {
+                name,
+                address,
+                email
+            },
+            comment
+        }
+        sendBtnLoad.value = true
+
+        const res = await newPartner(postData)
+        if (!res) return callAlert({ title: '表單傳送錯誤, 請通知我們', type: 'alert' })
+        sendBtnLoad.value = false
+        partnerRef.value.resetForm()
+        callAlert({ title: '感謝加入!, 我們會盡快聯繫您', type: 'check' })
+        router.push({ name: 'Home' })
+    }
 </script>
 <template lang="">
     <div class="">
@@ -106,10 +130,18 @@
             </div>
 
             <button
-                class="btn btn-dark w-50 mx-auto"
+                :class="`btn btn-dark w-50 mx-auto ${sendBtnLoad && 'disabled'}`"
+                :disable="sendBtnLoad"
                 type="submit"
             >
-                送出
+                <span
+                    v-if="sendBtnLoad === true"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                ></span>
+
+                確認送出
             </button>
         </VeeForm>
     </div>
