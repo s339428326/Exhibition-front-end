@@ -105,7 +105,6 @@
                             <p class="">點擊率 {{ item.viewer }}</p>
                         </div>
                         <div class="d-flex gap-2">
-                            {{ item?.id }}
                             <button
                                 class="border-0 bg-transparent"
                                 :data-bs-toggle="`${!user.userData?.username && 'modal'}`"
