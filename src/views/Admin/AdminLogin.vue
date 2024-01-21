@@ -1,6 +1,6 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import { adminLogin } from '../../api/admin'
+    import { partnerLogin } from '../../api/partner.js'
     import { useRouter } from 'vue-router'
     import { userDataStore } from '../../stores/userData'
 
@@ -12,12 +12,11 @@
     const isLoading = ref(false)
 
     //
-    const adminLoginForm = async () => {
+    const adminLoginForm = async (data) => {
         isLoading.value = true
-        const loginFormValues = adminLoginRef.value._value.getValues()
-        const res = await adminLogin({
-            email: loginFormValues['admin-email'],
-            password: loginFormValues['admin-password']
+        const res = await partnerLogin({
+            email: data?.['admin-email'],
+            password: data?.['admin-password']
         })
 
         if (typeof res === 'string') {

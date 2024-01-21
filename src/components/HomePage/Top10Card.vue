@@ -16,6 +16,7 @@
     const list = ref([])
     const currentItem = ref(0)
     const trackList = ref([])
+    const isLoading = ref(-1)
 
     const itemHandler = (val) => {
         currentItem.value = val
@@ -23,39 +24,32 @@
 
     //新增 user track exh
     const trackExhHandler = async (exhId) => {
-        console.log('click', user.userData?.localId, exhId)
-        if (!user.userData?.localId) {
-            return
-        }
-        //
-        if (trackList.value.includes(exhId)) {
-            const res = await deleteTrackExhibition(user.userData?.localId, exhId)
-            trackList.value = trackList.value.filter((item) => item !== exhId)
+        if (!exhId) return console.error(`error exhId:${exhId}`)
+        if (!user.userData?.id) return
+
+        isLoading.value = exhId
+
+        if (trackList.value.findIndex((track) => track?.id === exhId) !== -1) {
+            const res = await deleteTrackExhibition(exhId)
+            trackList.value = trackList.value.filter((item) => item?._id !== exhId)
+            isLoading.value = -1
             console.log('del track api', res)
         } else {
-            const res = await trackExhibition(user.userData?.localId, exhId)
-            console.log('[add track api]', res)
-            trackList.value.push(exhId)
+            const res = await trackExhibition(exhId)
+            console.log('[add track api]', res, exhId, [...trackList.value, exhId])
+            trackList.value.push(list.value.find((it) => it?._id === exhId))
+            isLoading.value = -1
         }
     }
 
-    const getUserTracKData = async () => {
-        const res = await getUserTrackData(user.userData.localId)
+    const getUserTrack = async () => {
+        const res = await getUserTrackData()
         if (!res?.data) return
-        console.log(
-            '[init track]',
-            res?.data,
-            Object.keys(res?.data).filter((key) => {
-                if (res?.data[key] === true) return key
-            })
-        )
-        trackList.value = Object.keys(res?.data).filter((key) => {
-            if (res?.data[key] === true) return key
-        })
+        trackList.value = res?.data?.data
     }
 
     onMounted(async () => {
-        getUserTracKData()
+        getUserTrack()
     })
 
     watch(currentItem, (newVal) => {
@@ -69,10 +63,11 @@
     })
 
     watch(userRefs.userData, () => {
-        if (!user.userData?.localId) {
+        console.log(user.userData)
+        if (!user.userData?.id) {
             trackList.value = []
         }
-        getUserTracKData()
+        getUserTrack()
     })
 </script>
 <template>
@@ -110,16 +105,27 @@
                             <p class="">點擊率 {{ item.viewer }}</p>
                         </div>
                         <div class="d-flex gap-2">
+                            {{ item?.id }}
                             <button
                                 class="border-0 bg-transparent"
-                                :data-bs-toggle="`${!user.userData?.name && 'modal'}`"
-                                :data-bs-target="`${!user.userData?.name && '#loginModal'}`"
-                                @click="trackExhHandler(item.id)"
+                                :data-bs-toggle="`${!user.userData?.username && 'modal'}`"
+                                :data-bs-target="`${!user.userData?.username && '#loginModal'}`"
+                                @click="trackExhHandler(item?.id)"
                             >
-                                <div :class="`${trackList.includes(item.id) && 'd-none'}`">
+                                <div
+                                    v-if="isLoading === item?.id"
+                                    class="spinner-border text-dark spinner-border-sm"
+                                    role="status"
+                                ></div>
+                                <div
+                                    v-else-if="
+                                        trackList.findIndex((track) => track?.id === item?.id) ===
+                                        -1
+                                    "
+                                >
                                     <HeartOutlineIcon :size="24" />
                                 </div>
-                                <div :class="`${!trackList.includes(item.id) && 'd-none'}`">
+                                <div v-else>
                                     <HeartIcon :size="24" />
                                 </div>
                             </button>

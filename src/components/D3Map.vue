@@ -228,9 +228,10 @@
                     .on('click', async (e, d) => {
                         console.log('click', d.properties['COUNTYNAME'])
                         this.currentCounty = d.properties['COUNTYNAME']
-
-                        console.log(this.currentCounty.slice(0, 2))
-                        this.getExhibitionView(this.currentCounty.slice(0, 2))
+                        // console.log(this.currentCounty)
+                        const cityName = this.currentCounty.slice(0, 2)
+                        console.log(cityName)
+                        this.getExhibitionView(cityName)
 
                         const activeList = document.querySelectorAll('.active')
 

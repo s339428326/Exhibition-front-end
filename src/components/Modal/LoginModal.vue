@@ -17,6 +17,7 @@
     let fromView = ref('登入')
     let resLoginErrorMessage = ref('')
     let resRegisterErrorMessage = ref('')
+
     //Form ref
     const loginRef = ref(null)
     const registerRef = ref(null)

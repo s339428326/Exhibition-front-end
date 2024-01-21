@@ -57,7 +57,7 @@
                         :class="`form-control ${errors['name'] && 'is-invalid'}`"
                         placeholder="***"
                         type="text"
-                        rules="max:20|required"
+                        rules="max:12|required"
                     />
                     <label for="name">合作廠商名稱</label>
                     <small
@@ -75,7 +75,7 @@
                         :class="`form-control ${errors['address'] && 'is-invalid'}`"
                         placeholder="***"
                         type="text"
-                        rules="max:20|required"
+                        rules="max:50|required"
                     />
                     <label for="address">公司地址</label>
                     <small
@@ -94,8 +94,8 @@
                         name="email"
                         :class="`form-control ${errors['email'] && 'is-invalid'}`"
                         placeholder="***"
-                        type="text"
-                        rules="max:20|required"
+                        type="email"
+                        rules="email|required"
                     />
                     <label for="email">聯絡信箱</label>
                     <small
@@ -123,7 +123,7 @@
                         <small
                             v-if="errors['comment']"
                             class="text-danger"
-                            >{{ errors['comment'].replace('comment', 'text') }}</small
+                            >{{ errors['comment'].replace('comment', '合作意向') }}</small
                         >
                     </div>
                 </VeeField>

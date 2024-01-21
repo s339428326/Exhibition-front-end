@@ -1,17 +1,18 @@
 <script setup>
-    import { ref, watch, onBeforeMount } from 'vue'
+    import { ref, watch, onMounted } from 'vue'
     import { storeToRefs } from 'pinia'
     import { userDataStore } from '../../stores/userData'
     import { getUserTrackData, trackExhibition, deleteTrackExhibition } from '../../api/user'
     import { getOneExhibition } from '../../api/exhibition'
     import { useAlert } from '../../stores/alertSlice'
+    import { filter } from 'd3'
 
     const alertStore = useAlert()
     const user = userDataStore()
     const userRefs = storeToRefs(user)
+    const isLoading = ref(false)
 
     const keyWord = ref('')
-    const exhIdArr = ref([])
     const data = ref([])
     const filterArr = ref([])
 
@@ -21,52 +22,32 @@
     }
 
     const getTrackData = async () => {
+        isLoading.value = true
         try {
-            const res = await getUserTrackData(user.userData?.localId)
-            exhIdArr.value = Object.keys(res.data).filter((key) => res.data[key] === true)
+            const res = await getUserTrackData()
+            data.value = res?.data?.data
+            filterArr.value = res?.data?.data
+            isLoading.value = false
+        } catch (error) {
+            console.log(error)
+            isLoading.value = false
+        }
+    }
+
+    //取消追蹤展覽
+    const unTrackExhibition = async (exhId) => {
+        try {
+            await deleteTrackExhibition(exhId)
+            data.value = data.value.filter((it) => it?._id !== exhId)
+            filterArr.value = filterArr.value.filter((it) => it?._id !== exhId)
+            console.log(filterArr.value)
         } catch (error) {
             console.log(error)
         }
     }
 
-    const getExhibitionArr = async () => {
-        data.value = []
-        exhIdArr.value.forEach(async (id) => {
-            const res = await getOneExhibition(id)
-            data.value.push({ id, ...res.data, isTrack: true })
-        })
-        filterArr.value = data.value
-    }
-
-    const unTrackExhibition = async (exhId) => {
-        //view update
-        const index = filterArr.value.findIndex((item) => item.id === exhId)
-        filterArr.value[index].isTrack = !filterArr.value[index].isTrack
-
-        //fireBase update
-        if (filterArr.value[index].isTrack === true) {
-            try {
-                await trackExhibition(user.userData?.localId, exhId)
-            } catch (error) {
-                alertStore.callAlert({ title: '追蹤失敗', type: 'error' })
-            }
-        } else {
-            try {
-                await deleteTrackExhibition(user.userData?.localId, exhId)
-            } catch (error) {
-                alertStore.callAlert({ title: '取消追蹤失敗', type: 'error' })
-            }
-        }
-    }
-
-    onBeforeMount(async () => {
+    onMounted(async () => {
         await getTrackData()
-        getExhibitionArr()
-    })
-
-    watch(userRefs.userData, () => {
-        getTrackData()
-        getExhibitionArr()
     })
 </script>
 
@@ -99,7 +80,7 @@
                                 />
                             </div>
                             <div class="p-2 d-flex flex-column justify-content-center">
-                                <h2 class="fw-bold text-hidden-1">
+                                <h2 class="fw-bold fs-5 text-hidden-1">
                                     <router-link
                                         class="text-dark"
                                         :to="`/viewExhibition/${item?.id}`"
@@ -114,15 +95,20 @@
                         </div>
 
                         <div class="border-start border-dark p-3">
+                            <!-- " -->
                             <button
-                                @click="unTrackExhibition(item?.id)"
                                 class="border-0 bg-transparent"
+                                @click="unTrackExhibition(item?.id)"
                             >
-                                <div v-if="item?.isTrack === true">
-                                    <HeartIcon :size="36" />
+                                <div
+                                    v-if="isLoading === true"
+                                    class="spinner-border text-primary"
+                                    role="status"
+                                >
+                                    <span class="sr-only">Loading...</span>
                                 </div>
                                 <div v-else>
-                                    <HeartOutlineIcon :size="36" />
+                                    <HeartIcon :size="36" />
                                 </div>
                             </button>
                         </div>
