@@ -167,6 +167,7 @@ const routes = [
         component: Redirect
     },
     ,
+    // 夥伴登入
     {
         path: '/admin',
         name: 'Admin',
@@ -196,6 +197,8 @@ const routes = [
             }
         ]
     },
+    // 夥伴工作人員登入
+    {},
     {
         path: '/test',
         name: 'Test',
